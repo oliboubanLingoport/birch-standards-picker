@@ -1,0 +1,21 @@
+{
+  "name": "birch-standards-picker",
+  "authors": [
+    "Josh Crowther <jshcrowthe@gmail.com>"
+  ],
+  "description": "A picker for the FamilySearch date/place standards",
+  "main": "birch-standards-picker.html",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "birch-typeahead": "https://github.com/FamilySearchElements/birch-typeahead.git",
+    "polymer": "Polymer/polymer#^1.7.0"
+  }
+}
