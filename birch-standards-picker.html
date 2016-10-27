@@ -1,0 +1,179 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../birch-typeahead/birch-typeahead.html">
+<link rel="import" href="../wc-i18n/wc-i18n.html">
+
+<!--
+A comment describing this element
+
+Example:
+
+    <birch-standards-picker></birch-standards-picker>
+
+@demo demo/index.html
+
+
+
+1. Auto Select First Standard on Blur
+2. 
+-->
+
+<dom-module id="birch-standards-picker">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .standard_label {
+        font-weight: bold;
+      }
+    </style>
+    <birch-typeahead
+      id='typeahead'
+      on-birch-typeahead:changed='_handleChange'
+      highlight-first-item
+      placeholder="[[_getPlaceholder(standardType, i18n)]]"
+      debounce-input-duration="250">
+      <template>
+        <template is="dom-if" if="[[item.icon]]">
+          <paper-icon-item>
+            <iron-icon item-icon>
+              <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="11" height="16" viewBox="0 0 11 16"><path d="M5.5,15.79a.39.39,0,0,1-.37-.24.36.36,0,0,1,0-.13A7.49,7.49,0,0,0,2.9,10.31c-.37-.44-.79-.94-1.27-1.57L1.4,8.42a5,5,0,0,1-1-3.08,5.13,5.13,0,1,1,10.27,0,5.08,5.08,0,0,1-1,3.08l-.24.32h0c-.48.63-.9,1.13-1.27,1.57a7.46,7.46,0,0,0-2.21,5.08A.39.39,0,0,1,5.5,15.79ZM5.5,3a2,2,0,1,0,2,2A2,2,0,0,0,5.5,3Z" style="fill:#333331"/><rect width="11" height="16" style="fill:none"/></svg>
+            </iron-icon>
+            <paper-item-body two-line>
+              <div>[[item.label]]</div>
+              <div secondary>[[item.type]]</div>
+            </paper-item-body>
+          </paper-icon-item>
+        </template>
+
+        <template is="dom-if" if="[[!item.icon]]">
+          <paper-icon-item>
+            <iron-icon item-icon></iron-icon>
+            <paper-item-body two-line>
+              <div>[[item.label]]</div>
+              <div secondary>[[item.type]]</div>
+            </paper-item-body>
+          </paper-icon-item>
+        </template>
+      </template>
+    </birch-typeahead>
+    <div>
+      <p><label class='standard_label'>[[i18n('STANDARD')]]:</label> [[standardText]]<span></span></p>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'birch-standards-picker',
+      behaviors: [
+        WCI18n()
+      ],
+      properties: {
+        originalText: {
+          type: String,
+          value: '',
+          notify: true
+        },
+        standardText: {
+          type: String,
+          value: '',
+          notify: true
+        },
+        _searchTerm: {
+          type: String,
+          value: ''
+        },
+        loading: {
+          type: Boolean,
+          value: false,
+          readOnly: true
+        },
+        /**
+         * The type of standard to fetch.
+         *
+         * Valid values are: `date`, `place`
+         * @type {String}
+         */
+        standardType: {
+          type: String,
+          value: 'date'
+        }
+      },
+      listeners: {
+      },
+      observers: [
+        '_updateOptions(_searchTerm, standardType, language)'
+      ],
+      _updateOptions(searchTerm, type, lang) {
+        if (!searchTerm) return;
+        this._fetchOptions(searchTerm, type, lang).then(function(options) {
+          this.$.typeahead.setOptions(options);
+        }.bind(this))
+        .catch(function(err) {
+
+        });
+      },
+      _fetchOptions: function(searchTerm, type, lang) {
+        return new Promise(function(resolve, reject) {
+          fetch('/tree-data/authorities/' + type + '?term=' + searchTerm + '&tz=360&locale=' + lang, {
+            credentials: 'same-origin'
+          }).then(function(res) {
+            return res.json();
+          }).then(function(data) {
+            if (!Array.isArray(data)) data = [];
+            // Map the data to our desired format
+            data = data.map(function(standard) {
+              return {
+                icon: true,
+                id: standard.id,
+                label: standard.label,
+                standardText: standard.value,
+                type: null,
+                customText: null
+              }
+            });
+
+            // Add our "no-standard" node
+            data.unshift({
+              icon: false,
+              id: null,
+              label: searchTerm,
+              standardText: null,
+              type: null,
+              customText: searchTerm
+            });
+
+            // Make the default selection auto select the
+            // first standard
+            if (data.length > 1) {
+              data[0].standardText = data[1].standardText;
+            }
+
+            // Eliminate the "None of the Above" entry
+            data.pop();
+
+            return data;
+          }).then(resolve).catch(reject);
+        });
+      },
+      _getPlaceholder: function(type, i18n) {
+        var string = type.toUpperCase() + '_PLACEHOLDER';
+        return this.i18n(string);
+      },
+      _handleCancel: function(e) {
+        console.log('cancel:', e);
+        if (!this.standardText) this.standardText = '';
+      },
+      _handleChange: function(e) {
+        console.log('change:', e);
+        if(!e || !e.detail || !e.detail.value) return;
+        this._searchTerm = e.detail.value;
+      },
+      _handleSelect: function(e) {
+        console.log('select:', e);
+        if (!e || !e.detail || !e.detail.selection) return;
+        this.originalText = e.detail.selection.label;
+        this.standardText = e.detail.selection.standardText;
+      }
+    });
+  </script>
+</dom-module>
