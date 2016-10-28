@@ -1,5 +1,8 @@
 {
   "PLACE_PLACEHOLDER":"Enter a place",
   "DATE_PLACEHOLDER":"Enter a date",
+  "NO_STANDARD_DATE_AVAILABLE":"No standardized date is available",
+  "NO_STANDARD_PLACE_AVAILABLE":"No standardized place is available",
+  "NO_STANDARD_SELECTED":"No standard is selected",
   "STANDARD":"Standard"
 }
