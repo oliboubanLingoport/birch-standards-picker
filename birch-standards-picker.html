@@ -50,8 +50,6 @@ Example:
       id='typeahead'
       on-birch-typeahead:input='_handleChange'
       on-birch-typeahead:selected='_handleSelect'
-      on-birch-typeahead:cancel='_handleCancel'
-      on-birch-typeahead:blur='_handleCancel'
       highlight-first-item
       value="{{_searchTerm}}"
       placeholder="[[_getPlaceholder(standardType, i18n)]]"
@@ -245,17 +243,6 @@ Example:
       _getPlaceholder: function(type, i18n) {
         var string = type.toUpperCase() + '_PLACEHOLDER';
         return this.i18n(string);
-      },
-      _handleCancel: function(e) {
-        console.log('cancel:', e);
-        if (!this.standardLabel && this._searchTerm) {
-          // select and set the first standard
-          var standardToSelect = this.$.typeahead.options[0];
-          this.originalText = standardToSelect.originalText;
-          this.standardText = standardToSelect.standardText;
-          this.standardLabel = standardToSelect.standardLabel;
-          this.julianDateRange = standardToSelect.julianDateRange;
-        }
       },
       _handleChange: function(e) {
         console.log('change:', e);
