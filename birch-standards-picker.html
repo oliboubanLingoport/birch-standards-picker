@@ -23,8 +23,27 @@ Example:
       :host {
         display: block;
       }
+      [hidden] {
+        display: none;
+      }
       .standard_label {
         font-weight: bold;
+      }
+      .standard-container {
+        position: relative;
+        max-width: 300px;
+      }
+      #optionsMenu {
+        top: 1.5em;
+        position: absolute;
+        padding: 0;
+        width: 100%;
+        max-height: 200px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        cursor: pointer;
+        box-shadow: 0px 5px 10px #bab7b1;
+        -webkit-overflow-scrolling: touch;
       }
     </style>
     <birch-typeahead
@@ -34,6 +53,7 @@ Example:
       on-birch-typeahead:cancel='_handleCancel'
       on-birch-typeahead:blur='_handleCancel'
       highlight-first-item
+      value="{{_searchTerm}}"
       placeholder="[[_getPlaceholder(standardType, i18n)]]"
       debounce-input-duration="250">
       <template>
@@ -60,8 +80,37 @@ Example:
         </template>
       </template>
     </birch-typeahead>
-    <div>
-      <p><label class='standard_label'>[[i18n('STANDARD')]]:</label> [[standardText]]<span></span></p>
+    <div class="standard-container">
+      <p><label class='standard_label'>[[i18n('STANDARD')]]: </label>
+        <template is="dom-if" if="[[standardLabel]]">
+          <button on-blur="_handleBlur" on-tap="_openStandardSelector">[[standardLabel]]<span> ▾</span></button>
+        </template>
+      </p>
+      <paper-menu id="optionsMenu" tabindex="-1" hidden$="[[_hideStandards]]">
+          <template is="dom-repeat" items="[[_options]]">
+            <template is="dom-if" if="[[item.icon]]">
+              <paper-icon-item on-tap="_handleChangeStandard">
+                <iron-icon item-icon>
+                  <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="11" height="16" viewBox="0 0 11 16"><path d="M5.5,15.79a.39.39,0,0,1-.37-.24.36.36,0,0,1,0-.13A7.49,7.49,0,0,0,2.9,10.31c-.37-.44-.79-.94-1.27-1.57L1.4,8.42a5,5,0,0,1-1-3.08,5.13,5.13,0,1,1,10.27,0,5.08,5.08,0,0,1-1,3.08l-.24.32h0c-.48.63-.9,1.13-1.27,1.57a7.46,7.46,0,0,0-2.21,5.08A.39.39,0,0,1,5.5,15.79ZM5.5,3a2,2,0,1,0,2,2A2,2,0,0,0,5.5,3Z" style="fill:#333331"/><rect width="11" height="16" style="fill:none"/></svg>
+                </iron-icon>
+                <paper-item-body two-line>
+                  <div>[[item.label]]</div>
+                  <div secondary>[[item.type]]</div>
+                </paper-item-body>
+              </paper-icon-item>
+            </template>
+
+            <template is="dom-if" if="[[!item.icon]]">
+              <paper-icon-item on-tap="_handleChangeStandard">
+                <iron-icon item-icon></iron-icon>
+                <paper-item-body two-line>
+                  <div>[[item.label]]</div>
+                  <div secondary>[[item.type]]</div>
+                </paper-item-body>
+              </paper-icon-item>
+            </template>
+          </template>
+      </paper-menu>
     </div>
   </template>
   <script>
@@ -72,6 +121,11 @@ Example:
       ],
       properties: {
         originalText: {
+          type: String,
+          value: '',
+          notify: true
+        },
+        standardLabel: {
           type: String,
           value: '',
           notify: true
@@ -92,6 +146,20 @@ Example:
           type: String,
           value: ''
         },
+        _options: {
+          type: Array,
+          value: function() {
+            return [];
+          }
+        },
+        _hideStandards: {
+          type: Boolean,
+          value: true
+        },
+        _stopSearch: {
+          type: Boolean,
+          value: false
+        },
         /**
          * The type of standard to fetch.
          *
@@ -111,13 +179,15 @@ Example:
       _updateOptions(searchTerm, type, lang, i18n) {
         if (!searchTerm) return;
         this._fetchOptions(searchTerm, type, lang, i18n).then(function(options) {
-          this.$.typeahead.options = options;
+          if (!this._stopSearch) this.$.typeahead.options = options;
+          this._stopSearch = false;
           this.$.typeahead.loading = false;
         }.bind(this))
         .catch(function(err) {
+          this._stopSearch = false;
           this.$.typeahead.loading = false;
           console.log(err)
-        });
+        }.bind(this));
       },
       _fetchOptions: function(searchTerm, type, lang, i18n) {
         return new Promise(function(resolve, reject) {
@@ -125,7 +195,7 @@ Example:
             credentials: 'same-origin'
           }).then(function(res) {
             return res.json();
-          }).then(function(data) {
+          }.bind(this)).then(function(data) {
             if (!Array.isArray(data)) data = [];
             // Map the data to our desired format
             data = data.map(function(standard) {
@@ -133,6 +203,7 @@ Example:
                 icon: true,
                 id: standard.id,
                 label: standard.label,
+                standardLabel: standard.label,
                 standardText: standard.value,
                 julianDateRange: standard.earliestAstro || standard.latestAstro ? {
                   earliestDay: standard.earliestAstro || standard.latestAstro,
@@ -143,12 +214,15 @@ Example:
               }
             });
 
+            this._options = JSON.parse(JSON.stringify(data));
+
             // Add our "no-standard" node
             data.unshift({
               icon: false,
               id: null,
               label: searchTerm,
-              standardText: i18n(`NO_STANDARD_${type.toUpperCase()}_AVAILABLE`),
+              standardLabel: i18n(`NO_STANDARD_${type.toUpperCase()}_AVAILABLE`),
+              standardText: '',
               type: null,
               customText: searchTerm
             });
@@ -158,14 +232,15 @@ Example:
 
             if (data.length > 1) {
               data[0].standardText = data[1].standardText;
+              data[0].standardLabel = data[1].label;
               data[0].julianDateRange = data[1].julianDateRange;
               // Eliminate the "None of the Above" entry
               data.pop();
             }
 
             return data;
-          }).then(resolve).catch(reject);
-        });
+          }.bind(this)).then(resolve).catch(reject);
+        }.bind(this));
       },
       _getPlaceholder: function(type, i18n) {
         var string = type.toUpperCase() + '_PLACEHOLDER';
@@ -173,11 +248,12 @@ Example:
       },
       _handleCancel: function(e) {
         console.log('cancel:', e);
-        if (!this.standardText) {
+        if (!this.standardLabel) {
           // select and set the first standard
           var standardToSelect = this.$.typeahead.options[0];
           this.originalText = standardToSelect.originalText;
           this.standardText = standardToSelect.standardText;
+          this.standardLabel = standardToSelect.standardLabel;
           this.julianDateRange = standardToSelect.julianDateRange;
         }
       },
@@ -186,15 +262,40 @@ Example:
         if(!e || !e.detail || !e.detail.value) return;
         this._searchTerm = e.detail.value;
         // we unset the standard whenever they change the the text
-        this.standardText = '';
+        this.standardLabel = '';
+        this.standardText = null;
+        this.julianDateRange = null;
         this.$.typeahead.loading = true;
+      },
+      _handleChangeStandard: function(e) {
+        console.log('changeStandard:', e);
+        if (!e || !e.model || !e.model.item) return;
+        if (this.originalText === this.standardText) {
+          this._stopSearch = true;
+          this.originalText = e.model.item.standardText || this.originalText;
+          this._searchTerm = e.model.item.standardText || this._searchTerm;
+        }
+        this.standardText = e.model.item.standardText;
+        this.standardLabel = e.model.item.standardLabel;
+        this.julianDateRange = e.model.item.julianDateRange;
+        this._hideStandards = true;
       },
       _handleSelect: function(e) {
         console.log('select:', e);
         if (!e || !e.detail || !e.detail.selection) return;
+        this._stopSearch = true;
         this.originalText = e.detail.selection.label;
         this.standardText = e.detail.selection.standardText;
+        this.standardLabel = e.detail.selection.standardLabel;
         this.julianDateRange = e.detail.selection.julianDateRange;
+      },
+      _openStandardSelector: function() {
+        this._hideStandards = false;
+      },
+      _handleBlur: function(e) {
+        if (e) {
+          if (this && this.$.optionsMenu && !this.$.optionsMenu.contains(e.relatedTarget)) this._hideStandards = true;
+        }
       }
     });
   </script>
