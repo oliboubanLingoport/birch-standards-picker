@@ -248,7 +248,7 @@ Example:
       },
       _handleCancel: function(e) {
         console.log('cancel:', e);
-        if (!this.standardLabel) {
+        if (!this.standardLabel && this._searchTerm) {
           // select and set the first standard
           var standardToSelect = this.$.typeahead.options[0];
           this.originalText = standardToSelect.originalText;
