@@ -36,6 +36,7 @@ Example:
       #optionsMenu {
         top: 1.5em;
         position: absolute;
+        z-index: 200;
         padding: 0;
         width: 100%;
         max-height: 200px;
@@ -212,10 +213,9 @@ Example:
               }
             });
 
-            this._options = JSON.parse(JSON.stringify(data));
+            this._options = data;
 
-            // Add our "no-standard" node
-            data.unshift({
+            var noStandard = {
               icon: false,
               id: null,
               label: searchTerm,
@@ -223,17 +223,22 @@ Example:
               standardText: '',
               type: null,
               customText: searchTerm
-            });
+            };
+
+            // Add our "no-standard" node
+            data = [noStandard].concat(data);
 
             // Make the default selection auto select the
             // first standard:
 
             if (data.length > 1) {
-              data[0].standardText = data[1].standardText;
-              data[0].standardLabel = data[1].label;
-              data[0].julianDateRange = data[1].julianDateRange;
+              data[0] = Object.assign({}, data[0], {
+                standardText: data[1].standardText,
+                standardLabel: data[1].label,
+                julianDateRange: data[1].julianDateRange
+              });
               // Eliminate the "None of the Above" entry
-              data.pop();
+              data = data.slice(0, data.length - 1);
             }
 
             return data;
