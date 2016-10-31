@@ -259,13 +259,13 @@ Example:
       },
       _handleChange: function(e) {
         console.log('change:', e);
-        if(!e || !e.detail || !e.detail.value) return;
+        if(!e || !e.detail) return;
         this._searchTerm = e.detail.value;
         // we unset the standard whenever they change the the text
         this.standardLabel = '';
         this.standardText = null;
         this.julianDateRange = null;
-        this.$.typeahead.loading = true;
+        if (e.detail.value) this.$.typeahead.loading = true;
       },
       _handleChangeStandard: function(e) {
         console.log('changeStandard:', e);
