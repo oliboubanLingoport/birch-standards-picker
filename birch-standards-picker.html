@@ -111,7 +111,7 @@ Example:
             </iron-icon>
             <paper-item-body style="white-space: nowrap !important;" two-line>
               <div>[[item.label]]</div>
-              <div>[[item.yearRange]]</div>
+              <div>[[item.type]] [[item.yearRange]]</div>
             </paper-item-body>
           </paper-icon-item>
         </template>
@@ -121,7 +121,7 @@ Example:
             <iron-icon item-icon></iron-icon>
             <paper-item-body two-line>
               <div>[[item.label]]</div>
-              <div>[[item.yearRange]]</div>
+              <div>[[item.type]] [[item.yearRange]]</div>
             </paper-item-body>
           </paper-icon-item>
         </template>
@@ -142,7 +142,7 @@ Example:
                 </iron-icon>
                 <paper-item-body two-line>
                   <div>[[item.label]]</div>
-                  <div>[[item.yearRange]]</div>
+                  <div>[[item.type]] [[item.yearRange]]</div>
                 </paper-item-body>
               </paper-icon-item>
             </template>
@@ -152,7 +152,7 @@ Example:
                 <iron-icon item-icon></iron-icon>
                 <paper-item-body two-line>
                   <div>[[item.label]]</div>
-                  <div>[[item.yearRange]]</div>
+                  <div>[[item.type]] [[item.yearRange]]</div>
                 </paper-item-body>
               </paper-icon-item>
             </template>
@@ -252,6 +252,7 @@ Example:
                 label: standard.label,
                 standardLabel: standard.label,
                 standardText: standard.value,
+                type: standard.type,
                 yearRange: standard.yearRange,
                 julianDateRange: standard.earliestAstro || standard.latestAstro ? {
                   earliestDay: standard.earliestAstro || standard.latestAstro,
