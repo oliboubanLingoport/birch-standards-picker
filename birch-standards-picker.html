@@ -52,10 +52,10 @@ Example:
           margin: 0;
           min-height: 2em;
           white-space: nowrap !important;
-        }
+        };
       }
       .label-text {
-        text-overflow: ellipsis
+        text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
         display: inline-block;
@@ -269,8 +269,10 @@ Example:
               customText: searchTerm
             };
 
+            var isStandard = data.length && data[0].label === searchTerm;
+            
             // Add our "no-standard" node
-            data = [noStandard].concat(data);
+            data = (isStandard ? [] : [noStandard]).concat(data);
 
             // Make the default selection auto select the
             // first standard:
