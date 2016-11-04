@@ -81,7 +81,7 @@ Example:
         margin-left: -13px;
       }
       .label-text {
-        padding-left: 10px;
+        padding-left: 2px;
         max-width: 265px;
         overflow: hidden;
         display: inline-block;
@@ -98,6 +98,7 @@ Example:
         background: 0 0;
         font-size: 14px;
         padding: 0;
+        padding-left: 2px;
         max-width: 300px;
         overflow: hidden;
       }
@@ -109,7 +110,7 @@ Example:
 
       }
       #Layer_1 {
-        vertical-align: bottom;
+        vertical-align: middle;
       }
       birch-typeahead {
         --birch-typeahead-input: {
@@ -467,7 +468,6 @@ Example:
       _handleSelect: function(e) {
         console.log('select:', e);
         if (!e || !e.detail || !e.detail.selection) return;
-        this._stopSearch = true;
         this.originalText = e.detail.selection.label;
         this.standardText = e.detail.selection.standardText;
         this.standardLabel = e.detail.selection.standardLabel;
