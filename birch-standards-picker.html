@@ -23,7 +23,7 @@ Example:
       :host {
         display: block;
         font-family: Verdana;
-        color: #333331;
+        color: #666662;
       }
       [hidden] {
         display: none;
@@ -103,7 +103,6 @@ Example:
         padding: 0;
         max-width: 300px;
         overflow: hidden;
-        text-overflow: ellipsis;
       }
       .standard-button:active,
       .standard-button:focus,
@@ -125,10 +124,25 @@ Example:
           color: #333331;
           padding: 6px 10px;
         }
-
-        --birch-typeahead-paper-item: {
-          white-space: normal !important;
-        }
+      }
+      paper-item, paper-icon-item, paper-item-body {
+        --paper-item: {
+          font-family: verdana;
+          font-size: 14px;
+        };
+        --paper-item-selected: {
+          font-weight: 100 !important;
+          background-color: #ecebea !important;
+        };
+      }
+      paper-menu {
+        --paper-menu: {
+          font-family: verdana
+        };
+      }
+      paper-item > *, paper-icon-item > *, paper-item-body > * {
+        white-space: normal !important;
+        font-size: 14px !important;
       }
     </style>
     <label class="standard_label" for="typeahead">[[textLabel]]</label>
@@ -147,16 +161,16 @@ Example:
 
           <paper-icon-item>
             <iron-icon item-icon>
-              <template is="dom-if" if="[[isDate()]]">
-                <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="11" height="16" viewBox="0 0 11 16"><path d="M5.5,15.79a.39.39,0,0,1-.37-.24.36.36,0,0,1,0-.13A7.49,7.49,0,0,0,2.9,10.31c-.37-.44-.79-.94-1.27-1.57L1.4,8.42a5,5,0,0,1-1-3.08,5.13,5.13,0,1,1,10.27,0,5.08,5.08,0,0,1-1,3.08l-.24.32h0c-.48.63-.9,1.13-1.27,1.57a7.46,7.46,0,0,0-2.21,5.08A.39.39,0,0,1,5.5,15.79ZM5.5,3a2,2,0,1,0,2,2A2,2,0,0,0,5.5,3Z" style="fill:#333331"/><rect width="11" height="16" style="fill:none"/></svg>
+              <template is="dom-if" if="[[isDate]]">
+                <svg id="Layer_1" data-name="Layer 1" width="14" height="16" viewBox="0 0 14 16"><path d="M1,15.9A.94.94,0,0,1,.1,15V3.6A1.5,1.5,0,0,1,1.6,2.1h.3V3A1.1,1.1,0,0,0,3,4.1h.1V.1H4a.9.9,0,0,1,.9.9V2.1h4V3A1.1,1.1,0,0,0,10,4.1h.1V.1H11a.9.9,0,0,1,.9.9V2.1h.5a1.5,1.5,0,0,1,1.5,1.5V15a.94.94,0,0,1-.94.94Zm.86-1.8H12.1V5.9H1.9Z" style="fill:#333331"/><rect width="14" height="16" style="fill:none"/><path d="M3.17,12.24l.59-.76a2.12,2.12,0,0,0,1.47.61c.65,0,1-.28,1-.68s-.33-.62-1.07-.62l-.66,0v-1h.66c.59,0,1-.18,1-.57s-.43-.63-1-.63a1.92,1.92,0,0,0-1.35.55l-.57-.71a2.63,2.63,0,0,1,2-.85c1.25,0,2,.56,2,1.45a1.31,1.31,0,0,1-1.17,1.22,1.34,1.34,0,0,1,1.25,1.28c0,.92-.82,1.57-2.1,1.57A2.67,2.67,0,0,1,3.17,12.24Z" style="fill:#333331"/><path d="M9.33,13V9.13l-.89.9-.65-.68L9.47,7.67h1V13Z" style="fill:#333331"/></svg>
               </template>
-              <template is="dom-if" if="[[isPlace()]]">
+              <template is="dom-if" if="[[isPlace]]">
                 <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="11" height="16" viewBox="0 0 11 16"><path d="M5.5,15.79a.39.39,0,0,1-.37-.24.36.36,0,0,1,0-.13A7.49,7.49,0,0,0,2.9,10.31c-.37-.44-.79-.94-1.27-1.57L1.4,8.42a5,5,0,0,1-1-3.08,5.13,5.13,0,1,1,10.27,0,5.08,5.08,0,0,1-1,3.08l-.24.32h0c-.48.63-.9,1.13-1.27,1.57a7.46,7.46,0,0,0-2.21,5.08A.39.39,0,0,1,5.5,15.79ZM5.5,3a2,2,0,1,0,2,2A2,2,0,0,0,5.5,3Z" style="fill:#333331"/><rect width="11" height="16" style="fill:none"/></svg>
               </template>
             </iron-icon>
             <paper-item-body two-line>
-              <div class="standard-label">[[item.label]]</div>
-              <div class="standard-info">[[item.type]][[item.yearRange]]</div>
+              <div class="standard-label" style="white-space:normal;color:#333331;font-weight:bold;">[[item.label]]</div>
+              <div class="standard-info" style="white-space:normal;color:#666662;font-size:12px !important;">[[item.type]][[item.yearRange]]</div>
             </paper-item-body>
           </paper-icon-item>
         </template>
@@ -173,31 +187,40 @@ Example:
       </template>
     </birch-typeahead>
     <div class="standard-container">
-      <p><label class='standard_label'>[[chosenStandardLabel]]</label>
-        <template is="dom-if" if="[[standardLabel]]">
-          <button class="standard-button" on-blur="_handleBlur" on-tap="_openStandardSelector"><iron-icon class="standard-icon"><svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="11" height="16" viewBox="0 0 11 16"><path d="M5.5,15.79a.39.39,0,0,1-.37-.24.36.36,0,0,1,0-.13A7.49,7.49,0,0,0,2.9,10.31c-.37-.44-.79-.94-1.27-1.57L1.4,8.42a5,5,0,0,1-1-3.08,5.13,5.13,0,1,1,10.27,0,5.08,5.08,0,0,1-1,3.08l-.24.32h0c-.48.63-.9,1.13-1.27,1.57a7.46,7.46,0,0,0-2.21,5.08A.39.39,0,0,1,5.5,15.79ZM5.5,3a2,2,0,1,0,2,2A2,2,0,0,0,5.5,3Z" style="fill:#333331"/><rect width="11" height="16" style="fill:none"/></svg></iron-icon><span class="label-text">[[standardLabel]]</span><span class="carat"> ▾</span></button>
+      <p><label id="label" class='standard_label'>[[chosenStandardLabel]]</label>
+        <template id="template" is="dom-if" if="[[standardLabel]]">
+          <button id="button" class="standard-button" on-blur="_handleBlur" on-tap="_openStandardSelector" on-keydown="_handleKeydown">
+            <iron-icon class="standardIcon">
+              <template is="dom-if" if="[[isDate]]">
+                <svg id="Layer_1" data-name="Layer 1" width="14" height="16" viewBox="0 0 14 16"><path d="M1,15.9A.94.94,0,0,1,.1,15V3.6A1.5,1.5,0,0,1,1.6,2.1h.3V3A1.1,1.1,0,0,0,3,4.1h.1V.1H4a.9.9,0,0,1,.9.9V2.1h4V3A1.1,1.1,0,0,0,10,4.1h.1V.1H11a.9.9,0,0,1,.9.9V2.1h.5a1.5,1.5,0,0,1,1.5,1.5V15a.94.94,0,0,1-.94.94Zm.86-1.8H12.1V5.9H1.9Z" style="fill:#333331"/><rect width="14" height="16" style="fill:none"/><path d="M3.17,12.24l.59-.76a2.12,2.12,0,0,0,1.47.61c.65,0,1-.28,1-.68s-.33-.62-1.07-.62l-.66,0v-1h.66c.59,0,1-.18,1-.57s-.43-.63-1-.63a1.92,1.92,0,0,0-1.35.55l-.57-.71a2.63,2.63,0,0,1,2-.85c1.25,0,2,.56,2,1.45a1.31,1.31,0,0,1-1.17,1.22,1.34,1.34,0,0,1,1.25,1.28c0,.92-.82,1.57-2.1,1.57A2.67,2.67,0,0,1,3.17,12.24Z" style="fill:#333331"/><path d="M9.33,13V9.13l-.89.9-.65-.68L9.47,7.67h1V13Z" style="fill:#333331"/></svg>
+              </template>
+              <template is="dom-if" if="[[isPlace]]">
+                <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="11" height="16" viewBox="0 0 11 16"><path d="M5.5,15.79a.39.39,0,0,1-.37-.24.36.36,0,0,1,0-.13A7.49,7.49,0,0,0,2.9,10.31c-.37-.44-.79-.94-1.27-1.57L1.4,8.42a5,5,0,0,1-1-3.08,5.13,5.13,0,1,1,10.27,0,5.08,5.08,0,0,1-1,3.08l-.24.32h0c-.48.63-.9,1.13-1.27,1.57a7.46,7.46,0,0,0-2.21,5.08A.39.39,0,0,1,5.5,15.79ZM5.5,3a2,2,0,1,0,2,2A2,2,0,0,0,5.5,3Z" style="fill:#333331"/><rect width="11" height="16" style="fill:none"/></svg>
+              </template>
+            </iron-icon>
+            <span class="label-text">[[standardLabel]]</span><span class="carat"> ▾</span></button>
         </template>
       </p>
       <div id="optionsMenuWrapper" tabindex="-1" hidden$="[[_hideStandards]]">
         <paper-menu id="optionsMenu" tabindex="-1" hidden$="[[_hideStandards]]">
           <template is="dom-repeat" items="[[_options]]">
             <template is="dom-if" if="[[item.icon]]">
+
               <paper-icon-item on-tap="_handleChangeStandard">
                 <iron-icon item-icon>
-                  <template is="dom-if" if="[[isDate()]]">
-                    <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="11" height="16" viewBox="0 0 11 16"><path d="M5.5,15.79a.39.39,0,0,1-.37-.24.36.36,0,0,1,0-.13A7.49,7.49,0,0,0,2.9,10.31c-.37-.44-.79-.94-1.27-1.57L1.4,8.42a5,5,0,0,1-1-3.08,5.13,5.13,0,1,1,10.27,0,5.08,5.08,0,0,1-1,3.08l-.24.32h0c-.48.63-.9,1.13-1.27,1.57a7.46,7.46,0,0,0-2.21,5.08A.39.39,0,0,1,5.5,15.79ZM5.5,3a2,2,0,1,0,2,2A2,2,0,0,0,5.5,3Z" style="fill:#333331"/><rect width="11" height="16" style="fill:none"/></svg>
+                  <template is="dom-if" if="[[isDate]]">
+                    <svg id="Layer_1" data-name="Layer 1" width="14" height="16" viewBox="0 0 14 16"><path d="M1,15.9A.94.94,0,0,1,.1,15V3.6A1.5,1.5,0,0,1,1.6,2.1h.3V3A1.1,1.1,0,0,0,3,4.1h.1V.1H4a.9.9,0,0,1,.9.9V2.1h4V3A1.1,1.1,0,0,0,10,4.1h.1V.1H11a.9.9,0,0,1,.9.9V2.1h.5a1.5,1.5,0,0,1,1.5,1.5V15a.94.94,0,0,1-.94.94Zm.86-1.8H12.1V5.9H1.9Z" style="fill:#333331"/><rect width="14" height="16" style="fill:none"/><path d="M3.17,12.24l.59-.76a2.12,2.12,0,0,0,1.47.61c.65,0,1-.28,1-.68s-.33-.62-1.07-.62l-.66,0v-1h.66c.59,0,1-.18,1-.57s-.43-.63-1-.63a1.92,1.92,0,0,0-1.35.55l-.57-.71a2.63,2.63,0,0,1,2-.85c1.25,0,2,.56,2,1.45a1.31,1.31,0,0,1-1.17,1.22,1.34,1.34,0,0,1,1.25,1.28c0,.92-.82,1.57-2.1,1.57A2.67,2.67,0,0,1,3.17,12.24Z" style="fill:#333331"/><path d="M9.33,13V9.13l-.89.9-.65-.68L9.47,7.67h1V13Z" style="fill:#333331"/></svg>
                   </template>
-                  <template is="dom-if" if="[[isPlace()]]">
+                  <template is="dom-if" if="[[isPlace]]">
                     <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="11" height="16" viewBox="0 0 11 16"><path d="M5.5,15.79a.39.39,0,0,1-.37-.24.36.36,0,0,1,0-.13A7.49,7.49,0,0,0,2.9,10.31c-.37-.44-.79-.94-1.27-1.57L1.4,8.42a5,5,0,0,1-1-3.08,5.13,5.13,0,1,1,10.27,0,5.08,5.08,0,0,1-1,3.08l-.24.32h0c-.48.63-.9,1.13-1.27,1.57a7.46,7.46,0,0,0-2.21,5.08A.39.39,0,0,1,5.5,15.79ZM5.5,3a2,2,0,1,0,2,2A2,2,0,0,0,5.5,3Z" style="fill:#333331"/><rect width="11" height="16" style="fill:none"/></svg>
                   </template>
                 </iron-icon>
                 <paper-item-body two-line>
-                  <div class="standard-label">[[item.label]]</div>
-                  <div class="standard-info">[[item.type]][[item.yearRange]]</div>
+                  <div class="standard-label" style="white-space:normal;color:#333331;font-weight:bold;">[[item.label]]</div>
+                  <div class="standard-info" style="white-space:normal;color:#666662;font-size:12px !important;">[[item.type]][[item.yearRange]]</div>
                 </paper-item-body>
               </paper-icon-item>
             </template>
-
             <template is="dom-if" if="[[!item.icon]]">
               <paper-icon-item on-tap="_handleChangeStandard">
                 <iron-icon item-icon></iron-icon>
@@ -282,20 +305,25 @@ Example:
       },
       observers: [
         '_updateOptions(_searchTerm, standardType, language, i18n)',
-        '_updateLabels(i18n, standardType)'
+        '_updateLabels(i18n, standardType)',
+        '_setIsDateOrPlace(standardType)'
       ],
       _updateLabels(i18n, standardType) {
         this.chosenStandardLabel = this.chosenStandardLabel || i18n(`STANDARD_${this.standardType.toUpperCase()}_LABEL`)
         this.textLabel = this.textLabel || i18n(`EVENT_${this.standardType.toUpperCase()}_LABEL`)
       },
       _updateOptions(searchTerm, type, lang, i18n) {
+        this._latestSearch = searchTerm
         if (!searchTerm) return;
         this._fetchOptions(searchTerm, type, lang).then(function(options) {
+          // don't do anything with the response if it came back after they typed something again
+          if (searchTerm !== this._latestSearch) return;
           if (!this._stopSearch) this.$.typeahead.options = options;
           this._stopSearch = false;
           this.$.typeahead.loading = false;
-        }.bind(this))
-        .catch(function(err) {
+        }.bind(this)).catch(function(err) {
+          // don't do anything with the response if it came back after they typed something again
+          if (searchTerm !== this._latestSearch) return;
           this._stopSearch = false;
           this.$.typeahead.loading = false;
           console.log(err)
@@ -410,15 +438,73 @@ Example:
       },
       _handleBlur: function(e) {
         if (e) {
-          if (this && this.$.optionsMenu && !this.$.optionsMenu.contains(e.relatedTarget)) this._hideStandards = true;
+          if (this && this.$.optionsMenu && !this.$.optionsMenu.contains(e.relatedTarget)) {
+            this._hideStandards = true;
+          } else {
+            e.target.focus();
+          }
         }
       },
-      isDate: function() {
-        return this.standardType === 'date';
+      _setIsDateOrPlace: function() {
+        this.isDate = this.standardType === 'date';
+        this.isPlace = this.standardType === 'place';
       },
-      isPlace: function() {
-        return this.standardType === 'place';
-      }
+      _handleKeydown: function(e){
+        if(!e || !e.which) return;
+        switch(e.which){
+          case 38:  this._handleUpArrow(e);     break;
+          case 40:  this._handleDownArrow(e);   break;
+          case 9:   this._handleTab(e);         break;
+          case 13:  this._handleEnter(e);       break;
+          case 27:  this._handleEscape(e);      break;
+        }
+      },
+
+      _handleUpArrow: function(e){
+        if(this._hideStandards) return;
+        e.preventDefault();
+        var optionsMenu = this.$.optionsMenu;
+        var index = Math.max(optionsMenu.selected - 1, 0);
+        optionsMenu.select(index);
+        this.shadowRoot.querySelector('#button').focus();
+      },
+
+      _handleDownArrow: function(e){
+        if(this._hideStandards) {
+          this._hideStandards = false;
+          return;
+        }
+        e.preventDefault();
+        var optionsMenu = this.$.optionsMenu;
+        var index = 0;
+        if(typeof optionsMenu.selected === 'number'){
+          index = Math.min(optionsMenu.selected + 1, this._options.length - 1);
+        }
+        optionsMenu.select(index);
+        this.shadowRoot.querySelector('#button').focus();
+      },
+
+      _handleTab: function(e){
+        if(this._hideStandards) return;
+        e.preventDefault();
+        if (e.shiftKey) {
+          this._handleUpArrow(e);
+        } else {
+          this._handleDownArrow(e);
+        }
+      },
+
+      _handleEnter: function(e){
+        if(this._hideStandards) return;
+        e.preventDefault();
+        e.model = e.model || {};
+        e.model.item = this._options[this.$.optionsMenu.selected];
+        this._handleChangeStandard(e);
+      },
+
+      _handleEscape: function(e){
+        this._hideStandards = true;
+      },
     });
   </script>
 </dom-module>
