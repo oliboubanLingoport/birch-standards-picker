@@ -22,22 +22,29 @@ Example:
     <style>
       :host {
         display: block;
+        font-family: Verdana;
+        color: #333331;
       }
       [hidden] {
         display: none;
       }
       .standard_label {
-        font-weight: bold;
+        font-size: 12px;
+        color: #666662;
+        display: block;
+        padding: 2px
       }
       .standard-container {
         position: relative;
         max-width: 300px;
-        white-space: nowrap;
+      }
+      .standard-container p {
+        margin: 0;
+        padding-top: 10px;
       }
       #optionsMenu {
-        top: 1.5em;
         position: absolute;
-        z-index: 10000;
+        z-index: 100000;
         padding: 0;
         width: 100%;
         max-height: 200px;
@@ -46,19 +53,43 @@ Example:
         cursor: pointer;
         box-shadow: 0px 5px 10px #bab7b1;
         -webkit-overflow-scrolling: touch;
+        border: 1px solid #bab7b1;
+        border-radius: 4px;
       }
-      paper-item, paper-icon-item, paper-item-body {
-        --paper-item: {
-          margin: 0;
-          min-height: 2em;
-          white-space: nowrap !important;
-        };
+      #optionsMenuWrapper {
+        position: relative;
+        margin-top: 12px;
+      }
+      #optionsMenuWrapper:after, #optionsMenuWrapper:before {
+        bottom: -1px;
+        left: 30px;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+      }
+      #optionsMenuWrapper:after {
+        border-color: rgba(255, 255, 255, 0);
+        border-bottom-color: #ffffff;
+        border-width: 12px;
+        margin-left: -12px;
+        z-index: 100001;
+      }
+      #optionsMenuWrapper:before {
+        border-color: rgba(186, 183, 177, 0);
+        border-bottom-color: #bab7b1;
+        border-width: 13px;
+        margin-left: -13px;
       }
       .label-text {
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        padding-left: 10px;
+        max-width: 265px;
         overflow: hidden;
         display: inline-block;
+        text-overflow: ellipsis;
+        vertical-align: middle;
       }
       .carat {
         vertical-align: top;
@@ -69,6 +100,10 @@ Example:
         white-space: nowrap;
         background: 0 0;
         font-size: 14px;
+        padding: 0;
+        max-width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
       .standard-button:active,
       .standard-button:focus,
@@ -76,6 +111,9 @@ Example:
         border:none;
         outline:none;
 
+      }
+      #Layer_1 {
+        vertical-align: bottom;
       }
       birch-typeahead {
         --birch-typeahead-input: {
@@ -89,15 +127,16 @@ Example:
         }
 
         --birch-typeahead-paper-item: {
-          margin: 0;
-          min-height: 2em;
-          white-space: nowrap !important;
+          white-space: normal !important;
         }
       }
     </style>
+    <label class="standard_label" for="typeahead">[[textLabel]]</label>
     <birch-typeahead
       id='typeahead'
       on-birch-typeahead:input='_handleChange'
+      on-birch-typeahead:cancel='_handleCancel'
+      on-birch-typeahead:blur='_handleCancel'
       on-birch-typeahead:selected='_handleSelect'
       highlight-first-item
       value="{{_searchTerm}}"
@@ -105,13 +144,19 @@ Example:
       debounce-input-duration="250">
       <template>
         <template is="dom-if" if="[[item.icon]]">
+
           <paper-icon-item>
             <iron-icon item-icon>
-              <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="11" height="16" viewBox="0 0 11 16"><path d="M5.5,15.79a.39.39,0,0,1-.37-.24.36.36,0,0,1,0-.13A7.49,7.49,0,0,0,2.9,10.31c-.37-.44-.79-.94-1.27-1.57L1.4,8.42a5,5,0,0,1-1-3.08,5.13,5.13,0,1,1,10.27,0,5.08,5.08,0,0,1-1,3.08l-.24.32h0c-.48.63-.9,1.13-1.27,1.57a7.46,7.46,0,0,0-2.21,5.08A.39.39,0,0,1,5.5,15.79ZM5.5,3a2,2,0,1,0,2,2A2,2,0,0,0,5.5,3Z" style="fill:#333331"/><rect width="11" height="16" style="fill:none"/></svg>
+              <template is="dom-if" if="[[isDate()]]">
+                <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="11" height="16" viewBox="0 0 11 16"><path d="M5.5,15.79a.39.39,0,0,1-.37-.24.36.36,0,0,1,0-.13A7.49,7.49,0,0,0,2.9,10.31c-.37-.44-.79-.94-1.27-1.57L1.4,8.42a5,5,0,0,1-1-3.08,5.13,5.13,0,1,1,10.27,0,5.08,5.08,0,0,1-1,3.08l-.24.32h0c-.48.63-.9,1.13-1.27,1.57a7.46,7.46,0,0,0-2.21,5.08A.39.39,0,0,1,5.5,15.79ZM5.5,3a2,2,0,1,0,2,2A2,2,0,0,0,5.5,3Z" style="fill:#333331"/><rect width="11" height="16" style="fill:none"/></svg>
+              </template>
+              <template is="dom-if" if="[[isPlace()]]">
+                <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="11" height="16" viewBox="0 0 11 16"><path d="M5.5,15.79a.39.39,0,0,1-.37-.24.36.36,0,0,1,0-.13A7.49,7.49,0,0,0,2.9,10.31c-.37-.44-.79-.94-1.27-1.57L1.4,8.42a5,5,0,0,1-1-3.08,5.13,5.13,0,1,1,10.27,0,5.08,5.08,0,0,1-1,3.08l-.24.32h0c-.48.63-.9,1.13-1.27,1.57a7.46,7.46,0,0,0-2.21,5.08A.39.39,0,0,1,5.5,15.79ZM5.5,3a2,2,0,1,0,2,2A2,2,0,0,0,5.5,3Z" style="fill:#333331"/><rect width="11" height="16" style="fill:none"/></svg>
+              </template>
             </iron-icon>
-            <paper-item-body style="white-space: nowrap !important;" two-line>
-              <div>[[item.label]]</div>
-              <div>[[item.type]] [[item.yearRange]]</div>
+            <paper-item-body two-line>
+              <div class="standard-label">[[item.label]]</div>
+              <div class="standard-info">[[item.type]][[item.yearRange]]</div>
             </paper-item-body>
           </paper-icon-item>
         </template>
@@ -120,29 +165,35 @@ Example:
           <paper-icon-item>
             <iron-icon item-icon></iron-icon>
             <paper-item-body two-line>
-              <div>[[item.label]]</div>
-              <div>[[item.type]] [[item.yearRange]]</div>
+              <div class="standard-label">[[item.label]]</div>
+              <div class="standard-info">[[item.type]][[item.yearRange]]</div>
             </paper-item-body>
           </paper-icon-item>
         </template>
       </template>
     </birch-typeahead>
     <div class="standard-container">
-      <p><label class='standard_label'>[[i18n('STANDARD')]]: </label>
+      <p><label class='standard_label'>[[chosenStandardLabel]]</label>
         <template is="dom-if" if="[[standardLabel]]">
-          <button class="standard-button" on-blur="_handleBlur" on-tap="_openStandardSelector"><span class="label-text">[[standardLabel]]</span><span class="carat"> ▾</span></button>
+          <button class="standard-button" on-blur="_handleBlur" on-tap="_openStandardSelector"><iron-icon class="standard-icon"><svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="11" height="16" viewBox="0 0 11 16"><path d="M5.5,15.79a.39.39,0,0,1-.37-.24.36.36,0,0,1,0-.13A7.49,7.49,0,0,0,2.9,10.31c-.37-.44-.79-.94-1.27-1.57L1.4,8.42a5,5,0,0,1-1-3.08,5.13,5.13,0,1,1,10.27,0,5.08,5.08,0,0,1-1,3.08l-.24.32h0c-.48.63-.9,1.13-1.27,1.57a7.46,7.46,0,0,0-2.21,5.08A.39.39,0,0,1,5.5,15.79ZM5.5,3a2,2,0,1,0,2,2A2,2,0,0,0,5.5,3Z" style="fill:#333331"/><rect width="11" height="16" style="fill:none"/></svg></iron-icon><span class="label-text">[[standardLabel]]</span><span class="carat"> ▾</span></button>
         </template>
       </p>
-      <paper-menu id="optionsMenu" tabindex="-1" hidden$="[[_hideStandards]]">
+      <div id="optionsMenuWrapper" tabindex="-1" hidden$="[[_hideStandards]]">
+        <paper-menu id="optionsMenu" tabindex="-1" hidden$="[[_hideStandards]]">
           <template is="dom-repeat" items="[[_options]]">
             <template is="dom-if" if="[[item.icon]]">
               <paper-icon-item on-tap="_handleChangeStandard">
                 <iron-icon item-icon>
-                  <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="11" height="16" viewBox="0 0 11 16"><path d="M5.5,15.79a.39.39,0,0,1-.37-.24.36.36,0,0,1,0-.13A7.49,7.49,0,0,0,2.9,10.31c-.37-.44-.79-.94-1.27-1.57L1.4,8.42a5,5,0,0,1-1-3.08,5.13,5.13,0,1,1,10.27,0,5.08,5.08,0,0,1-1,3.08l-.24.32h0c-.48.63-.9,1.13-1.27,1.57a7.46,7.46,0,0,0-2.21,5.08A.39.39,0,0,1,5.5,15.79ZM5.5,3a2,2,0,1,0,2,2A2,2,0,0,0,5.5,3Z" style="fill:#333331"/><rect width="11" height="16" style="fill:none"/></svg>
+                  <template is="dom-if" if="[[isDate()]]">
+                    <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="11" height="16" viewBox="0 0 11 16"><path d="M5.5,15.79a.39.39,0,0,1-.37-.24.36.36,0,0,1,0-.13A7.49,7.49,0,0,0,2.9,10.31c-.37-.44-.79-.94-1.27-1.57L1.4,8.42a5,5,0,0,1-1-3.08,5.13,5.13,0,1,1,10.27,0,5.08,5.08,0,0,1-1,3.08l-.24.32h0c-.48.63-.9,1.13-1.27,1.57a7.46,7.46,0,0,0-2.21,5.08A.39.39,0,0,1,5.5,15.79ZM5.5,3a2,2,0,1,0,2,2A2,2,0,0,0,5.5,3Z" style="fill:#333331"/><rect width="11" height="16" style="fill:none"/></svg>
+                  </template>
+                  <template is="dom-if" if="[[isPlace()]]">
+                    <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="11" height="16" viewBox="0 0 11 16"><path d="M5.5,15.79a.39.39,0,0,1-.37-.24.36.36,0,0,1,0-.13A7.49,7.49,0,0,0,2.9,10.31c-.37-.44-.79-.94-1.27-1.57L1.4,8.42a5,5,0,0,1-1-3.08,5.13,5.13,0,1,1,10.27,0,5.08,5.08,0,0,1-1,3.08l-.24.32h0c-.48.63-.9,1.13-1.27,1.57a7.46,7.46,0,0,0-2.21,5.08A.39.39,0,0,1,5.5,15.79ZM5.5,3a2,2,0,1,0,2,2A2,2,0,0,0,5.5,3Z" style="fill:#333331"/><rect width="11" height="16" style="fill:none"/></svg>
+                  </template>
                 </iron-icon>
                 <paper-item-body two-line>
-                  <div>[[item.label]]</div>
-                  <div>[[item.type]] [[item.yearRange]]</div>
+                  <div class="standard-label">[[item.label]]</div>
+                  <div class="standard-info">[[item.type]][[item.yearRange]]</div>
                 </paper-item-body>
               </paper-icon-item>
             </template>
@@ -151,13 +202,14 @@ Example:
               <paper-icon-item on-tap="_handleChangeStandard">
                 <iron-icon item-icon></iron-icon>
                 <paper-item-body two-line>
-                  <div>[[item.label]]</div>
-                  <div>[[item.type]] [[item.yearRange]]</div>
+                  <div class="standard-label">[[item.label]]</div>
+                  <div class="standard-info">[[item.type]][[item.yearRange]]</div>
                 </paper-item-body>
               </paper-icon-item>
             </template>
           </template>
-      </paper-menu>
+        </paper-menu>
+      </div>
     </div>
   </template>
   <script>
@@ -167,6 +219,14 @@ Example:
         WCI18n()
       ],
       properties: {
+        textLabel: {
+          type: String,
+          value: ''
+        },
+        chosenStandardLabel: {
+          type: String,
+          value: ''
+        },
         originalText: {
           type: String,
           value: '',
@@ -221,11 +281,16 @@ Example:
       listeners: {
       },
       observers: [
-        '_updateOptions(_searchTerm, standardType, language, i18n)'
+        '_updateOptions(_searchTerm, standardType, language, i18n)',
+        '_updateLabels(i18n, standardType)'
       ],
+      _updateLabels(i18n, standardType) {
+        this.chosenStandardLabel = this.chosenStandardLabel || i18n(`STANDARD_${this.standardType.toUpperCase()}_LABEL`)
+        this.textLabel = this.textLabel || i18n(`EVENT_${this.standardType.toUpperCase()}_LABEL`)
+      },
       _updateOptions(searchTerm, type, lang, i18n) {
         if (!searchTerm) return;
-        this._fetchOptions(searchTerm, type, lang, i18n).then(function(options) {
+        this._fetchOptions(searchTerm, type, lang).then(function(options) {
           if (!this._stopSearch) this.$.typeahead.options = options;
           this._stopSearch = false;
           this.$.typeahead.loading = false;
@@ -236,7 +301,7 @@ Example:
           console.log(err)
         }.bind(this));
       },
-      _fetchOptions: function(searchTerm, type, lang, i18n) {
+      _fetchOptions: function(searchTerm, type, lang) {
         return new Promise(function(resolve, reject) {
           fetch('/tree-data/authorities/' + type + '?term=' + searchTerm + '&tz=360&locale=' + lang, {
             credentials: 'same-origin'
@@ -246,7 +311,7 @@ Example:
             if (!Array.isArray(data)) data = [];
             // Map the data to our desired format
             data = data.map(function(standard) {
-              return {
+              var vm = {
                 icon: true,
                 id: standard.id,
                 label: standard.label,
@@ -258,9 +323,10 @@ Example:
                   earliestDay: standard.earliestAstro || standard.latestAstro,
                   latestDay: standard.latestAstro || standard.earliestAstro
                 } : null,
-                type: null,
                 customText: null
-              }
+              };
+              if (vm.type && vm.yearRange) vm.type = vm.type + ', ';
+              return vm;
             });
 
             this._options = data;
@@ -269,7 +335,7 @@ Example:
               icon: false,
               id: null,
               label: searchTerm,
-              standardLabel: i18n(`NO_STANDARD_${type.toUpperCase()}_AVAILABLE`),
+              standardLabel: this.i18n(`NO_STANDARD_${type.toUpperCase()}_AVAILABLE`),
               standardText: '',
               type: null,
               customText: searchTerm
@@ -314,13 +380,14 @@ Example:
       _handleChangeStandard: function(e) {
         console.log('changeStandard:', e);
         if (!e || !e.model || !e.model.item) return;
+        noneOfTheAboveText = this._options[this._options.length-1].standardLabel;
         if (this.originalText === this.standardText) {
           this._stopSearch = true;
           this.originalText = e.model.item.standardText || this.originalText;
           this._searchTerm = e.model.item.standardText || this._searchTerm;
         }
         this.standardText = e.model.item.standardText;
-        this.standardLabel = e.model.item.standardLabel;
+        this.standardLabel = e.model.item.standardLabel === noneOfTheAboveText ? this.i18n('NO_STANDARD_SELECTED') : e.model.item.standardLabel;
         this.julianDateRange = e.model.item.julianDateRange;
         this._hideStandards = true;
       },
@@ -333,6 +400,11 @@ Example:
         this.standardLabel = e.detail.selection.standardLabel;
         this.julianDateRange = e.detail.selection.julianDateRange;
       },
+      _handleCancel: function(e) {
+        console.log('cancel:', e);
+        if (this._searchTerm && !this.standardLabel) this.standardLabel = this.i18n('NO_STANDARD_SELECTED');
+        this.originalText = this._searchTerm;
+      },
       _openStandardSelector: function() {
         this._hideStandards = false;
       },
@@ -340,6 +412,12 @@ Example:
         if (e) {
           if (this && this.$.optionsMenu && !this.$.optionsMenu.contains(e.relatedTarget)) this._hideStandards = true;
         }
+      },
+      isDate: function() {
+        return this.standardType === 'date';
+      },
+      isPlace: function() {
+        return this.standardType === 'place';
       }
     });
   </script>
