@@ -11,10 +11,6 @@ Example:
 
 @demo demo/index.html
 
-
-
-1. Auto Select First Standard on Blur
-2.
 -->
 
 <dom-module id="birch-standards-picker">
@@ -41,6 +37,7 @@ Example:
       .standard-container p {
         margin: 0;
         padding-top: 10px;
+        min-height: 40px;
       }
       #optionsMenu {
         position: absolute;
@@ -242,34 +239,66 @@ Example:
         WCI18n()
       ],
       properties: {
+        /**
+         * The label for the input box.
+         * The default will be the translation for 'Event [type]'
+         *
+         * @type {String}
+         */
         textLabel: {
           type: String,
           value: ''
         },
 
+        /**
+         * The label for the standard selector.
+         * The default will be the translation for 'Standardized Event [type]'
+         *
+         * @type {String}
+         */
         chosenStandardLabel: {
           type: String,
           value: ''
         },
 
+        /**
+         * The text that the user has typed in.
+         *
+         * @type {String}
+         */
         originalText: {
           type: String,
           value: '',
           notify: true
         },
 
+        /**
+         * The display label for the standard selected.
+         *
+         * @type {String}
+         */
         standardLabel: {
           type: String,
           value: '',
           notify: true
         },
 
+        /**
+         * The text value of the standard.
+         *
+         * @type {String}
+         */
         standardText: {
           type: String,
           value: '',
           notify: true
         },
 
+        /**
+         * The julian date range of the standard
+         *
+         * @type {Object}
+         */
         julianDateRange: {
           type: Object,
           value: function() {
@@ -310,9 +339,6 @@ Example:
           type: Boolean,
           value: false
         }
-      },
-
-      listeners: {
       },
 
       observers: [
