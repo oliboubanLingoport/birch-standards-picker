@@ -246,25 +246,30 @@ Example:
           type: String,
           value: ''
         },
+
         chosenStandardLabel: {
           type: String,
           value: ''
         },
+
         originalText: {
           type: String,
           value: '',
           notify: true
         },
+
         standardLabel: {
           type: String,
           value: '',
           notify: true
         },
+
         standardText: {
           type: String,
           value: '',
           notify: true
         },
+
         julianDateRange: {
           type: Object,
           value: function() {
@@ -272,24 +277,7 @@ Example:
           },
           notify: true
         },
-        _searchTerm: {
-          type: String,
-          value: ''
-        },
-        _options: {
-          type: Array,
-          value: function() {
-            return [];
-          }
-        },
-        _hideStandards: {
-          type: Boolean,
-          value: true
-        },
-        _stopSearch: {
-          type: Boolean,
-          value: false
-        },
+
         /**
          * The type of standard to fetch.
          *
@@ -299,19 +287,45 @@ Example:
         standardType: {
           type: String,
           value: 'date'
+        },
+
+        _searchTerm: {
+          type: String,
+          value: ''
+        },
+
+        _options: {
+          type: Array,
+          value: function() {
+            return [];
+          }
+        },
+
+        _hideStandards: {
+          type: Boolean,
+          value: true
+        },
+
+        _stopSearch: {
+          type: Boolean,
+          value: false
         }
       },
+
       listeners: {
       },
+
       observers: [
         '_updateOptions(_searchTerm, standardType, language, i18n)',
         '_updateLabels(i18n, standardType)',
         '_setIsDateOrPlace(standardType)'
       ],
+
       _updateLabels(i18n, standardType) {
         this.chosenStandardLabel = this.chosenStandardLabel || i18n(`STANDARD_${this.standardType.toUpperCase()}_LABEL`)
         this.textLabel = this.textLabel || i18n(`EVENT_${this.standardType.toUpperCase()}_LABEL`)
       },
+
       _updateOptions(searchTerm, type, lang, i18n) {
         this._latestSearch = searchTerm
         if (!searchTerm) return;
@@ -329,6 +343,7 @@ Example:
           console.log(err)
         }.bind(this));
       },
+
       _fetchOptions: function(searchTerm, type, lang) {
         return new Promise(function(resolve, reject) {
           fetch('/tree-data/authorities/' + type + '?term=' + searchTerm + '&tz=360&locale=' + lang, {
@@ -391,10 +406,12 @@ Example:
           }.bind(this)).then(resolve).catch(reject);
         }.bind(this));
       },
+
       _getPlaceholder: function(type, i18n) {
         var string = type.toUpperCase() + '_PLACEHOLDER';
         return this.i18n(string);
       },
+
       _handleChange: function(e) {
         console.log('change:', e);
         if(!e || !e.detail) return;
@@ -405,6 +422,7 @@ Example:
         this.julianDateRange = null;
         if (e.detail.value) this.$.typeahead.loading = true;
       },
+
       _handleChangeStandard: function(e) {
         console.log('changeStandard:', e);
         if (!e || !e.model || !e.model.item) return;
@@ -419,6 +437,7 @@ Example:
         this.julianDateRange = e.model.item.julianDateRange;
         this._hideStandards = true;
       },
+
       _handleSelect: function(e) {
         console.log('select:', e);
         if (!e || !e.detail || !e.detail.selection) return;
@@ -428,27 +447,28 @@ Example:
         this.standardLabel = e.detail.selection.standardLabel;
         this.julianDateRange = e.detail.selection.julianDateRange;
       },
+
       _handleCancel: function(e) {
         console.log('cancel:', e);
         if (this._searchTerm && !this.standardLabel) this.standardLabel = this.i18n('NO_STANDARD_SELECTED');
         this.originalText = this._searchTerm;
       },
+
       _openStandardSelector: function() {
         this._hideStandards = false;
       },
+
       _handleBlur: function(e) {
         if (e) {
-          if (this && this.$.optionsMenu && !this.$.optionsMenu.contains(e.relatedTarget)) {
-            this._hideStandards = true;
-          } else {
-            e.target.focus();
-          }
+          if (this && this.$.optionsMenu && !this.$.optionsMenu.contains(e.relatedTarget)) this._hideStandards = true;
         }
       },
+
       _setIsDateOrPlace: function() {
         this.isDate = this.standardType === 'date';
         this.isPlace = this.standardType === 'place';
       },
+
       _handleKeydown: function(e){
         if(!e || !e.which) return;
         switch(e.which){
@@ -505,6 +525,7 @@ Example:
       _handleEscape: function(e){
         this._hideStandards = true;
       },
+
     });
   </script>
 </dom-module>
