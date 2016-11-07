@@ -152,11 +152,10 @@ Example:
       on-birch-typeahead:blur='_handleCancel'
       on-birch-typeahead:selected='_handleSelect'
       highlight-first-item
-      value="{{_searchTerm}}"
-      placeholder="[[_getPlaceholder(standardType, i18n)]]"
-      debounce-input-duration="250">
+      value="[[_searchTerm]]"
+      placeholder="[[_getPlaceholder(standardType, i18n)]]">
       <template>
-        <template is="dom-if" if="[[item.icon]]">
+        <template is="dom-if" if="[[item.icon]]" restamp>
 
           <paper-icon-item>
             <iron-icon item-icon>
@@ -174,7 +173,7 @@ Example:
           </paper-icon-item>
         </template>
 
-        <template is="dom-if" if="[[!item.icon]]">
+        <template is="dom-if" if="[[!item.icon]]" restamp>
           <paper-icon-item>
             <iron-icon item-icon></iron-icon>
             <paper-item-body two-line>
@@ -349,18 +348,24 @@ Example:
         '_setIsDateOrPlace(standardType)'
       ],
 
+      ready: function() {
+        this.$.typeahead.$.input.addEventListener('keydown', this._handleDownArrowForTypeahead.bind(this))
+      },
+
       _updateLabels(i18n, standardType) {
-        this.chosenStandardLabel = this.chosenStandardLabel || i18n(`STANDARD_${this.standardType.toUpperCase()}_LABEL`)
-        this.textLabel = this.textLabel || i18n(`EVENT_${this.standardType.toUpperCase()}_LABEL`)
+        this.chosenStandardLabel = this.chosenStandardLabel || this.i18n(`STANDARD_${this.standardType.toUpperCase()}_LABEL`)
+        this.textLabel = this.textLabel || this.i18n(`EVENT_${this.standardType.toUpperCase()}_LABEL`)
       },
 
       _updateOptions(searchTerm, type, lang, i18n) {
+        this._optionstoUseWhenNoChange = null;
         this._latestSearch = searchTerm
         if (!searchTerm) return;
         this._fetchOptions(searchTerm, type, lang).then(function(options) {
           // don't do anything with the response if it came back after they typed something again
           if (searchTerm !== this._latestSearch) return;
           if (!this._stopSearch) this.$.typeahead.options = options;
+          if (this._stopSearch) this._optionstoUseWhenNoChange = options;
           this._stopSearch = false;
           this.$.typeahead.loading = false;
         }.bind(this)).catch(function(err) {
@@ -401,12 +406,13 @@ Example:
             });
 
             this._options = data;
+            this._optionsChanged = true;
 
             var noStandard = {
               icon: false,
               id: null,
               label: searchTerm,
-              standardLabel: this.i18n(`NO_STANDARD_${type.toUpperCase()}_AVAILABLE`),
+              standardLabel: this.i18n(`NO_STANDARD_${this.standardType.toUpperCase()}_AVAILABLE`),
               standardText: '',
               type: null,
               customText: searchTerm
@@ -420,7 +426,7 @@ Example:
             // Make the default selection auto select the
             // first standard:
 
-            if (data.length > 1) {
+            if (data.length > 1 && !isStandard) {
               data[0] = Object.assign({}, data[0], {
                 standardText: data[1].standardText,
                 standardLabel: data[1].label,
@@ -441,7 +447,6 @@ Example:
       },
 
       _handleChange: function(e) {
-        console.log('change:', e);
         if(!e || !e.detail) return;
         this._searchTerm = e.detail.value;
         // we unset the standard whenever they change the the text
@@ -452,7 +457,6 @@ Example:
       },
 
       _handleChangeStandard: function(e) {
-        console.log('changeStandard:', e);
         if (!e || !e.model || !e.model.item) return;
         noneOfTheAboveText = this._options[this._options.length-1].standardLabel;
         if (this.originalText === this.standardText) {
@@ -467,22 +471,31 @@ Example:
       },
 
       _handleSelect: function(e) {
-        console.log('select:', e);
         if (!e || !e.detail || !e.detail.selection) return;
+        if (this._searchTerm !== e.detail.selection.label) this._stopSearch = true;
         this.originalText = e.detail.selection.label;
+        this._searchTerm = e.detail.selection.label;
         this.standardText = e.detail.selection.standardText;
         this.standardLabel = e.detail.selection.standardLabel;
         this.julianDateRange = e.detail.selection.julianDateRange;
       },
 
       _handleCancel: function(e) {
-        console.log('cancel:', e);
-        if (this._searchTerm && !this.standardLabel) this.standardLabel = this.i18n('NO_STANDARD_SELECTED');
-        this.originalText = this._searchTerm;
+        if (this._searchTerm && !this.standardLabel) {
+          if (this._options.length > 0) {
+            this.standardLabel = this.i18n('NO_STANDARD_SELECTED');
+          } else {
+            this.standardLabel = this.i18n(`NO_STANDARD_${type.toUpperCase()}_AVAILABLE`);
+          }
+          this.originalText = this._searchTerm;
+        }
       },
 
       _openStandardSelector: function() {
+        if (this._options.length < 1) return;
         this._hideStandards = false;
+        if (this._optionsChanged) this.$.optionsMenu.select(0);
+        this._optionsChanged = false;
       },
 
       _handleBlur: function(e) {
@@ -496,7 +509,7 @@ Example:
         this.isPlace = this.standardType === 'place';
       },
 
-      _handleKeydown: function(e){
+      _handleKeydown: function(e) {
         if(!e || !e.which) return;
         switch(e.which){
           case 38:  this._handleUpArrow(e);     break;
@@ -507,7 +520,7 @@ Example:
         }
       },
 
-      _handleUpArrow: function(e){
+      _handleUpArrow: function(e) {
         if(this._hideStandards) return;
         e.preventDefault();
         var optionsMenu = this.$.optionsMenu;
@@ -516,7 +529,7 @@ Example:
         this.shadowRoot.querySelector('#button').focus();
       },
 
-      _handleDownArrow: function(e){
+      _handleDownArrow: function(e) {
         if(this._hideStandards) {
           this._hideStandards = false;
           return;
@@ -531,7 +544,7 @@ Example:
         this.shadowRoot.querySelector('#button').focus();
       },
 
-      _handleTab: function(e){
+      _handleTab: function(e) {
         if(this._hideStandards) return;
         e.preventDefault();
         if (e.shiftKey) {
@@ -541,7 +554,7 @@ Example:
         }
       },
 
-      _handleEnter: function(e){
+      _handleEnter: function(e) {
         if(this._hideStandards) return;
         e.preventDefault();
         e.model = e.model || {};
@@ -549,8 +562,19 @@ Example:
         this._handleChangeStandard(e);
       },
 
-      _handleEscape: function(e){
+      _handleEscape: function(e) {
         this._hideStandards = true;
+      },
+
+      _handleDownArrowForTypeahead: function(e) {
+        if(e && e.which && e.which === 40 && this.$.typeahead._hideOptions) {
+          if (this._optionstoUseWhenNoChange) {
+            this.$.typeahead.options = this._optionstoUseWhenNoChange
+            this._optionstoUseWhenNoChange = null;
+          } else {
+            this.$.typeahead.showOptions()
+          }
+        }
       },
 
     });
