@@ -22,7 +22,7 @@ Example:
         color: #666662;
       }
       [hidden] {
-        display: none;
+        display: none !important;
       }
       .standard_label {
         font-size: 12px;
@@ -144,7 +144,7 @@ Example:
         font-size: 14px !important;
       }
     </style>
-    <label class="standard_label" for="typeahead">[[textLabel]]</label>
+    <label class="standard_label" for="typeahead" hidden$='[[hideInputLabel]]'>[[inputLabel]]</label>
     <birch-typeahead
       id='typeahead'
       on-birch-typeahead:input='_handleChange'
@@ -184,20 +184,19 @@ Example:
         </template>
       </template>
     </birch-typeahead>
-    <div class="standard-container">
-      <p><label id="label" class='standard_label'>[[chosenStandardLabel]]</label>
-        <template id="template" is="dom-if" if="[[standardLabel]]">
-          <button id="button" class="standard-button" on-blur="_handleBlur" on-tap="_openStandardSelector" on-keydown="_handleKeydown">
-            <iron-icon class="standardIcon">
-              <template is="dom-if" if="[[isDate]]">
-                <svg id="Layer_1" data-name="Layer 1" width="14" height="16" viewBox="0 0 14 16"><path d="M1,15.9A.94.94,0,0,1,.1,15V3.6A1.5,1.5,0,0,1,1.6,2.1h.3V3A1.1,1.1,0,0,0,3,4.1h.1V.1H4a.9.9,0,0,1,.9.9V2.1h4V3A1.1,1.1,0,0,0,10,4.1h.1V.1H11a.9.9,0,0,1,.9.9V2.1h.5a1.5,1.5,0,0,1,1.5,1.5V15a.94.94,0,0,1-.94.94Zm.86-1.8H12.1V5.9H1.9Z" style="fill:#333331"/><rect width="14" height="16" style="fill:none"/><path d="M3.17,12.24l.59-.76a2.12,2.12,0,0,0,1.47.61c.65,0,1-.28,1-.68s-.33-.62-1.07-.62l-.66,0v-1h.66c.59,0,1-.18,1-.57s-.43-.63-1-.63a1.92,1.92,0,0,0-1.35.55l-.57-.71a2.63,2.63,0,0,1,2-.85c1.25,0,2,.56,2,1.45a1.31,1.31,0,0,1-1.17,1.22,1.34,1.34,0,0,1,1.25,1.28c0,.92-.82,1.57-2.1,1.57A2.67,2.67,0,0,1,3.17,12.24Z" style="fill:#333331"/><path d="M9.33,13V9.13l-.89.9-.65-.68L9.47,7.67h1V13Z" style="fill:#333331"/></svg>
-              </template>
-              <template is="dom-if" if="[[isPlace]]">
-                <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="11" height="16" viewBox="0 0 11 16"><path d="M5.5,15.79a.39.39,0,0,1-.37-.24.36.36,0,0,1,0-.13A7.49,7.49,0,0,0,2.9,10.31c-.37-.44-.79-.94-1.27-1.57L1.4,8.42a5,5,0,0,1-1-3.08,5.13,5.13,0,1,1,10.27,0,5.08,5.08,0,0,1-1,3.08l-.24.32h0c-.48.63-.9,1.13-1.27,1.57a7.46,7.46,0,0,0-2.21,5.08A.39.39,0,0,1,5.5,15.79ZM5.5,3a2,2,0,1,0,2,2A2,2,0,0,0,5.5,3Z" style="fill:#333331"/><rect width="11" height="16" style="fill:none"/></svg>
-              </template>
-            </iron-icon>
-            <span class="label-text">[[standardLabel]]</span><span class="carat"> ▾</span></button>
-        </template>
+    <div class="standard-container" hidden$='[[hideStandardsDropdown]]'>
+      <p><label id="label" class='standard_label'>[[standardsDropdownLabel]]</label>
+        <button id="button" class="standard-button" on-blur="_handleBlur" on-tap="_openStandardSelector" on-keydown="_handleKeydown" hidden$=[[!_standardLabel]]>
+          <iron-icon class="standardIcon">
+            <template is="dom-if" if="[[isDate]]">
+              <svg id="Layer_1" data-name="Layer 1" width="14" height="16" viewBox="0 0 14 16"><path d="M1,15.9A.94.94,0,0,1,.1,15V3.6A1.5,1.5,0,0,1,1.6,2.1h.3V3A1.1,1.1,0,0,0,3,4.1h.1V.1H4a.9.9,0,0,1,.9.9V2.1h4V3A1.1,1.1,0,0,0,10,4.1h.1V.1H11a.9.9,0,0,1,.9.9V2.1h.5a1.5,1.5,0,0,1,1.5,1.5V15a.94.94,0,0,1-.94.94Zm.86-1.8H12.1V5.9H1.9Z" style="fill:#333331"/><rect width="14" height="16" style="fill:none"/><path d="M3.17,12.24l.59-.76a2.12,2.12,0,0,0,1.47.61c.65,0,1-.28,1-.68s-.33-.62-1.07-.62l-.66,0v-1h.66c.59,0,1-.18,1-.57s-.43-.63-1-.63a1.92,1.92,0,0,0-1.35.55l-.57-.71a2.63,2.63,0,0,1,2-.85c1.25,0,2,.56,2,1.45a1.31,1.31,0,0,1-1.17,1.22,1.34,1.34,0,0,1,1.25,1.28c0,.92-.82,1.57-2.1,1.57A2.67,2.67,0,0,1,3.17,12.24Z" style="fill:#333331"/><path d="M9.33,13V9.13l-.89.9-.65-.68L9.47,7.67h1V13Z" style="fill:#333331"/></svg>
+            </template>
+            <template is="dom-if" if="[[isPlace]]">
+              <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="11" height="16" viewBox="0 0 11 16"><path d="M5.5,15.79a.39.39,0,0,1-.37-.24.36.36,0,0,1,0-.13A7.49,7.49,0,0,0,2.9,10.31c-.37-.44-.79-.94-1.27-1.57L1.4,8.42a5,5,0,0,1-1-3.08,5.13,5.13,0,1,1,10.27,0,5.08,5.08,0,0,1-1,3.08l-.24.32h0c-.48.63-.9,1.13-1.27,1.57a7.46,7.46,0,0,0-2.21,5.08A.39.39,0,0,1,5.5,15.79ZM5.5,3a2,2,0,1,0,2,2A2,2,0,0,0,5.5,3Z" style="fill:#333331"/><rect width="11" height="16" style="fill:none"/></svg>
+            </template>
+          </iron-icon>
+          <span class="label-text">[[_standardLabel]]</span><span class="carat"> ▾</span>
+        </button>
       </p>
       <div id="optionsMenuWrapper" tabindex="-1" hidden$="[[_hideStandards]]">
         <paper-menu id="optionsMenu" tabindex="-1" hidden$="[[_hideStandards]]">
@@ -246,9 +245,29 @@ Example:
          *
          * @type {String}
          */
-        textLabel: {
+        inputLabel: {
           type: String,
           value: ''
+        },
+
+        /**
+         * Whether to hide the standards selector dropdown
+         *
+         * @type{Boolean}
+         */
+        hideStandardsDropdown: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * Whether to hide the label above the input box
+         *
+         * @type{Boolean}
+         */
+        hideInputLabel: {
+          type: Boolean,
+          value: false
         },
 
         /**
@@ -257,7 +276,7 @@ Example:
          *
          * @type {String}
          */
-        chosenStandardLabel: {
+        standardsDropdownLabel: {
           type: String,
           value: ''
         },
@@ -278,7 +297,7 @@ Example:
          *
          * @type {String}
          */
-        standardLabel: {
+        _standardLabel: {
           type: String,
           value: '',
           notify: true
@@ -353,8 +372,8 @@ Example:
       },
 
       _updateLabels(i18n, standardType) {
-        this.chosenStandardLabel = this.chosenStandardLabel || this.i18n(`STANDARD_${this.standardType.toUpperCase()}_LABEL`)
-        this.textLabel = this.textLabel || this.i18n(`EVENT_${this.standardType.toUpperCase()}_LABEL`)
+        this.standardsDropdownLabel = this.standardsDropdownLabel || this.i18n(`STANDARD_${this.standardType.toUpperCase()}_LABEL`)
+        this.inputLabel = this.inputLabel || this.i18n(`EVENT_${this.standardType.toUpperCase()}_LABEL`)
       },
 
       _updateOptions(searchTerm, type, lang, i18n) {
@@ -379,7 +398,7 @@ Example:
 
       _fetchOptions: function(searchTerm, type, lang) {
         return new Promise(function(resolve, reject) {
-          fetch('/tree-data/authorities/' + type + '?term=' + searchTerm + '&tz=360&locale=' + lang, {
+          fetch('/tree-data/authorities/' + type + '?term=' + searchTerm + '&locale=' + lang, {
             credentials: 'same-origin'
           }).then(function(res) {
             return res.json();
@@ -432,6 +451,8 @@ Example:
                 standardLabel: data[1].label,
                 julianDateRange: data[1].julianDateRange
               });
+            }
+            if (data.length > 1) {
               // Eliminate the "None of the Above" entry
               data = data.slice(0, data.length - 1);
             }
@@ -450,7 +471,7 @@ Example:
         if(!e || !e.detail) return;
         this._searchTerm = e.detail.value;
         // we unset the standard whenever they change the the text
-        this.standardLabel = '';
+        this._standardLabel = '';
         this.standardText = null;
         this.julianDateRange = null;
         if (e.detail.value) this.$.typeahead.loading = true;
@@ -465,7 +486,7 @@ Example:
           this._searchTerm = e.model.item.standardText || this._searchTerm;
         }
         this.standardText = e.model.item.standardText;
-        this.standardLabel = e.model.item.standardLabel === noneOfTheAboveText ? this.i18n('NO_STANDARD_SELECTED') : e.model.item.standardLabel;
+        this._standardLabel = e.model.item.standardLabel === noneOfTheAboveText ? this.i18n('NO_STANDARD_SELECTED') : e.model.item.standardLabel;
         this.julianDateRange = e.model.item.julianDateRange;
         this._hideStandards = true;
       },
@@ -476,16 +497,16 @@ Example:
         this.originalText = e.detail.selection.label;
         this._searchTerm = e.detail.selection.label;
         this.standardText = e.detail.selection.standardText;
-        this.standardLabel = e.detail.selection.standardLabel;
+        this._standardLabel = e.detail.selection.standardLabel;
         this.julianDateRange = e.detail.selection.julianDateRange;
       },
 
       _handleCancel: function(e) {
-        if (this._searchTerm && !this.standardLabel) {
+        if (this._searchTerm && !this._standardLabel) {
           if (this._options.length > 0) {
-            this.standardLabel = this.i18n('NO_STANDARD_SELECTED');
+            this._standardLabel = this.i18n('NO_STANDARD_SELECTED');
           } else {
-            this.standardLabel = this.i18n(`NO_STANDARD_${type.toUpperCase()}_AVAILABLE`);
+            this._standardLabel = this.i18n(`NO_STANDARD_${this.standardType.toUpperCase()}_AVAILABLE`);
           }
           this.originalText = this._searchTerm;
         }
@@ -526,7 +547,7 @@ Example:
         var optionsMenu = this.$.optionsMenu;
         var index = Math.max(optionsMenu.selected - 1, 0);
         optionsMenu.select(index);
-        this.shadowRoot.querySelector('#button').focus();
+        this.$.button.focus();
       },
 
       _handleDownArrow: function(e) {
@@ -541,7 +562,7 @@ Example:
           index = Math.min(optionsMenu.selected + 1, this._options.length - 1);
         }
         optionsMenu.select(index);
-        this.shadowRoot.querySelector('#button').focus();
+        this.$.button.focus();
       },
 
       _handleTab: function(e) {
@@ -555,15 +576,20 @@ Example:
       },
 
       _handleEnter: function(e) {
-        if(this._hideStandards) return;
+        if(this._hideStandards) {
+          this._hideStandards = false;
+          return;
+        }
         e.preventDefault();
         e.model = e.model || {};
         e.model.item = this._options[this.$.optionsMenu.selected];
         this._handleChangeStandard(e);
+        this.$.button.focus();
       },
 
       _handleEscape: function(e) {
         this._hideStandards = true;
+        this.$.button.focus();
       },
 
       _handleDownArrowForTypeahead: function(e) {
