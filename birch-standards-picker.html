@@ -338,6 +338,16 @@ Example:
           value: 'date'
         },
 
+        /**
+         * The id of the standard
+         *
+         * @type {String}
+         */
+        standardId: {
+          type: String,
+          value: ''
+        },
+
         _searchTerm: {
           type: String,
           value: ''
@@ -362,7 +372,7 @@ Example:
       },
 
       observers: [
-        '_updateOptions(_searchTerm, standardType, language, i18n)',
+        '_updateOptions(_searchTerm, standardType, language)',
         '_updateLabels(i18n, standardType)',
         '_setIsDateOrPlace(standardType)'
       ],
@@ -376,11 +386,11 @@ Example:
         this.inputLabel = this.inputLabel || this.i18n(`EVENT_${this.standardType.toUpperCase()}_LABEL`)
       },
 
-      _updateOptions(searchTerm, type, lang, i18n) {
+      _updateOptions(searchTerm, type, lang) {
         this._optionstoUseWhenNoChange = null;
         this._latestSearch = searchTerm
         if (!searchTerm) return;
-        this._fetchOptions(searchTerm, type, lang).then(function(options) {
+        return this._fetchOptions(searchTerm, type, lang).then(function(options) {
           // don't do anything with the response if it came back after they typed something again
           if (searchTerm !== this._latestSearch) return;
           if (!this._stopSearch) this.$.typeahead.options = options;
@@ -429,7 +439,7 @@ Example:
 
             var noStandard = {
               icon: false,
-              id: null,
+              id: '',
               label: searchTerm,
               standardLabel: this.i18n(`NO_STANDARD_${this.standardType.toUpperCase()}_AVAILABLE`),
               standardText: '',
@@ -447,6 +457,7 @@ Example:
 
             if (data.length > 1 && !isStandard) {
               data[0] = Object.assign({}, data[0], {
+                id: data[1].id,
                 standardText: data[1].standardText,
                 standardLabel: data[1].label,
                 julianDateRange: data[1].julianDateRange
@@ -473,6 +484,7 @@ Example:
         // we unset the standard whenever they change the the text
         this._standardLabel = '';
         this.standardText = null;
+        this.standardId = '';
         this.julianDateRange = null;
         if (e.detail.value) this.$.typeahead.loading = true;
       },
@@ -485,6 +497,7 @@ Example:
           this.originalText = e.model.item.standardText || this.originalText;
           this._searchTerm = e.model.item.standardText || this._searchTerm;
         }
+        this.standardId = e.model.item.id;
         this.standardText = e.model.item.standardText;
         this._standardLabel = e.model.item.standardLabel === noneOfTheAboveText ? this.i18n('NO_STANDARD_SELECTED') : e.model.item.standardLabel;
         this.julianDateRange = e.model.item.julianDateRange;
@@ -496,6 +509,7 @@ Example:
         if (this._searchTerm !== e.detail.selection.label) this._stopSearch = true;
         this.originalText = e.detail.selection.label;
         this._searchTerm = e.detail.selection.label;
+        this.standardId = e.detail.selection.id;
         this.standardText = e.detail.selection.standardText;
         this._standardLabel = e.detail.selection.standardLabel;
         this.julianDateRange = e.detail.selection.julianDateRange;
