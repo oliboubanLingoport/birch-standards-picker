@@ -17,9 +17,13 @@
   "dependencies": {
     "birch-typeahead": "https://github.com/FamilySearchElements/birch-typeahead.git",
     "polymer": "Polymer/polymer#^1.7.0",
+    "es6-promise-polyfill": "git+https://github.com/taylorhakes/promise-polyfill#6.0.2",
     "wc-i18n": "jshcrowthe/wc-i18n#^2.0.1"
   },
   "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#^1.1.7"
+    "fetch-mock": "https://unpkg.com/fetch-mock@5.5.0/es5/client-browserified.js",
+    "iron-component-page": "PolymerElements/iron-component-page#^1.1.7",
+    "qa-shared-mock-json": "https://github.com/fs-eng/qa-shared-mock-json.git",
+    "web-component-tester": "^4.3.1"
   }
 }
