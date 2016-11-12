@@ -48,7 +48,7 @@ Example:
         overflow-y: scroll;
         overflow-x: hidden;
         cursor: pointer;
-        box-shadow: 0px 5px 10px #bab7b1;
+        box-shadow: 0 5px 10px #bab7b1;
         -webkit-overflow-scrolling: touch;
         border: 1px solid #bab7b1;
         border-radius: 4px;
@@ -177,8 +177,8 @@ Example:
           <paper-icon-item>
             <iron-icon item-icon></iron-icon>
             <paper-item-body two-line>
-              <div class="standard-label">[[item.label]]</div>
-              <div class="standard-info">[[item.type]][[item.yearRange]]</div>
+              <div class="standard-label" style="white-space:normal;color:#333331;">[[item.label]]</div>
+              <div class="standard-info" style="white-space:normal;color:#666662;font-size:12px !important;">[[item.type]][[item.yearRange]]</div>
             </paper-item-body>
           </paper-icon-item>
         </template>
@@ -222,8 +222,8 @@ Example:
               <paper-icon-item on-tap="_handleChangeStandard">
                 <iron-icon item-icon></iron-icon>
                 <paper-item-body two-line>
-                  <div class="standard-label">[[item.label]]</div>
-                  <div class="standard-info">[[item.type]][[item.yearRange]]</div>
+                  <div class="standard-label" style="white-space:normal;color:#333331;">[[item.label]]</div>
+                  <div class="standard-info" style="white-space:normal;color:#666662;font-size:12px !important;">[[item.type]][[item.yearRange]]</div>
                 </paper-item-body>
               </paper-icon-item>
             </template>
@@ -378,31 +378,35 @@ Example:
       ],
 
       ready: function() {
-        this.$.typeahead.$.input.addEventListener('keydown', this._handleDownArrowForTypeahead.bind(this))
+        this.$.typeahead.$.input.addEventListener('keydown', this._handleDownArrowForTypeahead.bind(this));
       },
 
-      _updateLabels(i18n, standardType) {
-        this.standardsDropdownLabel = this.standardsDropdownLabel || this.i18n(`STANDARD_${this.standardType.toUpperCase()}_LABEL`)
-        this.inputLabel = this.inputLabel || this.i18n(`EVENT_${this.standardType.toUpperCase()}_LABEL`)
+      _updateLabels: function(i18n, standardType) {
+        this.standardsDropdownLabel = this.standardsDropdownLabel || this.i18n(`STANDARD_${this.standardType.toUpperCase()}_LABEL`);
+        this.inputLabel = this.inputLabel || this.i18n(`EVENT_${this.standardType.toUpperCase()}_LABEL`);
       },
 
-      _updateOptions(searchTerm, type, lang) {
+      _updateOptions: function(searchTerm, type, lang) {
         this._optionstoUseWhenNoChange = null;
-        this._latestSearch = searchTerm
+        this._latestSearch = searchTerm;
         if (!searchTerm) return;
         return this._fetchOptions(searchTerm, type, lang).then(function(options) {
           // don't do anything with the response if it came back after they typed something again
           if (searchTerm !== this._latestSearch) return;
           if (!this._stopSearch) this.$.typeahead.options = options;
+          // we stop the search a) when we select a standard from the typeahead menu since it will
+          // update the input value and we don't want the menu to open up again and b) when we
+          // choose a new standard from the dropdown menu and that causes us to change the text
+          // in the input field as well.
           if (this._stopSearch) this._optionstoUseWhenNoChange = options;
           this._stopSearch = false;
           this.$.typeahead.loading = false;
         }.bind(this)).catch(function(err) {
+          console.log(err);
           // don't do anything with the response if it came back after they typed something again
           if (searchTerm !== this._latestSearch) return;
           this._stopSearch = false;
           this.$.typeahead.loading = false;
-          console.log(err)
         }.bind(this));
       },
 
@@ -430,6 +434,9 @@ Example:
                 } : null,
                 customText: null
               };
+              // we display type and year next to each other with a comma between them, so
+              // if we have both, we're going to put in the comma here since it's easier
+              // than doing a dom-if for a comma and a space.
               if (vm.type && vm.yearRange) vm.type = vm.type + ', ';
               return vm;
             });
@@ -609,10 +616,10 @@ Example:
       _handleDownArrowForTypeahead: function(e) {
         if(e && e.which && e.which === 40 && this.$.typeahead._hideOptions) {
           if (this._optionstoUseWhenNoChange) {
-            this.$.typeahead.options = this._optionstoUseWhenNoChange
+            this.$.typeahead.options = this._optionstoUseWhenNoChange;
             this._optionstoUseWhenNoChange = null;
           } else {
-            this.$.typeahead.showOptions()
+            this.$.typeahead.showOptions();
           }
         }
       },
