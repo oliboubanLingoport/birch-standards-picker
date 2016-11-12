@@ -1,0 +1,12 @@
+{
+  "_LRM_PKTAG460": "birch-standards-picker_1_155 - FULL-FILE",
+  "DATE_PLACEHOLDER": "Ввести дату",
+  "EVENT_DATE_LABEL": "Дата события",
+  "EVENT_PLACE_LABEL": "Местоположение события",
+  "NO_STANDARD_DATE_AVAILABLE": "Стандартизованное значение даты недоступно",
+  "NO_STANDARD_PLACE_AVAILABLE": "Стандартизованное значение местоположения недоступно",
+  "NO_STANDARD_SELECTED": "Стандартизованное значение не выбрано",
+  "PLACE_PLACEHOLDER": "Ввести местоположение",
+  "STANDARD_DATE_LABEL": "Стандартизованная дата события",
+  "STANDARD_PLACE_LABEL": "Стандартизованное местоположение события"
+}
