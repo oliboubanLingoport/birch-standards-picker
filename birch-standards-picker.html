@@ -28,6 +28,7 @@ Example:
 
 <dom-module id="birch-standards-picker">
   <template>
+    <wc-i18n-src locale='[[lang]]' domain='birch-standards-picker' locale-dir='[[localeDir()]]' locale-strings='{{_i18n}}'></wc-i18n-src>
     <style>
       :host {
         display: block;
@@ -249,9 +250,14 @@ Example:
     Polymer({
       is: 'birch-standards-picker',
       behaviors: [
-        WCI18n()
+        WCI18nBehavior
       ],
       properties: {
+        _i18n: {
+          type: Object,
+          value: function() { return {}; }
+        },
+
         /**
          * The label for the input box.
          * The default will be the translation for 'Event [type]'
@@ -395,8 +401,8 @@ Example:
       },
 
       _updateLabels: function(i18n, standardType) {
-        this.standardsDropdownLabel = this.standardsDropdownLabel || this.i18n(`STANDARD_${this.standardType.toUpperCase()}_LABEL`);
-        this.inputLabel = this.inputLabel || this.i18n(`EVENT_${this.standardType.toUpperCase()}_LABEL`);
+        this.standardsDropdownLabel = this.standardsDropdownLabel || this._i18n[`STANDARD_${this.standardType.toUpperCase()}_LABEL`];
+        this.inputLabel = this.inputLabel || this._i18n[`EVENT_${this.standardType.toUpperCase()}_LABEL`];
       },
 
       _updateOptions: function(searchTerm, type, lang) {
@@ -461,7 +467,7 @@ Example:
               icon: false,
               id: '',
               label: searchTerm,
-              standardLabel: this.i18n(`NO_STANDARD_${this.standardType.toUpperCase()}_AVAILABLE`),
+              standardLabel: this._i18n[`NO_STANDARD_${this.standardType.toUpperCase()}_AVAILABLE`],
               standardText: '',
               type: null,
               customText: searchTerm
@@ -495,7 +501,7 @@ Example:
 
       _getPlaceholder: function(type, i18n) {
         var string = type.toUpperCase() + '_PLACEHOLDER';
-        return this.i18n(string);
+        return this._i18n[string];
       },
 
       _handleChange: function(e) {
@@ -520,7 +526,7 @@ Example:
         }
         this.standardId = e.model.item.id;
         this.standardText = e.model.item.standardText;
-        this._standardLabel = e.model.item.standardLabel === noneOfTheAboveText ? this.i18n('NO_STANDARD_SELECTED') : e.model.item.standardLabel;
+        this._standardLabel = e.model.item.standardLabel === noneOfTheAboveText ? this._i18n['NO_STANDARD_SELECTED'] : e.model.item.standardLabel;
         this.julianDateRange = e.model.item.julianDateRange;
         this._hideStandards = true;
       },
@@ -547,9 +553,9 @@ Example:
       _handleCancel: function(e) {
         if (this._searchTerm && !this._standardLabel) {
           if (this._options.length > 0) {
-            this._standardLabel = this.i18n('NO_STANDARD_SELECTED');
+            this._standardLabel = this._i18n['NO_STANDARD_SELECTED'];
           } else {
-            this._standardLabel = this.i18n(`NO_STANDARD_${this.standardType.toUpperCase()}_AVAILABLE`);
+            this._standardLabel = this._i18n[`NO_STANDARD_${this.standardType.toUpperCase()}_AVAILABLE`];
           }
           this.originalText = this._searchTerm;
         }
