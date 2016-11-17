@@ -25,6 +25,20 @@
     window.Polymer = { dom: 'shadow' };
   </script>
   <link rel="import" href="../birch-standards-picker.html">
+  <script src="../../fetch-mock/index.js"></script>
+  <script>
+    fetch('../../../components/qa-shared-mock-json/tree-data/authorities/date-en-get-200.json').then(function(res){
+      return res.json();
+    }).then(function(res) {
+      fetchMock.mock({matcher:/\/tree-data\/authorities\/date*/, response:{body: res}, method:'GET'});
+    });
+    fetch('../../../components/qa-shared-mock-json/tree-data/authorities/place-en-get-200.json').then(function(res){
+      return res.json();
+    }).then(function(res) {
+      fetchMock.mock({matcher:/\/tree-data\/authorities\/place*/, response:{body: res}, method:'GET'});
+    });
+  </script>
+
 
 </head>
 <body>
