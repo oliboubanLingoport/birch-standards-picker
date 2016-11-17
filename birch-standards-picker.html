@@ -542,7 +542,11 @@ Example:
 
       _handleBlur: function(e) {
         if (e) {
-          if (this && this.$.optionsMenu && !this.$.optionsMenu.contains(e.relatedTarget)) this._hideStandards = true;
+          if (this && this.$.optionsMenu && !this.$.optionsMenu.contains(e.relatedTarget)) {
+            this._hideStandards = true;
+          } else {
+            this.$.button.focus();
+          }
         }
       },
 
