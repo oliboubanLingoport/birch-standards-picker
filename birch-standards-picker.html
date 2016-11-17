@@ -3,11 +3,24 @@
 <link rel="import" href="../wc-i18n/wc-i18n.html">
 
 <!--
-A comment describing this element
+The standards picker is used to select standard dates and places.
+
+Assumptions the component makes
+- fetch and promises are supported (the component does not bring in the polyfills)
+- `/tree-data/` resolves to a valid tree-data path e.g. `integration.familysearch.org/tree-data` (you'll need a proxy for tree-data running locally)
+- user is logged in to familysearch (`tree-data` returns 401s)
+
+Behavior of the component
+- When a user types a standard then clicks away or presses escape without selecting from the input menu, no standard is selected
+- When a user presses enter after typing, the first standard will be selected (The first standard keeps the original text the user typed and uses the first standard in the list for its standardizied values)
+- The input menu will reappear when the user presses the down arrow while focused on the input field
+- If the user selects a standard from the input menu, it will change the text in the input field
+- If the user types fast and then quickly presses enter before the call to get the standards can come back, no standard will be selected, and when the call finishes the input menu will appear (unless the input field loses focus)
+- When the standard is changed from the dropdown menu, if the text in the input field matched the text of the previously selected standard the input field is updated to match the new standard
 
 Example:
 
-    <birch-standards-picker></birch-standards-picker>
+    <birch-standards-picker standard-type="place"></birch-standards-picker>
 
 @demo demo/index.html
 
