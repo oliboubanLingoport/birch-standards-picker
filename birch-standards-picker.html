@@ -493,6 +493,7 @@ Example:
         this.standardText = null;
         this.standardId = '';
         this.julianDateRange = null;
+        this.originalText = this._searchTerm;
         if (e.detail.value) this.$.typeahead.loading = true;
       },
 
@@ -512,6 +513,14 @@ Example:
       },
 
       _handleSelect: function(e) {
+        if (this.$.typeahead.loading) {
+          // this is a hacky way to override the behavior in birch-typeahead
+          // where on select it updates the input value - we can't intercept
+          // that call, but this allows us to have the text appear correct to
+          // the user. The _searchTerm is the value we just typed.
+          this.$.typeahead.$.input.value = this._searchTerm;
+          return;
+        }
         if (!e || !e.detail || !e.detail.selection) return;
         if (this._searchTerm !== e.detail.selection.label) this._stopSearch = true;
         this.originalText = e.detail.selection.label;
