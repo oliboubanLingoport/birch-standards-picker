@@ -18,6 +18,7 @@
     "birch-typeahead": "https://github.com/FamilySearchElements/birch-typeahead.git",
     "polymer": "Polymer/polymer#^1.7.0",
     "es6-promise-polyfill": "git+https://github.com/taylorhakes/promise-polyfill#6.0.2",
+    "oak-i18n-behavior": "git+https://github.com/FamilySearchElements/oak-i18n-behavior.git",
     "wc-i18n": "v1.1.0"
   },
   "devDependencies": {

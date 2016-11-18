@@ -1,5 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../birch-typeahead/birch-typeahead.html">
+<link rel="import" href="../oak-i18n-behavior/oak-i18n-behavior.html">
 <link rel="import" href="../wc-i18n/wc-i18n.html">
 
 <!--
@@ -28,7 +29,16 @@ Example:
 
 <dom-module id="birch-standards-picker">
   <template>
-    <wc-i18n-src locale='[[lang]]' domain='birch-standards-picker' locale-dir='[[localeDir()]]' locale-strings='{{_i18n}}'></wc-i18n-src>
+    <wc-i18n-src locale='[[lang]]' domain='birch-standards-picker' locale-dir='[[localeDir()]]'></wc-i18n-src>
+    <wc-i18n id='x1' provider key="birch-standards-picker.PLACE_PLACEHOLDER" value="{{_i18n_PLACE_PLACEHOLDER}}"></wc-i18n>
+    <wc-i18n provider key="birch-standards-picker.DATE_PLACEHOLDER" value="{{_i18n_DATE_PLACEHOLDER}}"></wc-i18n>
+    <wc-i18n provider key="birch-standards-picker.NO_STANDARD_DATE_AVAILABLE" value="{{_i18n_NO_STANDARD_DATE_AVAILABLE}}"></wc-i18n>
+    <wc-i18n provider key="birch-standards-picker.NO_STANDARD_PLACE_AVAILABLE" value="{{_i18n_NO_STANDARD_PLACE_AVAILABLE}}"></wc-i18n>
+    <wc-i18n provider key="birch-standards-picker.NO_STANDARD_SELECTED" value="{{_i18n_NO_STANDARD_SELECTED}}"></wc-i18n>
+    <wc-i18n provider key="birch-standards-picker.EVENT_DATE_LABEL" value="{{_i18n_EVENT_DATE_LABEL}}"></wc-i18n>
+    <wc-i18n provider key="birch-standards-picker.EVENT_PLACE_LABEL" value="{{_i18n_EVENT_PLACE_LABEL}}"></wc-i18n>
+    <wc-i18n provider key="birch-standards-picker.STANDARD_DATE_LABEL" value="{{_i18n_STANDARD_DATE_LABEL}}"></wc-i18n>
+    <wc-i18n provider key="birch-standards-picker.STANDARD_PLACE_LABEL" value="{{_i18n_STANDARD_PLACE_LABEL}}"></wc-i18n>
     <style>
       :host {
         display: block;
@@ -167,7 +177,7 @@ Example:
       on-birch-typeahead:selected='_handleSelect'
       highlight-first-item
       value="[[_searchTerm]]"
-      placeholder="[[_getPlaceholder(standardType, i18n)]]">
+      placeholder="[[_getPlaceholder(standardType, _i18n_DATE_PLACEHOLDER, _i18n_PLACE_PLACEHOLDER)]]">
       <template>
         <template is="dom-if" if="[[item.icon]]" restamp>
 
@@ -250,14 +260,10 @@ Example:
     Polymer({
       is: 'birch-standards-picker',
       behaviors: [
+        OakI18nBehavior,
         WCI18nBehavior
       ],
       properties: {
-        _i18n: {
-          type: Object,
-          value: function() { return {}; }
-        },
-
         /**
          * The label for the input box.
          * The default will be the translation for 'Event [type]'
@@ -391,8 +397,8 @@ Example:
       },
 
       observers: [
-        '_updateOptions(_searchTerm, standardType, language)',
-        '_updateLabels(i18n, standardType)',
+        '_updateOptions(_searchTerm, standardType, lang)',
+        '_updateLabels(_i18n_STANDARD_PLACE_LABEL, _i18n_STANDARD_DATE_LABEL, _i18n_EVENT_PLACE_LABEL, _i18n_EVENT_DATE_LABEL, standardType)',
         '_setIsDateOrPlace(standardType)'
       ],
 
@@ -400,9 +406,9 @@ Example:
         this.$.typeahead.$.input.addEventListener('keydown', this._handleDownArrowForTypeahead.bind(this));
       },
 
-      _updateLabels: function(i18n, standardType) {
-        this.standardsDropdownLabel = this.standardsDropdownLabel || this._i18n[`STANDARD_${this.standardType.toUpperCase()}_LABEL`];
-        this.inputLabel = this.inputLabel || this._i18n[`EVENT_${this.standardType.toUpperCase()}_LABEL`];
+      _updateLabels: function(standardPlaceLabel, standardDateLabel, eventPlaceLabel, eventDateLabel, standardType) {
+        this.standardsDropdownLabel = this.standardsDropdownLabel || this[`_i18n_STANDARD_${this.standardType.toUpperCase()}_LABEL`];
+        this.inputLabel = this.inputLabel || this[`_i18n_EVENT_${this.standardType.toUpperCase()}_LABEL`];
       },
 
       _updateOptions: function(searchTerm, type, lang) {
@@ -467,7 +473,7 @@ Example:
               icon: false,
               id: '',
               label: searchTerm,
-              standardLabel: this._i18n[`NO_STANDARD_${this.standardType.toUpperCase()}_AVAILABLE`],
+              standardLabel: this[`_i18n_NO_STANDARD_${this.standardType.toUpperCase()}_AVAILABLE`],
               standardText: '',
               type: null,
               customText: searchTerm
@@ -499,9 +505,9 @@ Example:
         }.bind(this));
       },
 
-      _getPlaceholder: function(type, i18n) {
-        var string = type.toUpperCase() + '_PLACEHOLDER';
-        return this._i18n[string];
+      _getPlaceholder: function(type, datePlaceholder, placePlaceholder) {
+        var string = `_i18n_${type.toUpperCase()}_PLACEHOLDER`;
+        return this[string];
       },
 
       _handleChange: function(e) {
@@ -526,7 +532,7 @@ Example:
         }
         this.standardId = e.model.item.id;
         this.standardText = e.model.item.standardText;
-        this._standardLabel = e.model.item.standardLabel === noneOfTheAboveText ? this._i18n['NO_STANDARD_SELECTED'] : e.model.item.standardLabel;
+        this._standardLabel = e.model.item.standardLabel === noneOfTheAboveText ? this['_i18n_NO_STANDARD_SELECTED'] : e.model.item.standardLabel;
         this.julianDateRange = e.model.item.julianDateRange;
         this._hideStandards = true;
       },
@@ -553,9 +559,9 @@ Example:
       _handleCancel: function(e) {
         if (this._searchTerm && !this._standardLabel) {
           if (this._options.length > 0) {
-            this._standardLabel = this._i18n['NO_STANDARD_SELECTED'];
+            this._standardLabel = this['_i18n_NO_STANDARD_SELECTED'];
           } else {
-            this._standardLabel = this._i18n[`NO_STANDARD_${this.standardType.toUpperCase()}_AVAILABLE`];
+            this._standardLabel = this[`_i18n_NO_STANDARD_${this.standardType.toUpperCase()}_AVAILABLE`];
           }
           this.originalText = this._searchTerm;
         }
