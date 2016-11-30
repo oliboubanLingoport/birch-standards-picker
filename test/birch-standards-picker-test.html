@@ -9,6 +9,7 @@
     <script src="../../es6-promise-polyfill/promise.js"></script>
     <script src="../../fetch/fetch.js"></script>
     <script src="../../fetch-mock/index.js"></script>
+    <script src="http://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
     <link rel="import" href="../birch-standards-picker.html">
 
   </head>
@@ -802,7 +803,80 @@
           })
         });
 
+        describe('UI Tests', function() {
+          it('observe the correct properties', function() {
+            var _updateOptionsSpy = sinon.spy(myEl, '_updateOptions');
+            var _updateLabelsSpy = sinon.spy(myEl, '_updateLabels');
+            var _setIsDateOrPlaceSpy = sinon.spy(myEl, '_setIsDateOrPlace');
+            myEl._searchTerm = 'new search term';
+            myEl.standardType = 'new type';
+            myEl.language = 'new el';
+            myEl.i18n = function(){};
+            expect(_updateOptionsSpy.calledThrice).to.be.true;
+            expect(_updateLabelsSpy.calledTwice).to.be.true;
+            expect(_setIsDateOrPlaceSpy.calledOnce).to.be.true;
+          });
+
+          it('wire up correct actions to the right functions', function(done) {
+            myEl._searchTerm = genericSearchTerm;
+            myEl.$.button.focus()
+            setTimeout(function() {
+              var _openStandardSelectorSpy = sinon.spy(myEl, '_openStandardSelector');
+              var _handleBlurSpy = sinon.spy(myEl, '_handleBlur');
+              var _handleKeydownSpy = sinon.spy(myEl, '_handleKeydown');
+              var _handleChangeStandardSpy = sinon.spy(myEl, '_handleChangeStandard');
+              var _handleChangeSpy = sinon.spy(myEl, '_handleChange');
+              var _handleCancelSpy = sinon.spy(myEl, '_handleCancel');
+              var _handleSelectSpy = sinon.spy(myEl, '_handleSelect');
+              var _handleDownArrowForTypeaheadSpy = sinon.spy(myEl, '_handleDownArrowForTypeahead');
+
+              myEl.$.button.focus()
+              myEl.$.button.click()
+              myEl.$.button.focus()
+              // expect(_openStandardSelectorSpy.called).to.be.true
+
+              // need to figure out how to emulate keydown events - possibly using jquery?
+              // myEl.$.button.press a key
+              // expect(_handleKeydownSpy.calledOnce).to.be.true
+
+              myEl.$.typeahead.$.input.focus()
+              // expect(_handleBlurSpy.called).to.be.true
+
+              // TODO: only works on chrome
+              myEl.$.optionsMenu.querySelectorAll('* /deep/ paper-icon-item')[0].click()
+              // expect(_handleChangeStandardSpy.called).to.be.true
+
+              myEl.$.typeahead.fire('birch-typeahead:input')
+              myEl.$.typeahead.fire('birch-typeahead:cancel')
+              myEl.$.typeahead.fire('birch-typeahead:blur')
+              myEl.$.typeahead.fire('birch-typeahead:selected')
+              // expect(_handleChangeSpy.called).to.be.true
+              // expect(_handleCancelSpy.called).to.be.true
+              // expect(_handleSelectSpy.called).to.be.true
+
+              // need to figure out how to emulate keydown events - possibly using jquery?
+              // myEl.$.typeahead.$.input.press a key
+              // expect(_handleDownArrowForTypeaheadSpy.calledOnce).to.be.true
+
+              setTimeout(function() {
+                expect(_openStandardSelectorSpy.called).to.be.true
+                // expect(_handleKeydownSpy.calledOnce).to.be.true
+                expect(_handleBlurSpy.called).to.be.true
+                expect(_handleChangeStandardSpy.called).to.be.true
+                expect(_handleChangeSpy.called).to.be.true
+                expect(_handleCancelSpy.called).to.be.true
+                expect(_handleSelectSpy.called).to.be.true
+                // expect(_handleDownArrowForTypeaheadSpy.calledOnce).to.be.true
+                done();
+              },300)
+
+            },0)
+          });
+        });
+
       });
+
+
     </script>
 
   </body>
