@@ -407,8 +407,8 @@ Example:
       },
 
       _updateLabels: function(standardPlaceLabel, standardDateLabel, eventPlaceLabel, eventDateLabel, standardType) {
-        this.standardsDropdownLabel = this.standardsDropdownLabel || this[`_i18n_STANDARD_${this.standardType.toUpperCase()}_LABEL`];
-        this.inputLabel = this.inputLabel || this[`_i18n_EVENT_${this.standardType.toUpperCase()}_LABEL`];
+        this.standardsDropdownLabel = this.standardsDropdownLabel || this['_i18n_STANDARD_' + this.standardType.toUpperCase() + '_LABEL'];
+        this.inputLabel = this.inputLabel || this['_i18n_EVENT_' + this.standardType.toUpperCase() + '_LABEL'];
       },
 
       _updateOptions: function(searchTerm, type, lang) {
@@ -473,7 +473,7 @@ Example:
               icon: false,
               id: '',
               label: searchTerm,
-              standardLabel: this[`_i18n_NO_STANDARD_${this.standardType.toUpperCase()}_AVAILABLE`],
+              standardLabel: this['_i18n_NO_STANDARD_' + this.standardType.toUpperCase() + '_AVAILABLE'],
               standardText: '',
               type: null,
               customText: searchTerm
@@ -506,7 +506,7 @@ Example:
       },
 
       _getPlaceholder: function(type, datePlaceholder, placePlaceholder) {
-        var string = `_i18n_${type.toUpperCase()}_PLACEHOLDER`;
+        var string = '_i18n_' + type.toUpperCase() + '_PLACEHOLDER';
         return this[string];
       },
 
@@ -561,7 +561,7 @@ Example:
           if (this._options.length > 0) {
             this._standardLabel = this['_i18n_NO_STANDARD_SELECTED'];
           } else {
-            this._standardLabel = this[`_i18n_NO_STANDARD_${this.standardType.toUpperCase()}_AVAILABLE`];
+            this._standardLabel = this['_i18n_NO_STANDARD_' + this.standardType.toUpperCase() + '_AVAILABLE'];
           }
           this.originalText = this._searchTerm;
         }
