@@ -647,7 +647,15 @@
           it('should select the previous index on the options menu', function(){
             myEl._handleUpArrow(e);
             expect(myEl.$.optionsMenu.selected).to.equal(1);
-          })
+          });
+          it('should fire iron-select event', function(done) {
+            var focusSpy = sinon.spy(myEl.$.button, 'focus');
+            myEl.addEventListener('iron-select', function() {
+              expect(focusSpy.calledOnce).to.be.true;
+              done();
+            });
+            myEl._handleUpArrow(e);
+          });
         });
 
         describe('_handleDownArrow', function() {
@@ -671,6 +679,14 @@
             myEl._handleDownArrow(e);
             expect(myEl.$.optionsMenu.selected).to.equal(2);
           })
+          it('should fire iron-select event', function(done) {
+            var focusSpy = sinon.spy(myEl.$.button, 'focus');
+            myEl.addEventListener('iron-select', function() {
+              expect(focusSpy.calledOnce).to.be.true;
+              done();
+            });
+            myEl._handleDownArrow(e);
+          });
         });
 
         describe('_handleTab', function() {
