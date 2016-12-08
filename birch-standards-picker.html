@@ -117,11 +117,9 @@ Example:
         overflow: hidden;
       }
       .standard-button:active,
-      .standard-button:focus,
       .standard-button:hover {
         border:none;
         outline:none;
-
       }
       #Layer_1 {
         vertical-align: middle;
@@ -572,6 +570,10 @@ Example:
         if (e) {
           if (this && this.$.optionsMenu && !this.$.optionsMenu.contains(e.relatedTarget)) {
             this._hideStandards = true;
+          } else {
+            setTimeout(function() {
+              this.$.button.focus();
+            }.bind(this));
           }
         }
       },
