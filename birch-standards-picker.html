@@ -1,6 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../birch-typeahead/birch-typeahead.html">
 <link rel="import" href="../wc-i18n/wc-i18n.html">
+<link rel="import" href="../paper-menu/paper-menu.html">
 
 <!--
 The standards picker is used to select standard dates and places.
@@ -116,11 +117,9 @@ Example:
         overflow: hidden;
       }
       .standard-button:active,
-      .standard-button:focus,
       .standard-button:hover {
         border:none;
         outline:none;
-
       }
       #Layer_1 {
         vertical-align: middle;
@@ -392,6 +391,11 @@ Example:
 
       ready: function() {
         this.$.typeahead.$.input.addEventListener('keydown', this._handleDownArrowForTypeahead.bind(this));
+        this.listen(this.$.optionsMenu, 'iron-select', '_focusButton');
+      },
+
+      _focusButton: function(event) {
+        this.$.button.focus();
       },
 
       _updateLabels: function(i18n, standardType) {
@@ -567,7 +571,9 @@ Example:
           if (this && this.$.optionsMenu && !this.$.optionsMenu.contains(e.relatedTarget)) {
             this._hideStandards = true;
           } else {
-            this.$.button.focus();
+            setTimeout(function() {
+              this.$.button.focus();
+            }.bind(this));
           }
         }
       },
@@ -594,7 +600,6 @@ Example:
         var optionsMenu = this.$.optionsMenu;
         var index = Math.max(optionsMenu.selected - 1, 0);
         optionsMenu.select(index);
-        this.$.button.focus();
       },
 
       _handleDownArrow: function(e) {
@@ -609,7 +614,6 @@ Example:
           index = Math.min(optionsMenu.selected + 1, this._options.length - 1);
         }
         optionsMenu.select(index);
-        this.$.button.focus();
       },
 
       _handleTab: function(e) {
