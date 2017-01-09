@@ -396,7 +396,7 @@ Example:
       observers: [
         '_updateOptions(_searchTerm, standardType, lang)',
         '_updateLabels(_i18n_STANDARD_PLACE_LABEL, _i18n_STANDARD_DATE_LABEL, _i18n_EVENT_PLACE_LABEL, _i18n_EVENT_DATE_LABEL, standardType)',
-        '_setIsDateOrPlace(standardType)'
+        '_setIsDateOrPlace(standardType, _i18n_STANDARD_PLACE_LABEL, _i18n_STANDARD_DATE_LABEL, _i18n_EVENT_PLACE_LABEL, _i18n_EVENT_DATE_LABEL)'
       ],
 
       ready: function() {
@@ -409,8 +409,8 @@ Example:
       },
 
       _updateLabels: function(standardPlaceLabel, standardDateLabel, eventPlaceLabel, eventDateLabel, standardType) {
-        this.standardsDropdownLabel = this.standardsDropdownLabel || this['_i18n_STANDARD_' + this.standardType.toUpperCase() + '_LABEL'];
-        this.inputLabel = this.inputLabel || this['_i18n_EVENT_' + this.standardType.toUpperCase() + '_LABEL'];
+        this.standardsDropdownLabel = this['_i18n_STANDARD_' + this.standardType.toUpperCase() + '_LABEL'];
+        this.inputLabel = this['_i18n_EVENT_' + this.standardType.toUpperCase() + '_LABEL'];
       },
 
       _updateOptions: function(searchTerm, type, lang) {
@@ -588,9 +588,9 @@ Example:
         }
       },
 
-      _setIsDateOrPlace: function() {
-        this.isDate = this.standardType === 'date';
-        this.isPlace = this.standardType === 'place';
+      _setIsDateOrPlace: function(standardType, i18n) {
+        this.isDate = standardType === 'date';
+        this.isPlace = standardType === 'place';
       },
 
       _handleKeydown: function(e) {
