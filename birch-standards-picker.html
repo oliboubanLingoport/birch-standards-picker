@@ -384,7 +384,7 @@ Example:
       observers: [
         '_updateOptions(_searchTerm, standardType, language)',
         '_updateLabels(i18n, standardType)',
-        '_setIsDateOrPlace(standardType)'
+        '_setIsDateOrPlace(standardType, i18n)'
       ],
 
       ready: function() {
@@ -397,8 +397,8 @@ Example:
       },
 
       _updateLabels: function(i18n, standardType) {
-        this.standardsDropdownLabel = this.standardsDropdownLabel || this.i18n('STANDARD_' + this.standardType.toUpperCase() + '_LABEL');
-        this.inputLabel = this.inputLabel || this.i18n('EVENT_' + this.standardType.toUpperCase() + '_LABEL');
+        this.standardsDropdownLabel = this.i18n('STANDARD_' + this.standardType.toUpperCase() + '_LABEL');
+        this.inputLabel = this.i18n('EVENT_' + this.standardType.toUpperCase() + '_LABEL');
       },
 
       _updateOptions: function(searchTerm, type, lang) {
@@ -576,9 +576,9 @@ Example:
         }
       },
 
-      _setIsDateOrPlace: function() {
-        this.isDate = this.standardType === 'date';
-        this.isPlace = this.standardType === 'place';
+      _setIsDateOrPlace: function(standardType, i18n) {
+        this.isDate = standardType === 'date';
+        this.isPlace = standardType === 'place';
       },
 
       _handleKeydown: function(e) {

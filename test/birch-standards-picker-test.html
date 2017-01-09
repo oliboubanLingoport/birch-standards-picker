@@ -539,11 +539,10 @@
 
         describe('_setIsDateOrPlace', function() {
           it('should set isDate and isPlace to true or false based on the standardType', function() {
-            myEl._setIsDateOrPlace();
+            myEl._setIsDateOrPlace('date', mockI18n);
             expect(myEl.isDate).to.be.true;
             expect(myEl.isPlace).to.be.false;
-            myEl.standardType = 'place';
-            myEl._setIsDateOrPlace();
+            myEl._setIsDateOrPlace('place', mockI18n);
             expect(myEl.isDate).to.be.false;
             expect(myEl.isPlace).to.be.true;
           })

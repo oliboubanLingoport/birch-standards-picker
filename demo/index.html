@@ -43,6 +43,13 @@
 </head>
 <body>
   <birch-standards-picker standard-type='place'></birch-standards-picker>
-  <birch-standards-picker standard-type='date'></birch-standards-picker>
+  <button id="button">Toggle Type</button>
+  <!--<birch-standards-picker standard-type='date'></birch-standards-picker>-->
+  <script>
+    document.querySelector('#button').addEventListener('click', function() {
+      var element = document.querySelector('birch-standards-picker');
+      element.setAttribute('standard-type', element.getAttribute('standard-type') === 'date' ? 'place' : 'date');
+    });
+  </script>
 </body>
 </html>
