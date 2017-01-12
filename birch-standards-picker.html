@@ -447,6 +447,9 @@ Example:
             if (!Array.isArray(data)) data = [];
             // Map the data to our desired format
             data = data.map(function(standard) {
+              if(standard.label === 'None of the above') {
+                standard.label = this['_18n_NONE_OF_THE_ABOVE'];
+              }
               var vm = {
                 icon: true,
                 id: standard.id,
@@ -466,7 +469,7 @@ Example:
               // than doing a dom-if for a comma and a space.
               if (vm.type && vm.yearRange) vm.type = vm.type + ', ';
               return vm;
-            });
+            }.bind(this));
 
             this._options = data;
             this._optionsChanged = true;
