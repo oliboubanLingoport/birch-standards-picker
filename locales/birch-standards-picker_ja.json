@@ -1,8 +1,9 @@
 {
-  "_LRM_PKTAG691": "birch-standards-picker_1_152 - FULL-FILE",
+  "_LRM_PKTAG334": "birch-standards-picker_2_152 - CHANGES-ONLY",
   "DATE_PLACEHOLDER": "日付を入力してください",
   "EVENT_DATE_LABEL": "出来事の日付",
   "EVENT_PLACE_LABEL": "出来事の場所",
+  "NONE_OF_THE_ABOVE": "上記のいずれでもない",
   "NO_STANDARD_DATE_AVAILABLE": "標準化した日付がありません",
   "NO_STANDARD_PLACE_AVAILABLE": "標準化した場所がありません",
   "NO_STANDARD_SELECTED": "標準が選択されていません",

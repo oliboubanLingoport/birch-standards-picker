@@ -1,8 +1,9 @@
 {
-  "_LRM_PKTAG890": "birch-standards-picker_1_150 - FULL-FILE",
+  "_LRM_PKTAG905": "birch-standards-picker_2_150 - CHANGES-ONLY",
   "DATE_PLACEHOLDER": "Saisir une date",
   "EVENT_DATE_LABEL": "Date de l’événement",
   "EVENT_PLACE_LABEL": "Lieu de l’événement",
+  "NONE_OF_THE_ABOVE": "Aucune des réponses précédentes",
   "NO_STANDARD_DATE_AVAILABLE": "Aucune date normalisée n’est disponible",
   "NO_STANDARD_PLACE_AVAILABLE": "Aucun lieu normalisé n’est disponible",
   "NO_STANDARD_SELECTED": "Aucune norme n’est sélectionnée",

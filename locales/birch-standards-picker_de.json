@@ -1,8 +1,9 @@
 {
-  "_LRM_PKTAG179": "birch-standards-picker_1_157 - FULL-FILE",
+  "_LRM_PKTAG381": "birch-standards-picker_2_157 - CHANGES-ONLY",
   "DATE_PLACEHOLDER": "Datum eingeben",
   "EVENT_DATE_LABEL": "Datum des Ereignisses",
   "EVENT_PLACE_LABEL": "Ort des Ereignisses",
+  "NONE_OF_THE_ABOVE": "Nichts davon",
   "NO_STANDARD_DATE_AVAILABLE": "Keine standardisierte Datumsangabe verfügbar",
   "NO_STANDARD_PLACE_AVAILABLE": "Keine standardisierte Ortsangabe verfügbar",
   "NO_STANDARD_SELECTED": "Es wurde kein Standard ausgewählt",
