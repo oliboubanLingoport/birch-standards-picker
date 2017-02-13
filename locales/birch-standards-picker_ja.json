@@ -1,5 +1,5 @@
 {
-  "_LRM_PKTAG334": "birch-standards-picker_2_152 - CHANGES-ONLY",
+  "_LRM_PKTAG272": "birch-standards-picker_3_152 - CHANGES-ONLY",
   "DATE_PLACEHOLDER": "日付を入力してください",
   "EVENT_DATE_LABEL": "出来事の日付",
   "EVENT_PLACE_LABEL": "出来事の場所",
@@ -8,6 +8,8 @@
   "NO_STANDARD_PLACE_AVAILABLE": "標準化した場所がありません",
   "NO_STANDARD_SELECTED": "標準が選択されていません",
   "PLACE_PLACEHOLDER": "場所を入力してください",
+  "STANDARDIZED_DATE": "標準化した日付",
+  "STANDARDIZED_PLACE": "標準化した場所",
   "STANDARD_DATE_LABEL": "標準化した出来事の日付",
   "STANDARD_PLACE_LABEL": "標準化した出来事の場所"
 }
