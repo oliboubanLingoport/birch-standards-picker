@@ -1,5 +1,5 @@
 {
-  "_LRM_PKTAG106": "birch-standards-picker_2_149 - CHANGES-ONLY",
+  "_LRM_PKTAG560": "birch-standards-picker_3_149 - CHANGES-ONLY",
   "DATE_PLACEHOLDER": "Ingresar una fecha",
   "EVENT_DATE_LABEL": "Fecha del acontecimiento",
   "EVENT_PLACE_LABEL": "Lugar del acontecimiento",
@@ -8,6 +8,8 @@
   "NO_STANDARD_PLACE_AVAILABLE": "No está disponible ningún lugar estandarizado.",
   "NO_STANDARD_SELECTED": "No se ha seleccionado un modelo estándar.",
   "PLACE_PLACEHOLDER": "Ingresar un lugar",
+  "STANDARDIZED_DATE": "Fecha estandarizada",
+  "STANDARDIZED_PLACE": "Lugar estandarizado",
   "STANDARD_DATE_LABEL": "Fecha estandarizada del acontecimiento",
   "STANDARD_PLACE_LABEL": "Lugar estandarizado del acontecimiento"
 }
