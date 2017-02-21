@@ -43,11 +43,11 @@
 
       server.respondWith("GET", /\/tree-data\/authorities\/date*/,
                          [200, {"Content-Type": "application/json"},
-                          JSON.stringify({body: dateData})]);
+                          JSON.stringify(dateData)]);
 
       server.respondWith("GET", /\/tree-data\/authorities\/place*/,
                          [200, {"Content-Type": "application/json"},
-                          JSON.stringify({body: placeData})]);
+                          JSON.stringify(placeData)]);
     }
 
     function increment(){

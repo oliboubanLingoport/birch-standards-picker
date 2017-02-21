@@ -2,6 +2,7 @@
 <link rel="import" href="../birch-typeahead/birch-typeahead.html">
 <link rel="import" href="../wc-i18n/wc-i18n.html">
 <link rel="import" href="../paper-menu/paper-menu.html">
+<link rel="import" href="../oak-i18n-behavior/oak-i18n-behavior.html">
 <!-- object-assign-shim is only to support IE11, but it's tiny anyhow -->
 <script src="../object-assign-shim/index.js"></script>
 
@@ -156,6 +157,7 @@ Example:
     Polymer({
       is: 'birch-standards-picker',
       behaviors: [
+        OakI18nBehavior,
         WCI18n()
       ],
       properties: {
@@ -318,7 +320,7 @@ Example:
 
       _fetchData: function(term, onlySetStandardOptions) {
         var self = this;
-        var url = '/tree-data/authorities/' + this.standardType + '?term=' + term + '&locale=en';
+        var url = '/tree-data/authorities/' + this.standardType + '?term=' + term + '&locale=' + this.lang;
         this._req('GET', url).then(function (data){
           self._handleResponse(data, onlySetStandardOptions);
         }).catch(function (err){

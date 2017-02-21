@@ -16,6 +16,7 @@
   ],
   "dependencies": {
     "birch-typeahead": "FamilySearchElements/birch-typeahead#1.x",
+    "oak-i18n-behavior": "FamilySearchElements/oak-i18n-behavior#1.x",
     "polymer": "Polymer/polymer#^1.7.0",
     "es6-promise-polyfill": "git+https://github.com/taylorhakes/promise-polyfill#6.0.2",
     "wc-i18n": "jshcrowthe/wc-i18n#^2.0.1",
