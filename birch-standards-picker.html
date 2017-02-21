@@ -139,7 +139,7 @@ Example:
       </div>
     </div>
 
-    <template is="dom-if" if="[[_showStandardSelectedIndicator(data)]]">
+    <template is="dom-if" if="[[_showStandardSelectedIndicator(data, searchTerm)]]">
       <div class="standard-indicator standard small">
         <p>[[_getStandardizedIndicatorText(standardType, i18n)]]</p>
       </div>
@@ -328,9 +328,10 @@ Example:
         });
       },
 
-      _handleResponse: function(data, onlySetStandardOptions) {
-        if(!data || !data.body) return;
-        var options = data.body;
+      _handleResponse: function(options, onlySetStandardOptions) {
+        this.loading = false;
+        this._setShowNonStandardSelectedIndicator(this.data, this.searchTerm, this._standardOptions);
+        if(!options) return;
         if(!Array.isArray(options)) return;
 
         options = options.map(this._mapOptionsCB.bind(this));
@@ -338,9 +339,6 @@ Example:
         if(onlySetStandardOptions !== true){
           this._typeaheadOptions = this._setupTypeaheadOptions([].concat(options));
         }
-        this._setShowNonStandardSelectedIndicator(this.data, this.searchTerm, this._standardOptions);
-
-        this.loading = false;
       },
 
       _mapOptionsCB: function(option) {
@@ -522,7 +520,6 @@ Example:
               return reject(err);
             }
           };
-          // xhr.setRequestHeader('Authorization', 'Bearer ' + readCookie('fssessionid'));
           this.xhr.setRequestHeader('Accept', 'application/json');
           this.xhr.send();
         }.bind(this));
@@ -536,8 +533,9 @@ Example:
         return !data.customText || data.label === i18n('NO_STANDARD_' + standardType.toUpperCase() + '_AVAILABLE');
       },
 
-      _showStandardSelectedIndicator: function(data) {
-        return data.standardText && !data.customText
+      // searchTerm is passed here simply to trigger this observer
+      _showStandardSelectedIndicator: function(data, searchTerm) {
+        return data.standardText && !data.customText && data.label === this.$.typeahead.value;
       },
 
       _setShowNonStandardSelectedIndicator: function(data, searchTerm, standardOptions) {

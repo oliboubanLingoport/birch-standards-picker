@@ -58,7 +58,7 @@
                 '/tree-data/authorities/' + keys[key],
                 [200,
                   {"Content-Type": "application/json"},
-                  JSON.stringify({body: mockData[keys[key]]})
+                  JSON.stringify(mockData[keys[key]])
                 ]
               );
               count++;
@@ -172,7 +172,7 @@
               '/tree-data/authorities/date?term=' + searchTerm + '&locale=en',
               [200,
                 {"Content-Type": "application/json"},
-                JSON.stringify({body: mockData['date?term=term&locale=en']})
+                JSON.stringify(mockData['date?term=term&locale=en'])
               ]
             );
 
