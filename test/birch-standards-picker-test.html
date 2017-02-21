@@ -8,9 +8,8 @@
     <script src="../../qa-shared-mock-json/tree-data/authorities/date-empty-get-200.json"></script>
     <script src="../../es6-promise-polyfill/promise.js"></script>
     <script src="../../fetch/fetch.js"></script>
-    <script src="../../fetch-mock/index.js"></script>
+    <script src="../../sinonjs/sinon.js"></script>
     <link rel="import" href="../birch-standards-picker.html">
-
   </head>
   <body>
 
@@ -24,12 +23,13 @@
       describe('<birch-standards-picker>', function() {
 
         var myEl;
-        var fetchMockData = {};
+        var mockData = {};
         var genericSearchTerm = 'term';
         var emptyResponseTerm = 'emptyResponse';
         var badRequestTerm = 'badRequest';
         var internalErrorTerm = 'internalError';
-        var mockI18n = function(key) {return `KEY: ${key} (en)`;};
+        var mockI18n = function(key) {return 'KEY: ' + key + ' (en)';};
+        var server = sinon.fakeServer.create({respondImmediately: true});
 
         /*
          * Set up the mock data from the contract tests
@@ -50,14 +50,22 @@
             'place-internalError-get-200.json' : "place?term=internalError&locale=en",
           }
           var getMockData = function(key) {
-            fetch(`../../../components/qa-shared-mock-json/tree-data/authorities/${key}`).then(function(res){
+            fetch('../../../components/qa-shared-mock-json/tree-data/authorities/' + key).then(function(res){
               return res.json();
             }).then(function(res) {
-              fetchMockData[keys[key]] = res;
-              fetchMock.mock({matcher:`/tree-data/authorities/${keys[key]}`, response:{body: fetchMockData[keys[key]]}, method:'GET'});
+              mockData[keys[key]] = res;
+              server.respondWith("GET",
+                '/tree-data/authorities/' + keys[key],
+                [200,
+                  {"Content-Type": "application/json"},
+                  JSON.stringify({body: mockData[keys[key]]})
+                ]
+              );
               count++;
               if (count === numberOfFiles) done();
-            }).catch(done);
+            }).catch(function(){
+              done();
+            });
           }
 
           for(keyName in keys) {
@@ -65,12 +73,9 @@
           }
         })
 
-        after(function() {
-          fetchMock.restore();
-        })
-
         beforeEach(function() {
           myEl = fixture('birch-standards-picker-fixture');
+          myEl.reset();
           // mock out i18n - the mock behaves like the real one
           // when there are no translation files loaded. This is
           // so that when on occasion the real one loads, we don't
@@ -86,160 +91,56 @@
           })
         });
 
-        describe('_updateOptions', function() {
-          var mappedDateOptionsWithDefault = [
-            {
-              "icon": false,
-              "id": "11 September 1981",
-              "label": "term",
-              "standardLabel": "11 September 1981",
-              "standardText": "11 September 1981",
-              "type": null,
-              "customText": "term",
-              "julianDateRange": {
-                "earliestDay": 2444859,
-                "latestDay": 2444859
-              }
-            },
-            {
-              "icon": true,
-              "id": "11 September 1981",
-              "label": "11 September 1981",
-              "standardLabel": "11 September 1981",
-              "standardText": "11 September 1981",
-              "julianDateRange":  {
-                "earliestDay": 2444859,
-                "latestDay": 2444859
-              },
-              "customText": null
-            }
-          ];
-          beforeEach(function() {
-            myEl.$.typeahead.options = [1,2,3]
-            myEl._optionstoUseWhenNoChange = [3,4,5];
-            myEl._stopSearch = false;
-          })
-
-          it('should reset the options to use next time the menu is opened', function() {
-            myEl._updateOptions(genericSearchTerm, 'date', 'en');
-            expect(myEl._optionstoUseWhenNoChange).to.be.null;
-          })
-
-          it('should set the latest search term to the current search term', function() {
-            myEl._latestSearch = 'something else';
-            myEl._updateOptions(genericSearchTerm, 'date', 'en');
-            expect(myEl._latestSearch).to.equal(genericSearchTerm);
-          })
-
-          it('should do nothing else if the search term is an empty string', function() {
-            var _fetchOptionsSpy = sinon.spy(myEl, '_fetchOptions');
-            myEl._updateOptions('', 'date', 'en');
-            expect(_fetchOptionsSpy.notCalled).to.be.true;
-            _fetchOptionsSpy.restore();
-          })
-
-          it('should call fetchOptions', function() {
-            var _fetchOptionsSpy = sinon.spy(myEl, '_fetchOptions');
-            myEl._updateOptions(genericSearchTerm, 'date', 'en');
-            expect(_fetchOptionsSpy.calledOnce).to.be.true;
-            _fetchOptionsSpy.restore();
-          })
-
-          it('should do nothing if the latest search term has been updated', function(done) {
-            myEl._updateOptions(genericSearchTerm, 'date', 'en').then(function(){
-              expect(JSON.stringify(myEl.$.typeahead.options)).to.not.equal(JSON.stringify(mappedDateOptionsWithDefault));
-              done();
-            }).catch(done);
-            myEl._updateOptions(internalErrorTerm, 'date', 'en')
-          })
-
-          it('should set the typeahead options if _stopSearch is not true', function(done) {
-            myEl._stopSearch = false;
-            myEl._updateOptions(genericSearchTerm, 'date', 'en').then(function(){
-              expect(JSON.stringify(myEl.$.typeahead.options)).to.equal(JSON.stringify(mappedDateOptionsWithDefault));
-              done();
-            }).catch(done);
-          })
-
-          it('should set _optionstoUseWhenNoChange if _stopSearch is true', function(done) {
-            myEl._stopSearch = true;
-            myEl._updateOptions(genericSearchTerm, 'date', 'en').then(function(){
-              expect(JSON.stringify(myEl._optionstoUseWhenNoChange)).to.equal(JSON.stringify(mappedDateOptionsWithDefault))
-              expect(myEl._stopSearch).to.be.false;
-              expect(myEl.$.typeahead.options).to.deep.equal([1,2,3]);
-              done();
-            }).catch(done);
-          })
-
-          it('should set _stopSearch and typeahead loading to false', function(done) {
-            myEl._updateOptions(genericSearchTerm, 'date', 'en').then(function(){
-              expect(myEl._stopSearch).to.be.false;
-              expect(myEl.$.typeahead.loading).to.be.false;
-              done();
-            }).catch(done);
-          })
-
-          it('should handle an error from _fetchOptions', function(done) {
-            var consoleSpy = sinon.spy(console, 'log');
-            myEl._updateOptions('bad search term', 'date', 'en').then(function(){
-              expect(myEl._stopSearch).to.be.false;
-              expect(myEl.$.typeahead.loading).to.be.false;
-              expect(consoleSpy.calledOnce).to.be.true;
-              consoleSpy.restore();
-              done();
-            }).catch(done);
-          })
-        });
-
-        describe('_fetchOptions', function() {
+        describe('_fetchData', function() {
           var mappedDateOptionsUnmodified = [
             {
               icon: true,
               id: "11 September 1981",
               label: "11 September 1981",
-              standardLabel: "11 September 1981",
-              standardText: "11 September 1981",
-              julianDateRange: {
-                earliestDay: 2444859,
-                latestDay: 2444859
-              },
-              customText: null
+              customText: null,
+              standardText: "11 September 1981"
+            },
+            {
+              icon: false,
+              id: "",
+              label: "KEY: NONE_OF_THE_ABOVE (en)",
+              customText: null,
+              standardText: ""
+            }
+          ];
+
+          it('should call _req', function(done) {
+            var reqSpy = sinon.spy(myEl, '_req');
+            myEl._fetchData(genericSearchTerm);
+            expect(reqSpy).calledOnce;
+            expect(reqSpy).calledWith('GET', '/tree-data/authorities/date?term=term&locale=en');
+            reqSpy.restore();
+            done();
+          })
+
+          it('should set this._standardOptions to the unmodified mapped data', function(done) {
+            myEl._fetchData(genericSearchTerm);
+            flush(function(){
+              expect(JSON.stringify(myEl._standardOptions)).to.equal(JSON.stringify(mappedDateOptionsUnmodified));
+              done();
+            });
+          })
+        });
+
+        describe('_req', function() {
+          var mappedDateOptionsWithDefault = [
+            {
+              label: "",
+              customText: "",
+              id: "11 September 1981",
+              standardText: "11 September 1981"
             },
             {
               icon: true,
-              id: "",
-              label: "KEY: NONE_OF_THE_ABOVE (en)",
-              standardLabel: "KEY: NONE_OF_THE_ABOVE (en)",
-              standardText: "",
-              julianDateRange: null,
-              customText: null
-            }
-          ];
-          var mappedDateOptionsWithDefault = [
-            {
-              "icon": false,
-              "id": "11 September 1981",
-              "label": "term",
-              "standardLabel": "11 September 1981",
-              "standardText": "11 September 1981",
-              "type": null,
-              "customText": "term",
-              "julianDateRange": {
-                "earliestDay": 2444859,
-                "latestDay": 2444859
-              }
-            },
-            {
-              "icon": true,
-              "id": "11 September 1981",
-              "label": "11 September 1981",
-              "standardLabel": "11 September 1981",
-              "standardText": "11 September 1981",
-              "julianDateRange":  {
-                "earliestDay": 2444859,
-                "latestDay": 2444859
-              },
-              "customText": null
+              id: "11 September 1981",
+              label: "11 September 1981",
+              customText: null,
+              standardText: "11 September 1981"
             }
           ];
           var mappedDateOptionsMatchesStandard = [
@@ -247,111 +148,66 @@
               icon: true,
               id: "11 September 1981",
               label: "11 September 1981",
-              standardLabel: "11 September 1981",
-              standardText: "11 September 1981",
-              julianDateRange: {
-                earliestDay: 2444859,
-                latestDay: 2444859
-              },
-              customText: null
-            }
-          ];
-          var mappedDateOptionsEmpty = [
-            {
-              icon: false,
-              id: "",
-              label: "emptyResponse",
-              standardLabel: "KEY: NO_STANDARD_DATE_AVAILABLE (en)",
-              standardText: "",
-              type: null,
-              customText: "emptyResponse"
-            }
-          ];
-          var mappedPlaceOptionsBadRequest = [
-            {
-              icon: false,
-              id: "",
-              label: badRequestTerm,
-              standardLabel: "KEY: NO_STANDARD_PLACE_AVAILABLE (en)",
-              standardText: "",
-              type: null,
-              customText: badRequestTerm
-            }
-          ];
-          var mappedPlaceOptionsInternalError = [
-            {
-              icon: false,
-              id: "",
-              label: internalErrorTerm,
-              standardLabel: "KEY: NO_STANDARD_PLACE_AVAILABLE (en)",
-              standardText: "",
-              type: null,
-              customText: internalErrorTerm
+              customText: null,
+              standardText: "11 September 1981"
             }
           ];
 
-          it('should call fetch', function(done) {
-            var call = 'date?term=term&locale=en';
-            var fetchSpy = sinon.spy(window, 'fetch');
-            myEl._fetchOptions(genericSearchTerm, 'date', 'en').then(function(options){
-              expect(fetchSpy).calledOnce;
-              expect(fetchSpy).calledWith(`/tree-data/authorities/${call}`);
-              fetchSpy.restore();
+          it('should set _typeaheadOptions with a default option added and "none of the above" removed', function(done) {
+            var url = '/tree-data/authorities/date?term=' + genericSearchTerm + '&locale=en';
+            myEl._req('GET', url).then(function (data){
+              myEl._handleResponse(data);
+              expect(JSON.stringify(myEl._typeaheadOptions)).to.equal(JSON.stringify(mappedDateOptionsWithDefault));
               done();
-            }).catch(done);
+            }).catch(function(){
+              done();
+            });
           })
 
-          it('should set this._options to the unmodified mapped data', function(done) {
-            myEl._fetchOptions(genericSearchTerm, 'date', 'en').then(function(options){
-              expect(JSON.stringify(myEl._options)).to.equal(JSON.stringify(mappedDateOptionsUnmodified));
-              done();
-            }).catch(done);
-          })
-
-          it('should set this._optionsChanged to true', function(done) {
-            myEl._fetchOptions(genericSearchTerm, 'date', 'en').then(function(options){
-              expect(myEl._optionsChanged).to.be.true
-              done();
-            }).catch(done);
-          })
-
-          it('should return options with a default option added and "none of the above" removed', function(done) {
-            myEl._fetchOptions(genericSearchTerm, 'date', 'en').then(function(options){
-              expect(JSON.stringify(options)).to.equal(JSON.stringify(mappedDateOptionsWithDefault))
-              done();
-            }).catch(done);
-          })
-
-          it('should not return a default option when the term has the same value as a standard', function(done) {
+          it('should set _typeaheadOptions without a default option when the term matches the first standard', function(done) {
             var searchTerm = '11 September 1981';
-            fetchMock.mock({matcher:`/tree-data/authorities/date?term=${searchTerm}&locale=en`, response:fetchMockData['date?term=term&locale=en'], method:'GET'});
-            myEl._fetchOptions(searchTerm, 'date', 'en').then(function(options){
-              expect(JSON.stringify(options)).to.equal(JSON.stringify(mappedDateOptionsMatchesStandard));
-              done();
-            }).catch(done);
-          })
+            var url = '/tree-data/authorities/date?term=' + searchTerm + '&locale=en';
 
-          it('should return a default option when there are no standards available', function(done) {
-            myEl._fetchOptions(emptyResponseTerm, 'date', 'en').then(function(options){
-              expect(JSON.stringify(options)).to.equal(JSON.stringify(mappedDateOptionsEmpty));
+            server.respondWith("GET",
+              '/tree-data/authorities/date?term=' + searchTerm + '&locale=en',
+              [200,
+                {"Content-Type": "application/json"},
+                JSON.stringify({body: mockData['date?term=term&locale=en']})
+              ]
+            );
+
+            myEl.searchTerm = searchTerm;
+            myEl._req('GET', url).then(function (data){
+              myEl._handleResponse(data);
+              expect(JSON.stringify(myEl._typeaheadOptions)).to.equal(JSON.stringify(mappedDateOptionsMatchesStandard));
               done();
-            }).catch(done);
+            }).catch(function(){
+              done();
+            });
           })
 
           it('should handle a bad request', function(done) {
+            var url = '/tree-data/authorities/date?term=' + badRequestTerm + '&locale=en';
             myEl.standardType = 'place';
-            myEl._fetchOptions(badRequestTerm, 'place', 'en').then(function(options){
-              expect(JSON.stringify(options)).to.equal(JSON.stringify(mappedPlaceOptionsBadRequest));
+            myEl._req('GET', url).then(function (data){
+              myEl._handleResponse(data);
+              expect(JSON.stringify(myEl._typeaheadOptions)).to.equal(JSON.stringify(mappedPlaceOptionsBadRequest));
               done();
-            }).catch(done);
+            }).catch(function(){
+              done();
+            });
           })
 
           it('should handle an internal server error response', function(done) {
+            var url = '/tree-data/authorities/date?term=' + internalErrorTerm + '&locale=en';
             myEl.standardType = 'place';
-            myEl._fetchOptions(internalErrorTerm, 'place', 'en').then(function(options){
-              expect(JSON.stringify(options)).to.equal(JSON.stringify(mappedPlaceOptionsInternalError));
+            myEl._req('GET', url).then(function (data){
+              myEl._handleResponse(data);
+              expect(JSON.stringify(myEl._typeaheadOptions)).to.equal(JSON.stringify(mappedPlaceOptionsInternalError));
               done();
-            }).catch(done);
+            }).catch(function(){
+              done();
+            });
           })
         });
 
@@ -361,26 +217,25 @@
           })
         });
 
-        describe('_handleChange', function() {
+        describe('_handleInput', function() {
           var mockEvent = {
             detail: {
               value: genericSearchTerm
             }
           };
 
-          it('should unset the standard and set the search term', function() {
-            myEl._handleChange(mockEvent)
-            expect(myEl._searchTerm).to.equal(genericSearchTerm);
-            expect(myEl._standardLabel).to.equal('');
-            expect(myEl.standardText).to.equal.null;
-            expect(myEl.julianDateRange).to.equal.null;
-            expect(myEl.$.typeahead.loading).to.be.true;
+          it('should fetch data', function() {
+            var fetchDataSpy = sinon.spy(myEl, '_fetchData');
+            myEl._handleInput(mockEvent);
+            expect(fetchDataSpy.calledOnce).to.be.true;
           })
 
-          it('should not set loading if there is no input value', function() {
+          it('should cancel pending requests and not set loading if there is no input value', function() {
+            var cancelActiveRequestSpy = sinon.spy(myEl, '_cancelActiveRequest');
             mockEvent.detail.value = '';
-            myEl._handleChange(mockEvent);
-            expect(myEl.$.typeahead.loading).to.be.false;
+            myEl._handleInput(mockEvent);
+            expect(myEl.loading).to.be.false;
+            expect(cancelActiveRequestSpy.calledOnce).to.be.true;
           })
         });
 
@@ -389,118 +244,94 @@
             model: {
               item: {
                 standardText: 'itemStandardText',
-                standardLabel: 'itemStandardLabel',
-                julianDateRange: 'itemJulianDateRange',
+                label: 'itemLabel'
               }
             }
           };
 
-          it('should not change the originalText if we have non-standard originalText', function() {
-            myEl._options = [{standardLabel: 'None Of The Above'}]
-            myEl.originalText = 'originalText';
-            myEl.standardText = 'standardText';
+          it('should not change customText', function() {
+            myEl._standardOptions = [{standardText: 'None Of The Above'}];
+            myEl.data = {customText: 'customText', standardText: 'standardText'};
             myEl._handleChangeStandard(itemEvent);
-            expect(myEl.originalText).to.equal('originalText');
+            expect(myEl.data.customText).to.equal('customText');
           })
 
-          it('should change the originalText and searchTerm if we have standard originalText', function() {
-            myEl._options = [{standardLabel: 'None Of The Above'}]
-            myEl.originalText = 'standardText';
-            myEl.standardText = 'standardText';
-            myEl._handleChangeStandard(itemEvent);
-            expect(myEl.originalText).to.equal('itemStandardText');
-            expect(myEl._searchTerm).to.equal('itemStandardText');
-            expect(myEl._stopSearch).to.equal.true;
-          })
-
-          it('should set the standardLabel to no standard selected', function() {
-            myEl._options = [{standardLabel: 'None Of The Above'}]
-            myEl.originalText = 'standardText';
-            myEl.standardText = 'standardText';
+          it('_getStandardLabel should return no standard selected', function() {
+            myEl._standardOptions = [{label: 'None Of The Above'}];
+            myEl.data = {customText: 'customText', standardText: 'standardText'};
             var noneOfTheAboveEvent = {
               model: {
                 item: {
                   standardText: '',
-                  standardLabel: 'None Of The Above',
-                  julianDateRange: null,
+                  label: 'None Of The Above'
                 }
               }
             };
             myEl._handleChangeStandard(noneOfTheAboveEvent);
-            expect(myEl.originalText).to.equal('standardText');
-            expect(myEl.standardText).to.equal('');
-            expect(myEl._standardLabel).to.equal(mockI18n('NO_STANDARD_SELECTED'));
+            expect(myEl.data.customText).to.equal('customText');
+            expect(myEl.data.standardText).to.equal('');
+            expect(myEl._getStandardLabel(myEl.data)).to.equal(myEl.data.label);
           })
 
           it('should update the standard and hide the menu', function() {
-            myEl._options = [{standardLabel: 'None Of The Above'}]
-            myEl.originalText = 'originalText';
-            myEl.standardText = 'standardText';
+            myEl._standardOptions = [{standardLabel: 'None Of The Above'}]
+            myEl.data = {customText: 'customText', standardText: 'standardText'};
             myEl._handleChangeStandard(itemEvent);
-            expect(myEl.standardText).to.equal('itemStandardText');
-            expect(myEl._standardLabel).to.equal('itemStandardLabel');
-            expect(myEl.julianDateRange).to.equal('itemJulianDateRange');
+            expect(myEl.data.standardText).to.equal('itemStandardText');
+            expect(myEl._getStandardLabel(myEl.data)).to.equal('itemStandardText');
             expect(myEl._hideStandards).to.equal.true;
           })
         });
 
-        describe('_handleSelect', function() {
+        describe.only('_handleSelect', function() {
           var e = {
             detail : {
               selection : {
                 label : 'selectionLabel',
-                standardText : 'selectionStandardText',
-                standardLabel : 'selectionStandardLabel',
-                julianDateRange : 'selectionDateRange'
+                customText : 'selectionStandardText',
+                standardText : 'selectionStandardLabel'
               }
             }
           };
 
-          it('should stop the search if we are changing the search term', function() {
-            myEl._searchTerm = e.detail.selection.label;
+          it('should abort xhr before kicking off a request', function() {
+            var cancelActiveRequestSpy = sinon.spy(myEl, '_cancelActiveRequest');
             myEl._handleSelect(e);
-            expect(myEl._stopSearch).to.equal.true;
+            expect(cancelActiveRequestSpy.called).to.be.true;
           })
           it('should update the standard', function() {
             myEl._handleSelect(e);
-            expect(myEl._searchTerm).to.equal(e.detail.selection.label);
-            expect(myEl.originalText).to.equal(e.detail.selection.label);
-            expect(myEl.standardText).to.equal(e.detail.selection.standardText);
-            expect(myEl._standardLabel).to.equal(e.detail.selection.standardLabel);
-            expect(myEl.julianDateRange).to.equal(e.detail.selection.julianDateRange);
+            var d = myEl.data;
+            expect(myEl.searchTerm).to.equal(e.detail.selection.customText);
+            expect(d.label).to.equal(e.detail.selection.label);
+            expect(d.customText).to.equal(e.detail.selection.customText);
+            expect(d.standardText).to.equal(e.detail.selection.standardText);
           })
         });
 
-        describe('_handleCancel', function() {
+        describe.only('_handleCancel', function() {
           it('should set no standard selected when we do not have a standard already', function() {
-            myEl._options = [1,2,3];
-            myEl._searchTerm = 'not blank';
+            myEl._standardOptions = [1,2,3];
+            myEl.searchTerm = 'not blank';
             myEl._handleCancel();
-            expect(myEl._standardLabel).to.equal(mockI18n('NO_STANDARD_SELECTED'));
-            expect(myEl.originalText).to.equal('not blank');
-          })
-          it('should set no standard available when we do not have standards available', function() {
-            myEl._options = [];
-            myEl._searchTerm = 'not blank';
-            myEl._searchTerm = 'not blank';
-            myEl._handleCancel();
-            expect(myEl._standardLabel).to.equal(mockI18n('NO_STANDARD_DATE_AVAILABLE'));
-            expect(myEl.originalText).to.equal('not blank');
+            expect(myEl._getStandardLabel(myEl.data)).to.equal(mockI18n('NO_STANDARD_SELECTED'));
+            expect(myEl.data.customText).to.equal('not blank');
           })
           it('should do nothing if we already have a standard selected', function() {
-            myEl._standardLabel = 'selected standard';
-            myEl._searchTerm = 'not blank';
-            myEl.originalText = 'not blank';
+            myEl.data = {id: '5773', standardText: 'selected standard'};
             myEl._handleCancel();
-            expect(myEl._standardLabel).to.equal('selected standard');
-            expect(myEl._searchTerm).to.equal('not blank');
-            expect(myEl.originalText).to.equal('not blank');
+            expect(myEl._getStandardLabel(myEl.data)).to.equal('selected standard');
+            expect(myEl.searchTerm).to.equal('selected standard');
+            expect(myEl.data.customText).to.be.undefined;
+            expect(myEl.data.standardText).to.equal('selected standard');
+            expect(myEl.data.label).to.equal('selected standard');
           })
           it('should do nothing if we have no searchTerm', function() {
-            myEl._searchTerm = '';
+            var handleDataChangeSpy = sinon.spy(myEl, '_handleDataChange');
+            myEl.searchTerm = '';
             myEl._handleCancel();
-            expect(myEl._standardLabel).to.equal('');
-            expect(myEl.originalText).to.equal('');
+            expect(Object.keys(myEl.data).length).to.equal(0);
+            expect(handleDataChangeSpy.called).to.be.false;
           })
         });
 
@@ -509,31 +340,10 @@
             myEl._openStandardSelector();
             expect(myEl._hideStandards).to.be.true;
           })
-          it('should select the first standard if the options in the list have changed', function() {
-            myEl._options = [1,2,3]
-            myEl._optionsChanged = true;
-            myEl._openStandardSelector();
-            expect(myEl.$.optionsMenu.selected).to.equal(0);
-          })
-          it('should set _hideStandards to false to show the dropdown', function() {
-            myEl._options = [1,2,3]
+          it('should set _hideStandards to false to show the dropdown when options are available', function() {
+            myEl._standardOptions = [1,2,3]
             myEl._openStandardSelector();
             expect(myEl._hideStandards).to.be.false;
-          })
-        });
-
-        describe('_handleBlur', function() {
-          it('should not hide the standards menu if the click was on the standards menu', function() {
-            var e = {relatedTarget: myEl.$.optionsMenu}
-            myEl._hideStandards = false;
-            myEl._handleBlur(e);
-            expect(myEl._hideStandards).to.be.false
-          })
-          it('should hide the standards menu if the click was not on the standards menu', function() {
-            var e = {relatedTarget: myEl}
-            myEl._hideStandards = false;
-            myEl._handleBlur(e);
-            expect(myEl._hideStandards).to.be.true
           })
         });
 
@@ -631,9 +441,9 @@
           var e;
           beforeEach(function() {
             e = { preventDefault : function(){return} }
-            myEl._standardLabel = 'standardLabel';
+            myEl.data = {label: 'standardLabel'};
             myEl._hideStandards = false;
-            myEl._options = [1,2,3]
+            myEl._standardOptions = [1,2,3]
             myEl.$.optionsMenu.select(2);
           })
           it('should do nothing if the menu is not showing', function(){
@@ -648,9 +458,7 @@
             expect(myEl.$.optionsMenu.selected).to.equal(1);
           });
           it('should fire iron-select event', function(done) {
-            var focusSpy = sinon.spy(myEl.$.button, 'focus');
             myEl.addEventListener('iron-select', function() {
-              expect(focusSpy.calledOnce).to.be.true;
               done();
             });
             myEl._handleUpArrow(e);
@@ -661,27 +469,17 @@
           var e;
           beforeEach(function() {
             e = { preventDefault : function(){return} }
-            myEl._standardLabel = 'standardLabel';
+            myEl.data = {label: 'standardLabel'};
             myEl._hideStandards = false;
-            myEl._options = [1,2,3]
+            myEl._standardOptions = [1,2,3]
             myEl.$.optionsMenu.select(1);
-          })
-          it('should show the menu if the menu is not showing', function(){
-            var preventDefaultSpy = sinon.spy(e, 'preventDefault');
-            myEl._hideStandards = true;
-            myEl._handleDownArrow(e);
-            expect(myEl._hideStandards).to.be.false;
-            expect(preventDefaultSpy.notCalled).to.be.true;
-            preventDefaultSpy.restore();
           })
           it('should select the next index on the options menu', function(){
             myEl._handleDownArrow(e);
             expect(myEl.$.optionsMenu.selected).to.equal(2);
           })
           it('should fire iron-select event', function(done) {
-            var focusSpy = sinon.spy(myEl.$.button, 'focus');
             myEl.addEventListener('iron-select', function() {
-              expect(focusSpy.calledOnce).to.be.true;
               done();
             });
             myEl._handleDownArrow(e);
@@ -692,9 +490,9 @@
           var e;
           beforeEach(function() {
             e = { shiftKey : false, preventDefault : function(){return} }
-            myEl._standardLabel = 'standardLabel';
+            myEl.data = {label: 'standardLabel'};
             myEl._hideStandards = false;
-            myEl._options = [1,2,3]
+            myEl._standardOptions = [1,2,3]
             myEl.$.optionsMenu.select(1);
           })
           it('should do nothing if the menu is not showing', function(){
@@ -704,18 +502,11 @@
             expect(preventDefaultSpy.notCalled).to.be.true;
             preventDefaultSpy.restore();
           })
-          it('should call _handleDownArrow', function(){
-            var _handleDownArrowSpy = sinon.spy(myEl, '_handleDownArrow')
+          it('should call _handleChangeStandard', function(){
+            var _handleChangeStandardSpy = sinon.spy(myEl, '_handleChangeStandard')
             myEl._handleTab(e);
-            expect(_handleDownArrowSpy.calledOnce).to.be.true;
-            _handleDownArrowSpy.restore();
-          })
-          it('should call _handleUpArrow if shift key is held down', function(){
-            e.shiftKey = true;
-            var _handleUpArrowSpy = sinon.spy(myEl, '_handleUpArrow')
-            myEl._handleTab(e);
-            expect(_handleUpArrowSpy.calledOnce).to.be.true;
-            _handleUpArrowSpy.restore();
+            expect(_handleChangeStandardSpy.calledOnce).to.be.true;
+            _handleChangeStandardSpy.restore();
           })
         });
 
@@ -723,9 +514,9 @@
           var e;
           beforeEach(function() {
             e = { preventDefault : function(){return} }
-            myEl._standardLabel = 'standardLabel';
+            myEl.data = {label: 'standardLabel'};
             myEl._hideStandards = false;
-            myEl._options = ['options 0','options 1']
+            myEl._standardOptions = ['options 0', 'options 1']
             myEl.$.optionsMenu.select(0);
           })
           it('should show the menu if the menu is not showing', function(){
@@ -747,7 +538,7 @@
             _handleChangeStandardSpy.restore();
           })
           it('should return focus to the button', function(){
-            var focusSpy = sinon.spy(myEl.$.button, 'focus')
+            var focusSpy = sinon.spy(myEl, '_focusButton')
             myEl._handleEnter(e);
             expect(focusSpy.calledOnce).to.be.true;
             focusSpy.restore();
@@ -761,47 +552,10 @@
             expect(myEl._hideStandards).to.be.true;
           })
           it('should return focus to the button', function(){
-            var focusSpy = sinon.spy(myEl.$.button, 'focus')
+            var focusSpy = sinon.spy(myEl, '_focusButton')
             myEl._handleEscape();
             expect(focusSpy.calledOnce).to.be.true;
             focusSpy.restore();
-          })
-        });
-
-        describe('_handleDownArrowForTypeahead', function() {
-          var e;
-          beforeEach(function() {
-            e = { which : 40 };
-            myEl.$.typeahead._hideOptions = true;
-            myEl._optionstoUseWhenNoChange = [1,2,3];
-          })
-          it('should do nothing if the key was not the down arrow', function() {
-            e.which = 0;
-            var showOptionsSpy = sinon.spy(myEl.$.typeahead, 'showOptions')
-            myEl._handleDownArrowForTypeahead(e);
-            expect(myEl._optionstoUseWhenNoChange).to.not.be.null;
-            expect(showOptionsSpy.notCalled).to.be.true
-            showOptionsSpy.restore();
-          })
-          it('should do nothing if the typeahead menu is showing', function() {
-            myEl.$.typeahead._hideOptions = false;
-            var showOptionsSpy = sinon.spy(myEl.$.typeahead, 'showOptions')
-            myEl._handleDownArrowForTypeahead(e);
-            expect(myEl._optionstoUseWhenNoChange).to.not.be.null;
-            expect(showOptionsSpy.notCalled).to.be.true
-            showOptionsSpy.restore();
-          })
-          it('should update the typeahead options if we need to', function() {
-            myEl._handleDownArrowForTypeahead(e);
-            expect(myEl.$.typeahead.options).to.deep.equal([1,2,3]);
-            expect(myEl._optionstoUseWhenNoChange).to.be.null;
-          })
-          it('should programatically show the typeahead options', function() {
-            var showOptionsSpy = sinon.spy(myEl.$.typeahead, 'showOptions')
-            myEl._optionstoUseWhenNoChange = null;
-            myEl._handleDownArrowForTypeahead(e);
-            expect(showOptionsSpy.calledOnce).to.be.true
-            showOptionsSpy.restore();
           })
         });
 

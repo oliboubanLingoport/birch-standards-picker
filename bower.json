@@ -15,15 +15,19 @@
     "tests"
   ],
   "dependencies": {
-    "birch-typeahead": "https://github.com/FamilySearchElements/birch-typeahead.git",
+    "birch-typeahead": "FamilySearchElements/birch-typeahead#1.x",
     "polymer": "Polymer/polymer#^1.7.0",
     "es6-promise-polyfill": "git+https://github.com/taylorhakes/promise-polyfill#6.0.2",
-    "wc-i18n": "jshcrowthe/wc-i18n#^2.0.1"
+    "wc-i18n": "jshcrowthe/wc-i18n#^2.0.1",
+    "object-assign-shim": "^1.0.0"
   },
   "devDependencies": {
-    "fetch-mock": "https://unpkg.com/fetch-mock@5.5.0/es5/client-browserified.js",
     "iron-component-page": "PolymerElements/iron-component-page#^1.1.7",
     "qa-shared-mock-json": "https://github.com/fs-eng/qa-shared-mock-json.git",
-    "web-component-tester": "^4.3.1"
+    "web-component-tester": "^4.3.1",
+    "fetch": "^2.0.2"
+  },
+  "resolutions": {
+    "fetch": "^2.0.2"
   }
 }

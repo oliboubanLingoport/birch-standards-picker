@@ -2,12 +2,14 @@
 <link rel="import" href="../birch-typeahead/birch-typeahead.html">
 <link rel="import" href="../wc-i18n/wc-i18n.html">
 <link rel="import" href="../paper-menu/paper-menu.html">
+<!-- object-assign-shim is only to support IE11, but it's tiny anyhow -->
+<script src="../object-assign-shim/index.js"></script>
 
 <!--
 The standards picker is used to select standard dates and places.
 
 Assumptions the component makes
-- fetch and promises are supported (the component does not bring in the polyfills)
+- promises and fetch are supported (the component does not bring in the polyfills)
 - `/tree-data/` resolves to a valid tree-data path e.g. `integration.familysearch.org/tree-data` (you'll need a proxy for tree-data running locally)
 - user is logged in to familysearch (`tree-data` returns 401s)
 
@@ -28,145 +30,26 @@ Example:
 -->
 
 <dom-module id="birch-standards-picker">
+  <link rel="import" type="css" href="birch-standards-picker.css">
   <template>
-    <style>
-      :host {
-        display: block;
-        font-family: Verdana;
-        color: #666662;
-      }
-      [hidden] {
-        display: none !important;
-      }
-      .standard_label {
-        font-size: 12px;
-        color: #666662;
-        display: block;
-        padding: 2px
-      }
-      .standard-container {
-        position: relative;
-        max-width: 300px;
-      }
-      .standard-container p {
-        margin: 0;
-        padding-top: 10px;
-        min-height: 40px;
-      }
-      #optionsMenu {
-        position: absolute;
-        z-index: 100000;
-        padding: 0;
-        width: 100%;
-        max-height: 200px;
-        overflow-y: scroll;
-        overflow-x: hidden;
-        cursor: pointer;
-        box-shadow: 0 5px 10px #bab7b1;
-        -webkit-overflow-scrolling: touch;
-        border: 1px solid #bab7b1;
-        border-radius: 4px;
-      }
-      #optionsMenuWrapper {
-        position: relative;
-        margin-top: 12px;
-      }
-      #optionsMenuWrapper:after, #optionsMenuWrapper:before {
-        bottom: -1px;
-        left: 30px;
-        border: solid transparent;
-        content: " ";
-        height: 0;
-        width: 0;
-        position: absolute;
-        pointer-events: none;
-      }
-      #optionsMenuWrapper:after {
-        border-color: rgba(255, 255, 255, 0);
-        border-bottom-color: #ffffff;
-        border-width: 12px;
-        margin-left: -12px;
-        z-index: 100001;
-      }
-      #optionsMenuWrapper:before {
-        border-color: rgba(186, 183, 177, 0);
-        border-bottom-color: #bab7b1;
-        border-width: 13px;
-        margin-left: -13px;
-      }
-      .label-text {
-        padding-left: 2px;
-        width: 75%;
-        max-width: 265px;
-        overflow: hidden;
-        display: inline-block;
-        text-overflow: ellipsis;
-        vertical-align: middle;
-      }
-      .carat {
-        vertical-align: top;
-      }
-      .standard-button {
-        position: relative;
-        width: 100%;
-        border: none;
-        vertical-align: middle;
-        white-space: nowrap;
-        background: 0 0;
-        font-size: 14px;
-        padding: 0;
-        padding-left: 2px;
-        max-width: 300px;
-        overflow: hidden;
-      }
-      #Layer_1 {
-        vertical-align: middle;
-      }
-      birch-typeahead {
-        --birch-typeahead-input: {
-          background-color: #fff;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-          box-shadow: inset 0 3px 0 rgba(0,0,0,.05);
-          box-sizing: border-box;
-          color: #333331;
-          padding: 6px 10px;
-        }
-      }
-      paper-item, paper-icon-item, paper-item-body {
-        --paper-item: {
-          font-family: verdana;
-          font-size: 14px;
-        };
-        --paper-item-selected: {
-          font-weight: 100 !important;
-          background-color: #ecebea !important;
-        };
-        --paper-item-icon-width: 25px;
-      }
-      paper-menu {
-        --paper-menu: {
-          font-family: verdana
-        };
-      }
-      paper-item > *, paper-icon-item > *, paper-item-body > * {
-        white-space: normal !important;
-        font-size: 14px !important;
-      }
-    </style>
-    <label class="standard_label" for="typeahead" hidden$='[[hideInputLabel]]'>[[inputLabel]]</label>
+
+    <label class="standard_label" for="typeahead">[[inputLabel]]</label>
     <birch-typeahead
       id='typeahead'
-      on-birch-typeahead:input='_handleChange'
+      highlight-first-item
+      follow-tabindex-after-tab-select
+      loading="[[loading]]"
+      debounce-input-duration="200"
+      value="{{searchTerm::birch-typeahead:input}}"
+      placeholder="[[_getPlaceholder(standardType, i18n)]]"
+      options="[[_typeaheadOptions]]"
+      on-birch-typeahead:input='_handleInput'
       on-birch-typeahead:cancel='_handleCancel'
       on-birch-typeahead:blur='_handleCancel'
-      on-birch-typeahead:selected='_handleSelect'
-      highlight-first-item
-      value="[[_searchTerm]]"
-      placeholder="[[_getPlaceholder(standardType, i18n)]]">
+      on-birch-typeahead:selected='_handleSelect'>
       <template>
-        <template is="dom-if" if="[[item.icon]]" restamp>
 
+        <template is="dom-if" if="[[item.icon]]" restamp>
           <paper-icon-item>
             <iron-icon item-icon>
               <template is="dom-if" if="[[isDate]]">
@@ -192,12 +75,21 @@ Example:
             </paper-item-body>
           </paper-icon-item>
         </template>
+
       </template>
     </birch-typeahead>
-    <div class="standard-container" hidden$='[[hideStandardsDropdown]]'>
-      <p><label id="label" class='standard_label'>[[standardsDropdownLabel]]</label>
-        <button id="button" class="standard-button" on-focusout="_handleBlur" on-tap="_openStandardSelector" on-keydown="_handleKeydown" hidden$=[[!_standardLabel]]>
-          <iron-icon class="standardIcon">
+
+    <div class="standard-container" hidden$='[[_hideStandardsContainer(data, standardType, i18n)]]'>
+      <p>
+        <label id="label" class='standard_label'>[[standardsDropdownLabel]]</label>
+        <button
+          id="button"
+          class="standard-button"
+          on-focusout="_handleFocusout"
+          on-tap="_openStandardSelector"
+          on-keydown="_handleKeydown">
+
+          <iron-icon class="standardIcon" hidden$="[[_hideStandardIcon(data.label, i18n)]]">
             <template is="dom-if" if="[[isDate]]">
               <svg id="Layer_1" data-name="Layer 1" width="14" height="16" viewBox="0 0 14 16"><path d="M1,15.9A.94.94,0,0,1,.1,15V3.6A1.5,1.5,0,0,1,1.6,2.1h.3V3A1.1,1.1,0,0,0,3,4.1h.1V.1H4a.9.9,0,0,1,.9.9V2.1h4V3A1.1,1.1,0,0,0,10,4.1h.1V.1H11a.9.9,0,0,1,.9.9V2.1h.5a1.5,1.5,0,0,1,1.5,1.5V15a.94.94,0,0,1-.94.94Zm.86-1.8H12.1V5.9H1.9Z" style="fill:#333331"/><rect width="14" height="16" style="fill:none"/><path d="M3.17,12.24l.59-.76a2.12,2.12,0,0,0,1.47.61c.65,0,1-.28,1-.68s-.33-.62-1.07-.62l-.66,0v-1h.66c.59,0,1-.18,1-.57s-.43-.63-1-.63a1.92,1.92,0,0,0-1.35.55l-.57-.71a2.63,2.63,0,0,1,2-.85c1.25,0,2,.56,2,1.45a1.31,1.31,0,0,1-1.17,1.22,1.34,1.34,0,0,1,1.25,1.28c0,.92-.82,1.57-2.1,1.57A2.67,2.67,0,0,1,3.17,12.24Z" style="fill:#333331"/><path d="M9.33,13V9.13l-.89.9-.65-.68L9.47,7.67h1V13Z" style="fill:#333331"/></svg>
             </template>
@@ -205,14 +97,17 @@ Example:
               <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="11" height="16" viewBox="0 0 11 16"><path d="M5.5,15.79a.39.39,0,0,1-.37-.24.36.36,0,0,1,0-.13A7.49,7.49,0,0,0,2.9,10.31c-.37-.44-.79-.94-1.27-1.57L1.4,8.42a5,5,0,0,1-1-3.08,5.13,5.13,0,1,1,10.27,0,5.08,5.08,0,0,1-1,3.08l-.24.32h0c-.48.63-.9,1.13-1.27,1.57a7.46,7.46,0,0,0-2.21,5.08A.39.39,0,0,1,5.5,15.79ZM5.5,3a2,2,0,1,0,2,2A2,2,0,0,0,5.5,3Z" style="fill:#333331"/><rect width="11" height="16" style="fill:none"/></svg>
             </template>
           </iron-icon>
-          <span class="label-text">[[_standardLabel]]</span><span class="carat"> ▾</span>
+          <span class="label-text">[[_getStandardLabel(data)]]</span>
+          <span class="carat" hidden$="[[loading]]">▾</span>
+          <span class="loading" hidden$="[[!loading]]"></span>
+
         </button>
       </p>
       <div id="optionsMenuWrapper" tabindex="-1" hidden$="[[_hideStandards]]">
         <paper-menu id="optionsMenu" tabindex="-1" hidden$="[[_hideStandards]]">
-          <template is="dom-repeat" items="[[_options]]">
-            <template is="dom-if" if="[[item.icon]]">
+          <template is="dom-repeat" items="[[_standardOptions]]">
 
+            <template is="dom-if" if="[[item.icon]]">
               <paper-icon-item on-tap="_handleChangeStandard">
                 <iron-icon item-icon>
                   <template is="dom-if" if="[[isDate]]">
@@ -228,6 +123,7 @@ Example:
                 </paper-item-body>
               </paper-icon-item>
             </template>
+
             <template is="dom-if" if="[[!item.icon]]">
               <paper-icon-item on-tap="_handleChangeStandard">
                 <iron-icon item-icon></iron-icon>
@@ -237,11 +133,25 @@ Example:
                 </paper-item-body>
               </paper-icon-item>
             </template>
+
           </template>
         </paper-menu>
       </div>
     </div>
+
+    <template is="dom-if" if="[[_showStandardSelectedIndicator(data)]]">
+      <div class="standard-indicator standard small">
+        <p>[[_getStandardizedIndicatorText(standardType, i18n)]]</p>
+      </div>
+    </template>
+
+    <template is="dom-if" if="[[_showNonStandardSelectedIndicator]]">
+      <div class="standard-indicator non-standard small">
+        <p>[[_getNonStandardizedIndicatorText(standardType, i18n)]]</p>
+      </div>
+    </template>
   </template>
+
   <script>
     Polymer({
       is: 'birch-standards-picker',
@@ -261,83 +171,6 @@ Example:
         },
 
         /**
-         * Whether to hide the standards selector dropdown
-         *
-         * @type{Boolean}
-         */
-        hideStandardsDropdown: {
-          type: Boolean,
-          value: false
-        },
-
-        /**
-         * Whether to hide the label above the input box
-         *
-         * @type{Boolean}
-         */
-        hideInputLabel: {
-          type: Boolean,
-          value: false
-        },
-
-        /**
-         * The label for the standard selector.
-         * The default will be the translation for 'Standardized Event [type]'
-         *
-         * @type {String}
-         */
-        standardsDropdownLabel: {
-          type: String,
-          value: ''
-        },
-
-        /**
-         * The text that the user has typed in.
-         *
-         * @type {String}
-         */
-        originalText: {
-          type: String,
-          value: '',
-          notify: true
-        },
-
-        /**
-         * The display label for the standard selected.
-         *
-         * @type {String}
-         */
-        _standardLabel: {
-          type: String,
-          value: '',
-          notify: true
-        },
-
-        /**
-         * The text value of the standard.
-         *
-         * @type {String}
-         */
-        standardText: {
-          type: String,
-          value: '',
-          notify: true
-        },
-
-        /**
-         * The julian date range of the standard
-         *
-         * @type {Object}
-         */
-        julianDateRange: {
-          type: Object,
-          value: function() {
-            return null;
-          },
-          notify: true
-        },
-
-        /**
          * The type of standard to fetch.
          *
          * Valid values are: `date`, `place`
@@ -349,51 +182,118 @@ Example:
         },
 
         /**
-         * The id of the standard
+         * The value for the typeahead input
          *
          * @type {String}
          */
-        standardId: {
+        searchTerm: {
           type: String,
           value: ''
         },
 
-        _searchTerm: {
+        /**
+         * The label to show in the standards dropdown button
+         *
+         * @type {String}
+         */
+        standardsDropdownLabel: {
           type: String,
           value: ''
         },
 
-        _options: {
+        /**
+         * The object containing the standards picker's current state
+         *
+         * @type {Object}
+         */
+        data: {
+          type: Object,
+          value: function(){ return {}; },
+          observer: '_handleDataChange',
+          notifies: true
+        },
+
+        /**
+         * Whether a network call is pending and spinners should show
+         *
+         * @type {Boolean}
+         */
+        loading: {
+          type: Boolean,
+          value: false
+        },
+
+        _typeaheadOptions: {
           type: Array,
-          value: function() {
-            return [];
-          }
+          value: function() { return []; }
+        },
+
+        _standardOptions: {
+          type: Array,
+          value: function() { return []; }
         },
 
         _hideStandards: {
           type: Boolean,
           value: true
-        },
-
-        _stopSearch: {
-          type: Boolean,
-          value: false
         }
       },
 
       observers: [
-        '_updateOptions(_searchTerm, standardType, language)',
         '_updateLabels(i18n, standardType)',
         '_setIsDateOrPlace(standardType, i18n)'
       ],
 
-      ready: function() {
-        this.$.typeahead.$.input.addEventListener('keydown', this._handleDownArrowForTypeahead.bind(this));
-        this.listen(this.$.optionsMenu, 'iron-select', '_focusButton');
+      /**
+       * Reset the standards picker and typeaheads' state and content
+       */
+      reset: function() {
+        this._typeaheadOptions = [];
+        this._standardOptions = [];
+        this._updateData({});
+        this.searchTerm = '';
+        this.$.typeahead.value = '';
+        this.$.optionsMenu.select(-1);
+        this.$.typeahead.hideOptionsAndBlur(true);
+        this._showNonStandardSelectedIndicator = false;
       },
 
       _focusButton: function(event) {
-        this.$.button.focus();
+        this.async(function(){
+          this.$.button.focus();
+        });
+      },
+
+      _handleDataChange: function(data) {
+        if(!this.searchTerm && (data.customText || data.standardText)){
+          this.searchTerm = data.customText || data.standardText;
+          if(!data.label){
+            data.label = data.standardText || data.customText;
+            this._updateData(this.data);
+            this._handleDataChange(this.data);
+          }
+          var fakeEvent = {
+            detail: {
+              value: this.searchTerm
+            }
+          }
+          this._handleInput(fakeEvent, true);
+        }
+      },
+
+      _getStandardLabel: function(data) {
+        return data.standardText || data.label;
+      },
+
+      _updateData: function(obj) {
+        this.data = Object.assign({}, obj);
+        console.log(this.data);
+      },
+
+      // Can't do _is(standardType, 'place') here because the markup gets templatized
+      _setIsDateOrPlace: function(standardType, i18n) {
+        this.isDate = standardType === 'date';
+        this.isPlace = standardType === 'place';
       },
 
       _updateLabels: function(i18n, standardType) {
@@ -401,187 +301,144 @@ Example:
         this.inputLabel = this.i18n('EVENT_' + this.standardType.toUpperCase() + '_LABEL');
       },
 
-      _updateOptions: function(searchTerm, type, lang) {
-        this._optionstoUseWhenNoChange = null;
-        this._latestSearch = searchTerm;
-        if (!searchTerm) return;
-        return this._fetchOptions(searchTerm, type, lang).then(function(options) {
-          // don't do anything with the response if it came back after they typed something again
-          if (searchTerm !== this._latestSearch) return;
-          if (!this._stopSearch) this.$.typeahead.options = options;
-          // we stop the search a) when we select a standard from the typeahead menu since it will
-          // update the input value and we don't want the menu to open up again and b) when we
-          // choose a new standard from the dropdown menu and that causes us to change the text
-          // in the input field as well.
-          if (this._stopSearch) this._optionstoUseWhenNoChange = options;
-          this._stopSearch = false;
-          this.$.typeahead.loading = false;
-        }.bind(this)).catch(function(err) {
-          console.log(err);
-          // don't do anything with the response if it came back after they typed something again
-          if (searchTerm !== this._latestSearch) return;
-          this._stopSearch = false;
-          this.$.typeahead.loading = false;
-        }.bind(this));
-      },
-
-      _fetchOptions: function(searchTerm, type, lang) {
-        return new Promise(function(resolve, reject) {
-          fetch('/tree-data/authorities/' + type + '?term=' + searchTerm + '&locale=' + lang, {
-            credentials: 'same-origin'
-          }).then(function(res) {
-            return res.json();
-          }.bind(this)).then(function(data) {
-            if (!Array.isArray(data)) data = [];
-            // Map the data to our desired format
-            data = data.map(function(standard) {
-              if(standard.label === 'None of the above') {
-                standard.label = this.i18n('NONE_OF_THE_ABOVE');
-              }
-              var vm = {
-                icon: true,
-                id: standard.id,
-                label: standard.label,
-                standardLabel: standard.label,
-                standardText: standard.value,
-                type: standard.type,
-                yearRange: standard.yearRange,
-                julianDateRange: standard.earliestAstro || standard.latestAstro ? {
-                  earliestDay: standard.earliestAstro || standard.latestAstro,
-                  latestDay: standard.latestAstro || standard.earliestAstro
-                } : null,
-                customText: null
-              };
-              // we display type and year next to each other with a comma between them, so
-              // if we have both, we're going to put in the comma here since it's easier
-              // than doing a dom-if for a comma and a space.
-              if (vm.type && vm.yearRange) vm.type = vm.type + ', ';
-              return vm;
-            }.bind(this));
-
-            this._options = data;
-            this._optionsChanged = true;
-
-            var noStandard = {
-              icon: false,
-              id: '',
-              label: searchTerm,
-              standardLabel: this.i18n('NO_STANDARD_' + this.standardType.toUpperCase() + '_AVAILABLE'),
-              standardText: '',
-              type: null,
-              customText: searchTerm
-            };
-
-            var isStandard = data.length && data[0].label === searchTerm;
-
-            // Add our "no-standard" node
-            data = (isStandard ? [] : [noStandard]).concat(data);
-
-            // Make the default selection auto select the
-            // first standard:
-
-            if (data.length > 1 && !isStandard) {
-              data[0] = Object.assign({}, data[0], {
-                id: data[1].id,
-                standardText: data[1].standardText,
-                standardLabel: data[1].label,
-                julianDateRange: data[1].julianDateRange
-              });
-            }
-            if (data.length > 1) {
-              // Eliminate the "None of the Above" entry
-              data = data.slice(0, data.length - 1);
-            }
-
-            return data;
-          }.bind(this)).then(resolve).catch(reject);
-        }.bind(this));
-      },
-
       _getPlaceholder: function(type, i18n) {
         var string = type.toUpperCase() + '_PLACEHOLDER';
         return this.i18n(string);
       },
 
-      _handleChange: function(e) {
-        if(!e || !e.detail) return;
-        this._searchTerm = e.detail.value;
-        // we unset the standard whenever they change the the text
-        this._standardLabel = '';
-        this.standardText = null;
-        this.standardId = '';
-        this.julianDateRange = null;
-        this.originalText = this._searchTerm;
-        if (e.detail.value) this.$.typeahead.loading = true;
+      _handleInput: function(e, onlySetStandardOptions) {
+        if(!e || !e.detail || !e.detail.value){
+          this._cancelActiveRequest();
+          this.loading = false;
+          return this.reset();
+        }
+        this.loading = true;
+        this._fetchData(e.detail.value, onlySetStandardOptions);
+      },
+
+      _fetchData: function(term, onlySetStandardOptions) {
+        var self = this;
+        var url = '/tree-data/authorities/' + this.standardType + '?term=' + term + '&locale=en';
+        this._req('GET', url).then(function (data){
+          self._handleResponse(data, onlySetStandardOptions);
+        }).catch(function (err){
+          if(err.aborted) return;
+          self._handleResponse({body: []}, onlySetStandardOptions);
+          console.error('birch-standards-picker:error', err);
+        });
+      },
+
+      _handleResponse: function(data, onlySetStandardOptions) {
+        if(!data || !data.body) return;
+        var options = data.body;
+        if(!Array.isArray(options)) return;
+
+        options = options.map(this._mapOptionsCB.bind(this));
+        this._standardOptions = [].concat(options);
+        if(onlySetStandardOptions !== true){
+          this._typeaheadOptions = this._setupTypeaheadOptions([].concat(options));
+        }
+        this._setShowNonStandardSelectedIndicator(this.data, this.searchTerm, this._standardOptions);
+
+        this.loading = false;
+      },
+
+      _mapOptionsCB: function(option) {
+        var vm = {
+          icon: true,
+          id: option.id,
+          label: option.label,
+          customText: null,
+          standardText: option.value,
+          type: option.type,
+          yearRange: option.yearRange
+        };
+        if(vm.label === 'None of the above') {
+          vm.label = this.i18n('NONE_OF_THE_ABOVE');
+          vm.icon = false;
+        }
+        // If both type and yearRange exist, separate them with a comma
+        if (vm.type && vm.yearRange) vm.type = vm.type + ', ';
+        return vm;
+      },
+
+      _setupTypeaheadOptions: function(options) {
+        //Strip the "None of the above" option that tree-data always sends back
+        if(options.length > 1){
+          options = options.slice(0, options.length - 1);
+        }
+
+        if(options.length){
+          //Add the currently entered value as the first option if it differs from the first standard
+          var isStandard = (options.length && options[0].label.toLowerCase() === this.searchTerm.toLowerCase());
+          if(!isStandard){
+            options.unshift({
+              label: this.searchTerm,
+              customText: this.searchTerm
+            });
+            if (options.length > 1){
+              options[0] = Object.assign({}, options[0], {
+                id: options[1].id,
+                standardText: options[1].standardText
+              });
+            }
+          }
+        }
+
+        return options;
       },
 
       _handleChangeStandard: function(e) {
         if (!e || !e.model || !e.model.item) return;
-        noneOfTheAboveText = this._options[this._options.length-1].standardLabel;
-        if (this.originalText === this.standardText) {
-          this._stopSearch = true;
-          this.originalText = e.model.item.standardText || this.originalText;
-          this._searchTerm = e.model.item.standardText || this._searchTerm;
+        this._cancelActiveRequest();
+        this.loading = false;
+        if(e.model.item.label === this.i18n('NONE_OF_THE_ABOVE')){
+          e.model.item.label = this.i18n('NO_STANDARD_SELECTED');
         }
-        this.standardId = e.model.item.id;
-        this.standardText = e.model.item.standardText;
-        this._standardLabel = e.model.item.standardLabel === noneOfTheAboveText ? this.i18n('NO_STANDARD_SELECTED') : e.model.item.standardLabel;
-        this.julianDateRange = e.model.item.julianDateRange;
+        e.model.item.customText = this.data.customText;
+        this._updateData(e.model.item);
         this._hideStandards = true;
       },
 
       _handleSelect: function(e) {
-        if (this.$.typeahead.loading) {
-          // this is a hacky way to override the behavior in birch-typeahead
-          // where on select it updates the input value - we can't intercept
-          // that call, but this allows us to have the text appear correct to
-          // the user. The _searchTerm is the value we just typed.
-          this.$.typeahead.$.input.value = this._searchTerm;
-          return;
-        }
         if (!e || !e.detail || !e.detail.selection) return;
-        if (this._searchTerm !== e.detail.selection.label) this._stopSearch = true;
-        this.originalText = e.detail.selection.label;
-        this._searchTerm = e.detail.selection.label;
-        this.standardId = e.detail.selection.id;
-        this.standardText = e.detail.selection.standardText;
-        this._standardLabel = e.detail.selection.standardLabel;
-        this.julianDateRange = e.detail.selection.julianDateRange;
+        this._cancelActiveRequest();
+        this.loading = false;
+        this._updateData(e.detail.selection);
+        this.$.optionsMenu.select(0);
+        this._setShowNonStandardSelectedIndicator(this.data, this.searchTerm, this._standardOptions);
       },
 
       _handleCancel: function(e) {
-        if (this._searchTerm && !this._standardLabel) {
-          if (this._options.length > 0) {
-            this._standardLabel = this.i18n('NO_STANDARD_SELECTED');
-          } else {
-            this._standardLabel = this.i18n('NO_STANDARD_' + this.standardType.toUpperCase() + '_AVAILABLE');
+        if (this.searchTerm) {
+          if(!Object.keys(this.data).length){
+            if (this._standardOptions.length > 0) {
+              this.data = {label: this.i18n('NO_STANDARD_SELECTED')};
+            } else {
+              this.data = {label: this.i18n('NO_STANDARD_' + this.standardType.toUpperCase() + '_AVAILABLE')};
+            }
           }
-          this.originalText = this._searchTerm;
+          if(this.data.standardText !== this.$.typeahead.value){
+            this.data.customText = this.searchTerm;
+          }
+          this._updateData(this.data);
         }
+        this._setShowNonStandardSelectedIndicator(this.data, this.searchTerm, this._standardOptions);
       },
 
       _openStandardSelector: function() {
-        if (this._options.length < 1) return;
+        if (this._standardOptions.length < 1) return;
         this._hideStandards = false;
-        if (this._optionsChanged) this.$.optionsMenu.select(0);
-        this._optionsChanged = false;
+        this._focusButton();
       },
 
-      _handleBlur: function(e) {
-        if (e) {
-          if (this && this.$.optionsMenu && !this.$.optionsMenu.contains(e.relatedTarget)) {
-            this._hideStandards = true;
-          } else {
-            setTimeout(function() {
-              this.$.button.focus();
-            }.bind(this));
-          }
+      _handleFocusout: function(e) {
+        if(!e) return;
+        if (this && this.$.optionsMenu && !this.$.optionsMenu.contains(e.relatedTarget)) {
+          this._hideStandards = true;
+        } else {
+          this._focusButton();
         }
-      },
-
-      _setIsDateOrPlace: function(standardType, i18n) {
-        this.isDate = standardType === 'date';
-        this.isPlace = standardType === 'place';
       },
 
       _handleKeydown: function(e) {
@@ -601,6 +458,7 @@ Example:
         var optionsMenu = this.$.optionsMenu;
         var index = Math.max(optionsMenu.selected - 1, 0);
         optionsMenu.select(index);
+        this._focusButton();
       },
 
       _handleDownArrow: function(e) {
@@ -612,19 +470,17 @@ Example:
         var optionsMenu = this.$.optionsMenu;
         var index = 0;
         if(typeof optionsMenu.selected === 'number'){
-          index = Math.min(optionsMenu.selected + 1, this._options.length - 1);
+          index = Math.min(optionsMenu.selected + 1, this._standardOptions.length - 1);
         }
         optionsMenu.select(index);
+        this._focusButton();
       },
 
       _handleTab: function(e) {
         if(this._hideStandards) return;
-        e.preventDefault();
-        if (e.shiftKey) {
-          this._handleUpArrow(e);
-        } else {
-          this._handleDownArrow(e);
-        }
+        e.model = e.model || {};
+        e.model.item = this._standardOptions[this.$.optionsMenu.selected];
+        this._handleChangeStandard(e);
       },
 
       _handleEnter: function(e) {
@@ -634,26 +490,67 @@ Example:
         }
         e.preventDefault();
         e.model = e.model || {};
-        e.model.item = this._options[this.$.optionsMenu.selected];
+        e.model.item = this._standardOptions[this.$.optionsMenu.selected];
         this._handleChangeStandard(e);
-        this.$.button.focus();
+        this._focusButton();
       },
 
       _handleEscape: function(e) {
         this._hideStandards = true;
-        this.$.button.focus();
+        this._focusButton();
       },
 
-      _handleDownArrowForTypeahead: function(e) {
-        if(e && e.which && e.which === 40 && this.$.typeahead._hideOptions) {
-          if (this._optionstoUseWhenNoChange) {
-            this.$.typeahead.options = this._optionstoUseWhenNoChange;
-            this._optionstoUseWhenNoChange = null;
-          } else {
-            this.$.typeahead.showOptions();
-          }
+      _cancelActiveRequest: function() {
+        if(this.xhr){
+          this.xhr.abort();
+          this.xhr = null;
         }
       },
+
+      _req: function(method, url) {
+        this._cancelActiveRequest();
+        return new Promise(function (resolve, reject){
+          this.xhr = new XMLHttpRequest();
+          this.xhr.open(method.toUpperCase(), url, true);
+          this.xhr.onload = function(){
+            try{
+              if(!this || !this.response || !this.response) return reject(this);
+              if(this.status >= 300) return reject(this);
+              if(this.status === 204) return resolve();
+              return resolve(JSON.parse(this.response));
+            } catch(err) {
+              return reject(err);
+            }
+          };
+          // xhr.setRequestHeader('Authorization', 'Bearer ' + readCookie('fssessionid'));
+          this.xhr.setRequestHeader('Accept', 'application/json');
+          this.xhr.send();
+        }.bind(this));
+      },
+
+      _hideStandardIcon: function(label, i18n) {
+        return label === i18n('NO_STANDARD_SELECTED');
+      },
+
+      _hideStandardsContainer: function(data, standardType, i18n) {
+        return !data.customText || data.label === i18n('NO_STANDARD_' + standardType.toUpperCase() + '_AVAILABLE');
+      },
+
+      _showStandardSelectedIndicator: function(data) {
+        return data.standardText && !data.customText
+      },
+
+      _setShowNonStandardSelectedIndicator: function(data, searchTerm, standardOptions) {
+        this._showNonStandardSelectedIndicator = !data.standardText && searchTerm && !standardOptions.length;
+      },
+
+      _getStandardizedIndicatorText: function(standardType, i18n) {
+        return (standardType === 'place') ? i18n('STANDARDIZED_PLACE') : i18n('STANDARDIZED_DATE');
+      },
+
+      _getNonStandardizedIndicatorText: function(standardType, i18n) {
+        return (standardType === 'place') ? i18n('NO_STANDARD_PLACE_AVAILABLE') : i18n('NO_STANDARD_DATE_AVAILABLE');
+      }
 
     });
   </script>
