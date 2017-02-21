@@ -108,7 +108,7 @@ Example:
         <paper-menu id="optionsMenu" tabindex="-1" hidden$="[[_hideStandards]]">
           <template is="dom-repeat" items="[[_standardOptions]]">
 
-            <template is="dom-if" if="[[item.icon]]">
+            <template is="dom-if" if="[[item.icon]]" restamp>
               <paper-icon-item on-tap="_handleChangeStandard">
                 <iron-icon item-icon>
                   <template is="dom-if" if="[[isDate]]">
@@ -125,7 +125,7 @@ Example:
               </paper-icon-item>
             </template>
 
-            <template is="dom-if" if="[[!item.icon]]">
+            <template is="dom-if" if="[[!item.icon]]" restamp>
               <paper-icon-item on-tap="_handleChangeStandard">
                 <iron-icon item-icon></iron-icon>
                 <paper-item-body two-line>
