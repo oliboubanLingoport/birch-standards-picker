@@ -250,14 +250,18 @@ Example:
        * Reset the standards picker and typeaheads' state and content
        */
       reset: function() {
-        this._typeaheadOptions = [];
-        this._standardOptions = [];
+        this._resetArrays();
         this._updateData({});
         this.searchTerm = '';
         this.$.typeahead.value = '';
         this.$.optionsMenu.select(-1);
         this.$.typeahead.hideOptionsAndBlur(true);
         this._showNonStandardSelectedIndicator = false;
+      },
+
+      _resetArrays: function(){
+        this._typeaheadOptions = [];
+        this._standardOptions = [];
       },
 
       _focusButton: function(event) {
@@ -325,17 +329,20 @@ Example:
           self._handleResponse(data, onlySetStandardOptions);
         }).catch(function (err){
           if(err.aborted) return;
-          self._handleResponse({body: []}, onlySetStandardOptions);
+          self._handleResponse([], onlySetStandardOptions);
           console.error('birch-standards-picker:error', err);
         });
       },
 
       _handleResponse: function(options, onlySetStandardOptions) {
         this.loading = false;
+        if(!options || !Array.isArray(options)){
+          options = [];
+          this._resetArrays();
+        }
         this._setShowNonStandardSelectedIndicator(this.data, this.searchTerm, this._standardOptions);
-        if(!options) return;
-        if(!Array.isArray(options)) return;
 
+        if(!options.length) return;
         options = options.map(this._mapOptionsCB.bind(this));
         this._standardOptions = [].concat(options);
         if(onlySetStandardOptions !== true){
