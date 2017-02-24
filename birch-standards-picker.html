@@ -1,4 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../fs-styles/fs-styles.html">
 <link rel="import" href="../birch-typeahead/birch-typeahead.html">
 <link rel="import" href="../wc-i18n/wc-i18n.html">
 <link rel="import" href="../paper-menu/paper-menu.html">
@@ -31,10 +32,11 @@ Example:
 -->
 
 <dom-module id="birch-standards-picker">
+  <style include='fs-styles'></style>
   <link rel="import" type="css" href="birch-standards-picker.css">
   <template>
 
-    <label class="standard_label" for="typeahead">[[inputLabel]]</label>
+    <small>[[inputLabel]]</small>
     <birch-typeahead
       id='typeahead'
       highlight-first-item
@@ -82,7 +84,7 @@ Example:
 
     <div class="standard-container" hidden$='[[_hideStandardsContainer(data, standardType, i18n)]]'>
       <p>
-        <label id="label" class='standard_label'>[[standardsDropdownLabel]]</label>
+        <small>[[standardsDropdownLabel]]</small>
         <button
           id="button"
           class="standard-button"
@@ -142,13 +144,13 @@ Example:
 
     <template is="dom-if" if="[[_showStandardSelectedIndicator(data, searchTerm)]]">
       <div class="standard-indicator standard small">
-        <p>[[_getStandardizedIndicatorText(standardType, i18n)]]</p>
+        <small>[[_getStandardizedIndicatorText(standardType, i18n)]]</small>
       </div>
     </template>
 
     <template is="dom-if" if="[[_showNonStandardSelectedIndicator]]">
       <div class="standard-indicator non-standard small">
-        <p>[[_getNonStandardizedIndicatorText(standardType, i18n)]]</p>
+        <small>[[_getNonStandardizedIndicatorText(standardType, i18n)]]</small>
       </div>
     </template>
   </template>
@@ -293,6 +295,7 @@ Example:
 
       _updateData: function(obj) {
         this.data = Object.assign({}, obj);
+        this.fire('birch-standards-picker:update-data', this.data);
         console.log(this.data);
       },
 
@@ -330,6 +333,7 @@ Example:
         }).catch(function (err){
           if(err.aborted) return;
           self._handleResponse([], onlySetStandardOptions);
+          self.fire('birch-standards-picker:error', err);
           console.error('birch-standards-picker:error', err);
         });
       },
@@ -342,7 +346,13 @@ Example:
         }
         this._setShowNonStandardSelectedIndicator(this.data, this.searchTerm, this._standardOptions);
 
-        if(!options.length) return;
+        var val = this.$.typeahead.$.input.value;
+        if(val && !options.length){
+          return this._updateData({
+            customText: val,
+            label: this.i18n('NO_STANDARD_' + this.standardType.toUpperCase() + '_AVAILABLE')
+          });
+        }
         options = options.map(this._mapOptionsCB.bind(this));
         this._standardOptions = [].concat(options);
         if(onlySetStandardOptions !== true){

@@ -1,8 +1,5 @@
 {
   "name": "birch-standards-picker",
-  "authors": [
-    "Josh Crowther <jshcrowthe@gmail.com>"
-  ],
   "description": "A picker for the FamilySearch date/place standards",
   "main": "birch-standards-picker.html",
   "license": "MIT",
@@ -20,6 +17,7 @@
     "polymer": "Polymer/polymer#^1.7.0",
     "es6-promise-polyfill": "git+https://github.com/taylorhakes/promise-polyfill#6.0.2",
     "wc-i18n": "jshcrowthe/wc-i18n#^2.0.1",
+    "fs-styles": "fs-webdev/fs-styles#2.x",
     "object-assign-shim": "^1.0.0"
   },
   "devDependencies": {
@@ -29,6 +27,7 @@
     "fetch": "^2.0.2"
   },
   "resolutions": {
-    "fetch": "^2.0.2"
+    "fetch": "^2.0.2",
+    "fs-styles": "2.x"
   }
 }

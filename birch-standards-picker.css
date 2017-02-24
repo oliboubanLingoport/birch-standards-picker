@@ -6,12 +6,6 @@
 [hidden] {
   display: none !important;
 }
-.standard_label {
-  font-size: 12px;
-  color: #666662;
-  display: block;
-  padding: 2px
-}
 .standard-container {
   position: relative;
   max-width: 300px;
@@ -107,28 +101,25 @@
   overflow: hidden;
 }
 .standard-indicator {
-  padding: 0 2.857rem 0 2.2rem;
+  padding: 0.25rem 2.857rem 0 1.75rem;
   position: relative;
-}
-.standard-indicator p {
-  margin: 5px 0;
 }
 .standard-indicator:before {
   background-position: center;
   background-repeat: no-repeat;
   background-size: 16px;
   content: '';
-  height: 12.75px;
-  height: 0.75rem;
-  left: 7px;
+  height: 18.5px;
+  height: 1.45rem;
+  left: 0;
   position: absolute;
   width: 22.75px;
   width: 1.625rem;
 }
-.standard-indicator.standard {
+.standard-indicator.standard small {
   color: #44650f;
 }
-.standard-indicator.non-standard {
+.standard-indicator.non-standard small {
   color: #79520f;
 }
 .standard-indicator.standard:before {
