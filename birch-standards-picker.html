@@ -445,8 +445,8 @@ Example:
 
       _openStandardSelector: function() {
         if (this._standardOptions.length < 1) return;
-        this._hideStandards = false;
-        this._focusButton();
+        this._hideStandards = this._hideStandards ? false : true;
+        // this._focusButton();
       },
 
       _handleFocusout: function(e) {
@@ -470,8 +470,8 @@ Example:
       },
 
       _handleUpArrow: function(e) {
-        if(this._hideStandards) return;
         e.preventDefault();
+        if(this._hideStandards) return;
         var optionsMenu = this.$.optionsMenu;
         var index = Math.max(optionsMenu.selected - 1, 0);
         optionsMenu.select(index);
@@ -479,11 +479,11 @@ Example:
       },
 
       _handleDownArrow: function(e) {
+        e.preventDefault();
         if(this._hideStandards) {
           this._hideStandards = false;
           return;
         }
-        e.preventDefault();
         var optionsMenu = this.$.optionsMenu;
         var index = 0;
         if(typeof optionsMenu.selected === 'number'){
@@ -501,11 +501,11 @@ Example:
       },
 
       _handleEnter: function(e) {
+        e.preventDefault();
         if(this._hideStandards) {
           this._hideStandards = false;
           return;
         }
-        e.preventDefault();
         e.model = e.model || {};
         e.model.item = this._standardOptions[this.$.optionsMenu.selected];
         this._handleChangeStandard(e);
