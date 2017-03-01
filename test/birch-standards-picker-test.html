@@ -112,8 +112,8 @@
           it('should call _req', function(done) {
             var reqSpy = sinon.spy(myEl, '_req');
             myEl._fetchData(genericSearchTerm);
-            expect(reqSpy).calledOnce;
-            expect(reqSpy).calledWith('GET', '/tree-data/authorities/date?term=term&locale=en');
+            expect(reqSpy.calledOnce).to.be.true;
+            expect(reqSpy.calledWith('GET', '/tree-data/authorities/date?term=term&locale=en')).to.be.true;
             reqSpy.restore();
             done();
           })
