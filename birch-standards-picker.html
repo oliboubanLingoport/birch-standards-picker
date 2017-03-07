@@ -366,7 +366,10 @@ Example:
             label: this.i18n('NO_STANDARD_' + this.standardType.toUpperCase() + '_AVAILABLE')
           });
         } else {
-          this._updateData({});
+          if(this.data.label === this.i18n('NO_STANDARD_' + this.standardType.toUpperCase() + '_AVAILABLE')){
+            delete this.data.label;
+            this._updateData(this.data);
+          }
         }
         options = options.map(this._mapOptionsCB.bind(this));
         this._standardOptions = [].concat(options);
@@ -443,7 +446,8 @@ Example:
 
       _handleCancel: function(e) {
         if (this.searchTerm) {
-          if(!Object.keys(this.data).length){
+          var props = Object.keys(this.data).length;
+          if(!props || (props === 1 && this.data.customText)){
             if (this._standardOptions.length > 0) {
               this.data = {label: this.i18n('NO_STANDARD_SELECTED')};
             } else {
