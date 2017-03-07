@@ -100,6 +100,13 @@
   max-width: 300px;
   overflow: hidden;
 }
+#button .standard-indicator {
+  padding: 0 2.857rem 0 1.75rem;
+}
+#button .standard-indicator:before {
+  height: 16.5px;
+  height: 1.15rem;
+}
 .standard-indicator {
   padding: 0.25rem 2.857rem 0 1.75rem;
   position: relative;
