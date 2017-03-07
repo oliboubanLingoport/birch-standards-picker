@@ -348,10 +348,13 @@ Example:
 
         var val = this.$.typeahead.$.input.value;
         if(val && !options.length){
+          this._resetArrays();
           return this._updateData({
             customText: val,
             label: this.i18n('NO_STANDARD_' + this.standardType.toUpperCase() + '_AVAILABLE')
           });
+        } else {
+          this._updateData({});
         }
         options = options.map(this._mapOptionsCB.bind(this));
         this._standardOptions = [].concat(options);
