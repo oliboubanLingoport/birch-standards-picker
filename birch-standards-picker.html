@@ -256,6 +256,14 @@ Example:
         '_setIsDateOrPlace(standardType, i18n)'
       ],
 
+      ready: function(){
+        this.listen(this.$.typeahead.$.input, 'keydown', '_cancelEscapeForIE');
+      },
+
+      detached: function(){
+        this.unlisten(this.$.typeahead.$.input, 'keydown', '_cancelEscapeForIE');
+      },
+
       /**
        * Reset the standards picker and typeaheads' state and content
        */
@@ -561,6 +569,12 @@ Example:
           this.xhr.setRequestHeader('Accept', 'application/json');
           this.xhr.send();
         }.bind(this));
+      },
+
+      // IE clears inputs on escape keydown.
+      // We cancel that behavior in favor of our own standards selection logic.
+      _cancelEscapeForIE: function(e){
+        if(e.which === 27) e.preventDefault();
       },
 
       _hideStandardIcon: function(label, i18n) {
