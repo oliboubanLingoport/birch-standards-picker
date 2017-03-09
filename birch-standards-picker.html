@@ -30,16 +30,6 @@ Example:
 
 <dom-module id="birch-standards-picker">
   <template>
-    <wc-i18n-src locale='[[lang]]' domain='birch-standards-picker' locale-dir='[[localeDir()]]'></wc-i18n-src>
-    <wc-i18n id='x1' provider key="birch-standards-picker.PLACE_PLACEHOLDER" value="{{_i18n_PLACE_PLACEHOLDER}}"></wc-i18n>
-    <wc-i18n provider key="birch-standards-picker.DATE_PLACEHOLDER" value="{{_i18n_DATE_PLACEHOLDER}}"></wc-i18n>
-    <wc-i18n provider key="birch-standards-picker.NO_STANDARD_DATE_AVAILABLE" value="{{_i18n_NO_STANDARD_DATE_AVAILABLE}}"></wc-i18n>
-    <wc-i18n provider key="birch-standards-picker.NO_STANDARD_PLACE_AVAILABLE" value="{{_i18n_NO_STANDARD_PLACE_AVAILABLE}}"></wc-i18n>
-    <wc-i18n provider key="birch-standards-picker.NO_STANDARD_SELECTED" value="{{_i18n_NO_STANDARD_SELECTED}}"></wc-i18n>
-    <wc-i18n provider key="birch-standards-picker.EVENT_DATE_LABEL" value="{{_i18n_EVENT_DATE_LABEL}}"></wc-i18n>
-    <wc-i18n provider key="birch-standards-picker.EVENT_PLACE_LABEL" value="{{_i18n_EVENT_PLACE_LABEL}}"></wc-i18n>
-    <wc-i18n provider key="birch-standards-picker.STANDARD_DATE_LABEL" value="{{_i18n_STANDARD_DATE_LABEL}}"></wc-i18n>
-    <wc-i18n provider key="birch-standards-picker.STANDARD_PLACE_LABEL" value="{{_i18n_STANDARD_PLACE_LABEL}}"></wc-i18n>
     <style>
       :host {
         display: block;
@@ -174,7 +164,7 @@ Example:
       on-birch-typeahead:selected='_handleSelect'
       highlight-first-item
       value="[[_searchTerm]]"
-      placeholder="[[_getPlaceholder(standardType, _i18n_DATE_PLACEHOLDER, _i18n_PLACE_PLACEHOLDER)]]">
+      placeholder="[[_getPlaceholder(standardType, i18n)]]">
       <template>
         <template is="dom-if" if="[[item.icon]]" restamp>
 
@@ -258,7 +248,7 @@ Example:
       is: 'birch-standards-picker',
       behaviors: [
         OakI18nBehavior,
-        WCI18nBehavior
+        WCI18n()
       ],
       properties: {
         /**
@@ -395,8 +385,8 @@ Example:
 
       observers: [
         '_updateOptions(_searchTerm, standardType, lang)',
-        '_updateLabels(_i18n_STANDARD_PLACE_LABEL, _i18n_STANDARD_DATE_LABEL, _i18n_EVENT_PLACE_LABEL, _i18n_EVENT_DATE_LABEL, standardType)',
-        '_setIsDateOrPlace(standardType, _i18n_STANDARD_PLACE_LABEL, _i18n_STANDARD_DATE_LABEL, _i18n_EVENT_PLACE_LABEL, _i18n_EVENT_DATE_LABEL)'
+        '_updateLabels(standardType, i18n)',
+        '_setIsDateOrPlace(standardType, i18n)'
       ],
 
       ready: function() {
@@ -408,9 +398,9 @@ Example:
         this.$.button.focus();
       },
 
-      _updateLabels: function(standardPlaceLabel, standardDateLabel, eventPlaceLabel, eventDateLabel, standardType) {
-        this.standardsDropdownLabel = this['_i18n_STANDARD_' + this.standardType.toUpperCase() + '_LABEL'];
-        this.inputLabel = this['_i18n_EVENT_' + this.standardType.toUpperCase() + '_LABEL'];
+      _updateLabels: function(standarType, i18n) {
+        this.standardsDropdownLabel = this.i18n('STANDARD_' + this.standardType.toUpperCase() + '_LABEL');
+        this.inputLabel = this.i18n('EVENT_' + this.standardType.toUpperCase() + '_LABEL');
       },
 
       _updateOptions: function(searchTerm, type, lang) {
@@ -510,9 +500,10 @@ Example:
         }.bind(this));
       },
 
-      _getPlaceholder: function(type, datePlaceholder, placePlaceholder) {
-        var string = '_i18n_' + type.toUpperCase() + '_PLACEHOLDER';
-        return this[string];
+      _getPlaceholder: function(type, i18n) {
+        if (!this.i18n('DATE_PLACEHOLDER')) return '';
+        var string = type.toUpperCase() + '_PLACEHOLDER';
+        return this.i18n(string);
       },
 
       _handleChange: function(e) {
@@ -537,7 +528,7 @@ Example:
         }
         this.standardId = e.model.item.id;
         this.standardText = e.model.item.standardText;
-        this._standardLabel = e.model.item.standardLabel === noneOfTheAboveText ? this['_i18n_NO_STANDARD_SELECTED'] : e.model.item.standardLabel;
+        this._standardLabel = e.model.item.standardLabel === noneOfTheAboveText ? this.i18n('_i18n_NO_STANDARD_SELECTED') : e.model.item.standardLabel;
         this.julianDateRange = e.model.item.julianDateRange;
         this._hideStandards = true;
       },
@@ -564,7 +555,7 @@ Example:
       _handleCancel: function(e) {
         if (this._searchTerm && !this._standardLabel) {
           if (this._options.length > 0) {
-            this._standardLabel = this['_i18n_NO_STANDARD_SELECTED'];
+            this._standardLabel = this.i18n('_i18n_NO_STANDARD_SELECTED');
           } else {
             this._standardLabel = this['_i18n_NO_STANDARD_' + this.standardType.toUpperCase() + '_AVAILABLE'];
           }
