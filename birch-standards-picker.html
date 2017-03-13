@@ -150,16 +150,18 @@ Example:
       </div>
     </div>
 
-    <template is="dom-if" if="[[_showStandardSelectedIndicator(data, searchTerm)]]">
-      <div class="standard-indicator standard small">
-        <small>[[_getStandardizedIndicatorText(standardType, i18n)]]</small>
-      </div>
-    </template>
+    <template is="dom-if" if="[[!loading]]">
+      <template is="dom-if" if="[[_showStandardSelectedIndicator(data, searchTerm)]]">
+        <div class="standard-indicator standard small">
+          <small>[[_getStandardizedIndicatorText(standardType, i18n)]]</small>
+        </div>
+      </template>
 
-    <template is="dom-if" if="[[_showNonStandardSelectedIndicator]]">
-      <div class="standard-indicator non-standard small">
-        <small>[[_getNonStandardizedIndicatorText(standardType, i18n)]]</small>
-      </div>
+      <template is="dom-if" if="[[_showNonStandardSelectedIndicator]]">
+        <div class="standard-indicator non-standard small">
+          <small>[[_getNonStandardizedIndicatorText(standardType, i18n)]]</small>
+        </div>
+      </template>
     </template>
   </template>
 
@@ -284,7 +286,7 @@ Example:
         if(!this.searchTerm && (data.customText || data.standardText)){
           this.searchTerm = data.customText || data.standardText;
           if(!data.label){
-            data.label = data.standardText || data.customText;
+            data.label = data.standardText || undefined;
             this._updateData(this.data);
             this._handleDataChange(this.data);
           }
@@ -305,9 +307,27 @@ Example:
         return this._getStandardLabel(data) === i18n('NO_STANDARD_SELECTED');
       },
 
+      // Don't update this.data or emit the update-data event if nothing has changed
+      _dataHasChanged: function(oldData, data) {
+        var keys = ['id', 'customText', 'standardText', 'label'];
+
+        if(!oldData.id && oldData.placeRepId){
+          oldData.id = oldData.placeRepId.toString();
+        }
+
+        for(var i = 0; i < keys.length; ++i){
+          var key = keys[i];
+          if(data[key] !== oldData[key]){
+            return true;
+          }
+        }
+        return false;
+      },
+
       _updateData: function(obj) {
+        if(!this._dataHasChanged(this.data, obj)) return;
         this.data = Object.assign({}, obj);
-        this.fire('birch-standards-picker:update-data', this.data);
+        this.fire('birch-standards-picker:update-data', {data: this.data});
         console.log(this.data);
       },
 
@@ -356,26 +376,32 @@ Example:
           options = [];
           this._resetArrays();
         }
-        this._setShowNonStandardSelectedIndicator(this.data, this.searchTerm, this._standardOptions);
 
         var val = this.$.typeahead.$.input.value;
         if(val && !options.length){
           this._resetArrays();
-          return this._updateData({
+          this._updateData({
             customText: val,
             label: this.i18n('NO_STANDARD_' + this.standardType.toUpperCase() + '_AVAILABLE')
           });
+          return this._setShowNonStandardSelectedIndicator(this.data, this.searchTerm, this._standardOptions);
         } else {
           if(this.data.label === this.i18n('NO_STANDARD_' + this.standardType.toUpperCase() + '_AVAILABLE')){
             delete this.data.label;
             this._updateData(this.data);
           }
         }
+        if(val && !this.data.label && options.length){
+          this.data.label = this.i18n('NO_STANDARD_SELECTED');
+          this._updateData(this.data);
+        }
         options = options.map(this._mapOptionsCB.bind(this));
         this._standardOptions = [].concat(options);
         if(onlySetStandardOptions !== true){
           this._typeaheadOptions = this._setupTypeaheadOptions([].concat(options));
         }
+
+        this._setShowNonStandardSelectedIndicator(this.data, this.searchTerm, this._standardOptions);
       },
 
       _mapOptionsCB: function(option) {
