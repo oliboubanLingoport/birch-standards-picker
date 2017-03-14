@@ -286,8 +286,9 @@ Example:
         if(!this.searchTerm && (data.customText || data.standardText)){
           this.searchTerm = data.customText || data.standardText;
           if(!data.label){
-            data.label = data.standardText || undefined;
-            this._updateData(this.data);
+            var clonedData = this._clone(this.data);
+            clonedData.label = clonedData.standardText || undefined;
+            this._updateData(clonedData);
             this._handleDataChange(this.data);
           }
           var fakeEvent = {
@@ -305,6 +306,10 @@ Example:
 
       _isNonStandardSelected: function(data, i18n) {
         return this._getStandardLabel(data) === i18n('NO_STANDARD_SELECTED');
+      },
+
+      _clone: function(obj){
+        return JSON.parse(JSON.stringify(obj));
       },
 
       // Don't update this.data or emit the update-data event if nothing has changed
@@ -387,13 +392,15 @@ Example:
           return this._setShowNonStandardSelectedIndicator(this.data, this.searchTerm, this._standardOptions);
         } else {
           if(this.data.label === this.i18n('NO_STANDARD_' + this.standardType.toUpperCase() + '_AVAILABLE')){
-            delete this.data.label;
-            this._updateData(this.data);
+            var clonedData = this._clone(this.data);
+            delete clonedData.label;
+            this._updateData(clonedData);
           }
         }
         if(val && !this.data.label && options.length){
-          this.data.label = this.i18n('NO_STANDARD_SELECTED');
-          this._updateData(this.data);
+          var clonedData = this._clone(this.data);
+          clonedData.label = this.i18n('NO_STANDARD_SELECTED');
+          this._updateData(clonedData);
         }
         options = options.map(this._mapOptionsCB.bind(this));
         this._standardOptions = [].concat(options);
@@ -472,18 +479,19 @@ Example:
 
       _handleCancel: function(e) {
         if (this.searchTerm) {
+          var data = {};
           var props = Object.keys(this.data).length;
           if(!props || (props === 1 && this.data.customText)){
             if (this._standardOptions.length > 0) {
-              this.data = {label: this.i18n('NO_STANDARD_SELECTED')};
+              data = {label: this.i18n('NO_STANDARD_SELECTED')};
             } else {
-              this.data = {label: this.i18n('NO_STANDARD_' + this.standardType.toUpperCase() + '_AVAILABLE')};
+              data = {label: this.i18n('NO_STANDARD_' + this.standardType.toUpperCase() + '_AVAILABLE')};
             }
           }
           if(this.data.standardText !== this.$.typeahead.value){
             this.data.customText = this.searchTerm;
           }
-          this._updateData(this.data);
+          this._updateData(data);
         }
         this._setShowNonStandardSelectedIndicator(this.data, this.searchTerm, this._standardOptions);
       },
@@ -491,7 +499,6 @@ Example:
       _openStandardSelector: function() {
         if (this._standardOptions.length < 1) return;
         this._hideStandards = this._hideStandards ? false : true;
-        // this._focusButton();
       },
 
       _handleFocusout: function(e) {

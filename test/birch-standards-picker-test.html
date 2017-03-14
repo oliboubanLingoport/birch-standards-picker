@@ -559,6 +559,15 @@
           })
         });
 
+        describe('_clone', function() {
+          it('should return an identical object (top-level only) with a new reference', function(){
+            var a = {hi: 'there'};
+            var b = myEl._clone(a);
+            expect(a === b).to.be.false;
+            expect(a.hi).to.equal(b.hi);
+          })
+        });
+
       });
     </script>
 
