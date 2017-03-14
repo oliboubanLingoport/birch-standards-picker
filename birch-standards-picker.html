@@ -473,17 +473,17 @@ Example:
 
       _handleCancel: function(e) {
         if (this.searchTerm) {
-          var data = {};
-          var props = Object.keys(this.data).length;
+          var data = this._clone(this.data);
+          var props = Object.keys(data).length;
           if(!props || (props === 1 && this.data.customText)){
             if (this._standardOptions.length > 0) {
-              data = {label: this.i18n('NO_STANDARD_SELECTED')};
+              data.label = this.i18n('NO_STANDARD_SELECTED');
             } else {
-              data = {label: this.i18n('NO_STANDARD_' + this.standardType.toUpperCase() + '_AVAILABLE')};
+              data.label = this.i18n('NO_STANDARD_' + this.standardType.toUpperCase() + '_AVAILABLE');
             }
           }
-          if(this.data.standardText !== this.$.typeahead.value){
-            this.data.customText = this.searchTerm;
+          if(data.standardText !== this.$.typeahead.value){
+            data.customText = this.searchTerm;
           }
           this._updateData(data);
         }
