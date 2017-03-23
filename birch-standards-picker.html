@@ -352,6 +352,7 @@ Example:
           this.loading = false;
           return this.reset();
         }
+        if(!e.detail.value.trim()) return;
         this.loading = true;
         this._fetchData(e.detail.value, onlySetStandardOptions);
       },
@@ -377,7 +378,7 @@ Example:
         }
 
         var val = this.$.typeahead.$.input.value;
-        if(val && !options.length){
+        if(val && !!val.trim() && !options.length){
           this._resetArrays();
           this._updateData({
             customText: val,
@@ -391,7 +392,7 @@ Example:
             this._updateData(clonedData);
           }
         }
-        if(val && !this.data.label && options.length){
+        if(val && !!val.trim() && !this.data.label && options.length){
           var clonedData = this._clone(this.data);
           clonedData.label = clonedData.standardText || this.i18n('NO_STANDARD_SELECTED');
           this._updateData(clonedData);
