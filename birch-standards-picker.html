@@ -160,6 +160,9 @@ Example:
   </template>
 
   <script>
+  (function(){
+    var queryCache = {};
+
     Polymer({
       is: 'birch-standards-picker',
       behaviors: [
@@ -216,7 +219,7 @@ Example:
          */
         data: {
           type: Object,
-          value: function(){ return {}; },
+          value: function() { return {}; },
           observer: '_handleDataChange',
           notifies: true
         },
@@ -576,6 +579,8 @@ Example:
       _req: function(method, url) {
         this._cancelActiveRequest();
         return new Promise(function (resolve, reject){
+          var cacheVal = queryCache[url];
+          if(cacheVal) return resolve(cacheVal);
           this.xhr = new XMLHttpRequest();
           this.xhr.open(method.toUpperCase(), url, true);
           this.xhr.onload = function(){
@@ -583,7 +588,9 @@ Example:
               if(!this || !this.response || !this.response) return reject(this);
               if(this.status >= 300) return reject(this);
               if(this.status === 204) return resolve();
-              return resolve(JSON.parse(this.response));
+              var output = JSON.parse(this.response);
+              queryCache[url] = output;
+              return resolve(output);
             } catch(err) {
               return reject(err);
             }
@@ -619,5 +626,6 @@ Example:
       }
 
     });
+  })();
   </script>
 </dom-module>
