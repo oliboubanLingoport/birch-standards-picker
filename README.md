@@ -1,5 +1,4 @@
 [![Build Status](https://travis-ci.org/FamilySearchElements/birch-standards-picker.svg?branch=master)](https://travis-ci.org/FamilySearchElements/birch-standards-picker)
-
 # birch-standards-picker
 An element that chooses standard dates and places.
 
