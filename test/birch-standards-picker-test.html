@@ -28,10 +28,14 @@
         var badRequestTerm = 'badRequest';
         var internalErrorTerm = 'internalError';
         var mockI18n = function(key) {return 'KEY: ' + key + ' (en)';};
+        var server;
 
         /*
-         * Set up the mock data from the contract tests
+         * Block AJAX
          */
+        before(function() {
+          server = sinon.fakeServer.create();
+        });
           
         beforeEach(function() {
           myEl = fixture('birch-standards-picker-fixture');
@@ -41,14 +45,6 @@
           // so that when on occasion the real one loads, we don't
           // have inconsistent behavior and false test failures
           myEl.i18n = mockI18n;
-        });
-
-        describe('_updateLabels', function() {
-          it('should set the correct labels', function() {
-            myEl._updateLabels();
-            expect(myEl.standardsDropdownLabel).to.equal(mockI18n('STANDARD_DATE_LABEL'));
-            expect(myEl.inputLabel).to.equal(mockI18n('EVENT_DATE_LABEL'));
-          })
         });
 
         describe('_fetchData', function() {
@@ -80,12 +76,6 @@
             expect(reqSpy.calledWith('GET', '/tree-data/authorities/date?term=term&locale=en')).to.be.true;
             reqSpy.restore();
             done();
-          })
-        });
-
-        describe('_getPlaceholder', function() {
-          it('should get the placeholder', function() {
-            expect(myEl._getPlaceholder(myEl.standardType)).to.equal(mockI18n('DATE_PLACEHOLDER'));
           })
         });
 
