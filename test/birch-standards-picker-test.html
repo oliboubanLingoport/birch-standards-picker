@@ -36,7 +36,7 @@
         before(function() {
           server = sinon.fakeServer.create();
         });
-          
+
         beforeEach(function() {
           myEl = fixture('birch-standards-picker-fixture');
           myEl.reset();
@@ -145,7 +145,7 @@
           })
         });
 
-        describe.only('_handleSelect', function() {
+        describe('_handleSelect', function() {
           var e = {
             detail : {
               selection : {
@@ -171,7 +171,7 @@
           })
         });
 
-        describe.only('_handleCancel', function() {
+        describe('_handleCancel', function() {
           it('should set no standard selected when we do not have a standard already', function() {
             myEl._standardOptions = [1,2,3];
             myEl.searchTerm = 'not blank';
@@ -417,6 +417,30 @@
             expect(a === b).to.be.false;
             expect(a.hi).to.equal(b.hi);
           })
+        });
+
+        describe('_getPlaceholder', function() {
+          var type,
+              disabled,
+              i18n;
+
+          function i18n(key){
+            return key;
+          }
+
+          beforeEach(function(){
+            type = "DATE";
+            disabled = false;
+          });
+
+          it('should return an empty string if disabled is true', function(){
+            disabled = true;
+            expect(myEl._getPlaceholder(type, i18n, disabled)).to.equal("");
+          });
+
+          it('should return an i18n translated string (mocked to return key)', function(){
+            expect(myEl._getPlaceholder(type, i18n, disabled)).to.equal("DATE_PLACEHOLDER");
+          });
         });
 
       });

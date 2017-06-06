@@ -42,9 +42,10 @@ Example:
       highlight-first-item
       follow-tabindex-after-tab-select
       loading="[[loading]]"
+      disabled="[[disabled]]"
       debounce-input-duration="200"
       value="{{searchTerm::birch-typeahead:input}}"
-      placeholder="[[_getPlaceholder(standardType, i18n)]]"
+      placeholder="[[_getPlaceholder(standardType, i18n, disabled)]]"
       options="[[_typeaheadOptions]]"
       on-birch-typeahead:input='_handleInput'
       on-birch-typeahead:cancel='_handleCancel'
@@ -225,6 +226,14 @@ Example:
           notify: true
         },
 
+        /** Whether the typeahead input should be disabled or not.
+         * @type {Boolean}
+         */
+        disabled: {
+          type: Boolean,
+          value: false
+        },
+
         /**
          * Whether a network call is pending and spinners should show
          *
@@ -350,9 +359,10 @@ Example:
         this.inputLabel = this.inputLabel || this.i18n('EVENT_' + this.standardType.toUpperCase() + '_LABEL');
       },
 
-      _getPlaceholder: function(type, i18n) {
+      _getPlaceholder: function(type, i18n, disabled) {
+        if (disabled) return '';
         var string = type.toUpperCase() + '_PLACEHOLDER';
-        return this.i18n(string);
+        return i18n(string);
       },
 
       _handleInput: function(e, onlySetStandardOptions) {
