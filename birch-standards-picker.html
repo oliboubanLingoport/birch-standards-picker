@@ -42,9 +42,10 @@ Example:
       highlight-first-item
       follow-tabindex-after-tab-select
       loading="[[loading]]"
+      disabled="[[disabled]]"
       debounce-input-duration="200"
       value="{{searchTerm::birch-typeahead:input}}"
-      placeholder="[[_getPlaceholder(standardType, i18n)]]"
+      placeholder="[[_getPlaceholder(standardType, i18n, disabled)]]"
       options="[[_typeaheadOptions]]"
       on-birch-typeahead:input='_handleInput'
       on-birch-typeahead:cancel='_handleCancel'
@@ -79,11 +80,12 @@ Example:
       </template>
     </birch-typeahead>
 
-    <div class="standard-container" hidden$='[[_hideStandardsContainer(data, standardType, i18n)]]'>
+    <div class="standard-container" hidden$='[[_hideStandardsContainer(data, standardType, i18n, hideStandardsMenu)]]'>
       <p>
         <small>[[standardsDropdownLabel]]</small>
         <button
           id="button"
+          type="button"
           class="standard-button"
           on-focusout="_handleFocusout"
           on-tap="_openStandardSelector"
@@ -221,7 +223,15 @@ Example:
           type: Object,
           value: function() { return {}; },
           observer: '_handleDataChange',
-          notifies: true
+          notify: true
+        },
+
+        /** Whether the typeahead input should be disabled or not.
+         * @type {Boolean}
+         */
+        disabled: {
+          type: Boolean,
+          value: false
         },
 
         /**
@@ -247,6 +257,11 @@ Example:
         _hideStandards: {
           type: Boolean,
           value: true
+        },
+
+        hideStandardsMenu: {
+          type: Boolean,
+          value: false
         }
       },
 
@@ -341,12 +356,13 @@ Example:
 
       _updateLabels: function(i18n, standardType) {
         this.standardsDropdownLabel = this.i18n('STANDARD_' + this.standardType.toUpperCase() + '_LABEL');
-        this.inputLabel = this.i18n('EVENT_' + this.standardType.toUpperCase() + '_LABEL');
+        this.inputLabel = this.inputLabel || this.i18n('EVENT_' + this.standardType.toUpperCase() + '_LABEL');
       },
 
-      _getPlaceholder: function(type, i18n) {
+      _getPlaceholder: function(type, i18n, disabled) {
+        if (disabled) return '';
         var string = type.toUpperCase() + '_PLACEHOLDER';
-        return this.i18n(string);
+        return i18n(string);
       },
 
       _handleInput: function(e, onlySetStandardOptions) {
@@ -605,7 +621,9 @@ Example:
         return label === i18n('NO_STANDARD_SELECTED');
       },
 
-      _hideStandardsContainer: function(data, standardType, i18n) {
+      _hideStandardsContainer: function(data, standardType, i18n, hideStandardsMenu) {
+        if(hideStandardsMenu) return true;
+
         return !data.customText || data.label === i18n('NO_STANDARD_' + standardType.toUpperCase() + '_AVAILABLE');
       },
 
