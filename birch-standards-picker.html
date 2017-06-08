@@ -50,7 +50,8 @@ Example:
       on-birch-typeahead:input='_handleInput'
       on-birch-typeahead:cancel='_handleCancel'
       on-birch-typeahead:blur='_handleCancel'
-      on-birch-typeahead:selected='_handleSelect'>
+      on-birch-typeahead:selected='_handleSelect'
+      on-keydown="_handleKeydown">
       <template>
 
         <template is="dom-if" if="[[item.icon]]" restamp>
