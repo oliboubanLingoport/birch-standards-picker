@@ -342,10 +342,13 @@ Example:
       },
 
       _updateData: function(obj) {
-        if(!this._dataHasChanged(this.data, obj)) return;
+        // Must reassign this.data even if data hasn't changed
+        // in order to trigger data's observer so that the
+        // Standard Selected indicator can show.
         this.data = Object.assign({}, obj);
-        this.fire('birch-standards-picker:update-data', {data: this.data});
-        console.log(this.data);
+        if(this._dataHasChanged(this.data, obj)){
+          this.fire('birch-standards-picker:update-data', {data: this.data});
+        }
       },
 
       // Can't do _is(standardType, 'place') here because the markup gets templatized
