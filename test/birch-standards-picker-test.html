@@ -396,6 +396,31 @@
           })
         });
 
+        describe('_preventFormSubmission', function() {
+          var e,
+              preventDefaultSpy;
+
+          beforeEach(function() {
+            e = { preventDefault : function(){return}, which: 13 };
+            preventDefaultSpy = sinon.spy(e, "preventDefault");
+          });
+
+          afterEach(function(){
+            preventDefaultSpy.reset();
+          });
+
+          it('should call e.preventDefault if e.which is 13 (the enter key)', function(){
+            myEl._preventFormSubmission(e);
+            expect(preventDefaultSpy.called).to.be.true;
+          });
+
+          it('should not call e.preventDefault if e.which is not 13', function(){
+            e.which = 2;
+            myEl._preventFormSubmission(e);
+            expect(preventDefaultSpy.called).to.be.false;
+          });
+        });
+
         describe('_handleEscape', function() {
           it('should hide the menu', function(){
             myEl._hideStandards = false;
