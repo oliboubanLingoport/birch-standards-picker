@@ -150,11 +150,11 @@ birch-typeahead {
     box-sizing: border-box;
     color: #333331;
     padding: 6px 10px;
-  }
+  };
 
   --birch-typeahead-input-disabled: {
     background-color: #eee;
-  }
+  };
 }
 paper-item, paper-icon-item, paper-item-body {
   --paper-item: {
