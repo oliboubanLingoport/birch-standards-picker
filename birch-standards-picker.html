@@ -81,6 +81,26 @@ Example:
       </template>
     </birch-typeahead>
 
+    <template is="dom-if" if="[[!loading]]">
+      <template is="dom-if" if="[[_showStandardSelectedIndicator(data, searchTerm)]]">
+        <div class="standard-indicator standard small">
+          <small>[[_getStandardizedIndicatorText(standardType, i18n)]]</small>
+        </div>
+      </template>
+
+      <template is="dom-if" if="[[_showNonStandardSelectedIndicator]]">
+        <div class="standard-indicator non-standard small">
+          <small>[[_getNonStandardizedIndicatorText(standardType, i18n)]]</small>
+        </div>
+      </template>
+
+      <template is="dom-if" if="[[_isNonStandardSelected(data, i18n, 'true')]]">
+        <div class="standard-indicator non-standard small">
+          <small>[[_getStandardLabel(data)]]</small>
+        </div>
+      </template>
+    </template>
+
     <div class="standard-container" hidden$='[[_hideStandardsContainer(data, standardType, i18n, hideStandardsMenu)]]'>
       <p>
         <small>[[standardsDropdownLabel]]</small>
@@ -146,20 +166,6 @@ Example:
         </paper-menu>
       </div>
     </div>
-
-    <template is="dom-if" if="[[!loading]]">
-      <template is="dom-if" if="[[_showStandardSelectedIndicator(data, searchTerm)]]">
-        <div class="standard-indicator standard small">
-          <small>[[_getStandardizedIndicatorText(standardType, i18n)]]</small>
-        </div>
-      </template>
-
-      <template is="dom-if" if="[[_showNonStandardSelectedIndicator]]">
-        <div class="standard-indicator non-standard small">
-          <small>[[_getNonStandardizedIndicatorText(standardType, i18n)]]</small>
-        </div>
-      </template>
-    </template>
   </template>
 
   <script>
@@ -317,7 +323,8 @@ Example:
         return data.standardText || data.label;
       },
 
-      _isNonStandardSelected: function(data, i18n) {
+      _isNonStandardSelected: function(data, i18n, showOnlyIfStandardsMenuHidden) {
+        if(showOnlyIfStandardsMenuHidden && !this.hideStandardsMenu) return false;
         return this._getStandardLabel(data) === i18n('NO_STANDARD_SELECTED');
       },
 
@@ -585,7 +592,8 @@ Example:
         this._focusButton();
       },
 
-      /** If the enter key is pressed, prevent the default action like a form submitting.
+      /** 
+       * If the enter key is pressed, prevent the default action like a form submitting.
        * If the esc key is pressed, prevent other events listening for it from firing.
        * @param {Object} e - The keydown event.
        */
@@ -636,13 +644,14 @@ Example:
 
       _hideStandardsContainer: function(data, standardType, i18n, hideStandardsMenu) {
         if(hideStandardsMenu) return true;
-
-        return !data.customText || data.label === i18n('NO_STANDARD_' + standardType.toUpperCase() + '_AVAILABLE');
+        var standardType = standardType.toUpperCase();
+        var noStandardText = i18n('NO_STANDARD_' + standardType + '_AVAILABLE');
+        return !data.customText || data.label === noStandardText;
       },
 
       // searchTerm is passed here simply to trigger this observer
       _showStandardSelectedIndicator: function(data, searchTerm) {
-        return data.standardText && !data.customText && data.label === this.$.typeahead.value;
+        return data.standardText;
       },
 
       _setShowNonStandardSelectedIndicator: function(data, searchTerm, standardOptions) {
