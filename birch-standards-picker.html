@@ -50,8 +50,7 @@ Example:
       on-birch-typeahead:input='_handleInput'
       on-birch-typeahead:cancel='_handleCancel'
       on-birch-typeahead:blur='_handleCancel'
-      on-birch-typeahead:selected='_handleSelect'
-      on-keydown="_preventDefaultActions">
+      on-birch-typeahead:selected='_handleSelect'>
       <template>
 
         <template is="dom-if" if="[[item.icon]]" restamp>
@@ -581,28 +580,19 @@ Example:
       },
 
       _handleEnter: function(e) {
-        e.preventDefault();
         if(this._hideStandards) {
           this._hideStandards = false;
           return;
         }
+        e.preventDefault();
         e.model = e.model || {};
         e.model.item = this._standardOptions[this.$.optionsMenu.selected];
         this._handleChangeStandard(e);
         this._focusButton();
       },
 
-      /** 
-       * If the enter key is pressed, prevent the default action like a form submitting.
-       * If the esc key is pressed, prevent other events listening for it from firing.
-       * @param {Object} e - The keydown event.
-       */
-      _preventDefaultActions: function(e){
-        if(e.which === 13) e.preventDefault();
-        if(e.which === 27) e.stopPropagation();
-      },
-
       _handleEscape: function(e) {
+        if(!this._hideStandards) e.stopPropagation();
         this._hideStandards = true;
         this._focusButton();
       },

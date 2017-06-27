@@ -396,51 +396,10 @@
           })
         });
 
-        describe('_preventDefaultActions', function() {
-          var e,
-              preventDefaultSpy,
-              stopPropagationSpy;
-
-          beforeEach(function() {
-            e = {
-              "preventDefault": function(){return},
-              "stopPropagation": function(){return},
-              which: 13
-            };
-            preventDefaultSpy = sinon.spy(e, "preventDefault");
-            stopPropagationSpy = sinon.spy(e, "stopPropagation");
-          });
-
-          afterEach(function(){
-            preventDefaultSpy.reset();
-            stopPropagationSpy.reset();
-          });
-
-          it('should call e.preventDefault if e.which is 13 (the enter key)', function(){
-            myEl._preventDefaultActions(e);
-            expect(preventDefaultSpy.called).to.be.true;
-            expect(stopPropagationSpy.called).to.be.false;
-          });
-
-          it('should call e.stopPropagation if e.which is 27 (the esc key)', function(){
-            e.which = 27;
-            myEl._preventDefaultActions(e);
-            expect(stopPropagationSpy.called).to.be.true;
-            expect(preventDefaultSpy.called).to.be.false;
-          });
-
-          it('should not call e.preventDefault or e.stopPropagation if e.which is not 13 or 27', function(){
-            e.which = 2;
-            myEl._preventDefaultActions(e);
-            expect(preventDefaultSpy.called).to.be.false;
-            expect(stopPropagationSpy.called).to.be.false;
-          });
-        });
-
         describe('_handleEscape', function() {
           it('should hide the menu', function(){
             myEl._hideStandards = false;
-            myEl._handleEscape();
+            myEl._handleEscape({stopPropagation: function(){}});
             expect(myEl._hideStandards).to.be.true;
           })
           it('should return focus to the button', function(){
