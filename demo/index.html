@@ -20,9 +20,9 @@
   <link rel="apple-touch-icon-precomposed" href="apple-touch-icon.png">
 
   <!-- Polyfills -->
-  <script src="../../es6-promise-polyfill/promise.min.js"></script>
-  <script src="../../fetch/fetch.js"></script>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../es6-promise/dist/es6-promise.auto.js"></script>
+  <script src="../../fetch/fetch.js"></script>
   <script>
     window.Polymer = { dom: 'shadow' };
   </script>
@@ -33,7 +33,7 @@
      * This setup is necessary to overcome timing issues in firefox, safari, and IE11.
      * Chrome works fine.
      */
-     
+
     var count = 0;
     var dateData;
     var placeData;
