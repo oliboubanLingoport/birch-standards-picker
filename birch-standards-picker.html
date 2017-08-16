@@ -351,7 +351,7 @@ Example:
       _updateData: function(obj) {
         // Check changes and trigger the event before updating the data.
         if(this._dataHasChanged(this.data, obj)){
-          this.fire('birch-standards-picker:update-data', {data: this.data});
+          this.fire('birch-standards-picker:update-data', {data: obj});
         }
         // Must reassign this.data even if data hasn't changed
         // in order to trigger data's observer so that the
