@@ -1,11 +1,10 @@
 {
-  "_LRM_PKTAG548": "birch-standards-picker_4_153 - CHANGES-ONLY",
   "DATE_PLACEHOLDER": "날짜 입력.",
   "EVENT_DATE_LABEL": "사건 날짜",
   "EVENT_PLACE_LABEL": "사건 장소",
   "NONE_OF_THE_ABOVE": "위에 해당 사항 없음",
-  "NO_STANDARD_DATE_AVAILABLE": "표준화된 날짜가 아닙니다. ",
-  "NO_STANDARD_PLACE_AVAILABLE": "표준화된 장소가 아닙니다.",
+  "NO_STANDARD_DATE_AVAILABLE": "표준화되지 않은 날짜",
+  "NO_STANDARD_PLACE_AVAILABLE": "표준화되지 않은 장소",
   "NO_STANDARD_SELECTED": "표준이 선택되지 않았습니다.",
   "PLACE_PLACEHOLDER": "장소 입력.",
   "STANDARDIZED_DATE": "표준화된 날짜",
