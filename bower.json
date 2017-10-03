@@ -19,7 +19,8 @@
     "wc-i18n": "jshcrowthe/wc-i18n#^1.2.0",
     "fs-styles": "fs-webdev/fs-styles#^2.3.0",
     "object-assign-shim": "^1.0.0",
-    "paper-listbox": "PolymerElements/paper-listbox#1 - 2"
+    "paper-listbox": "PolymerElements/paper-listbox#1 - 2",
+    "fs-metrics": "fs-webdev/fs-metrics#1.x"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#1 - 3",

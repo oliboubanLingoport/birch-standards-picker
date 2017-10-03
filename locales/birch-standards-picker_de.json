@@ -1,11 +1,10 @@
 {
-  "_LRM_PKTAG237": "birch-standards-picker_4_157 - CHANGES-ONLY",
   "DATE_PLACEHOLDER": "Geben Sie ein Datum ein.",
   "EVENT_DATE_LABEL": "Datum des Ereignisses",
   "EVENT_PLACE_LABEL": "Ort des Ereignisses",
   "NONE_OF_THE_ABOVE": "nichts davon",
-  "NO_STANDARD_DATE_AVAILABLE": "Kein standardisiertes Datum",
-  "NO_STANDARD_PLACE_AVAILABLE": "Kein standardisierter Ort",
+  "NO_STANDARD_DATE_AVAILABLE": "Nicht standardisiertes Datum",
+  "NO_STANDARD_PLACE_AVAILABLE": "Nicht standardisierter Ort",
   "NO_STANDARD_SELECTED": "Es wurde kein Standard ausgewählt.",
   "PLACE_PLACEHOLDER": "Geben Sie einen Ort ein.",
   "STANDARDIZED_DATE": "Standardisiertes Datum",

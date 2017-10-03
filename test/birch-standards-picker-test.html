@@ -19,6 +19,11 @@
     </test-fixture>
 
     <script>
+      FS = {};
+      FS.Analytics = {
+        trackLink: function() {},
+        trackData: function() {}
+      };
       describe('<birch-standards-picker>', function() {
 
         var myEl;

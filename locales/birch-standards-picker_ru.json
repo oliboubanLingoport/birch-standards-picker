@@ -1,11 +1,10 @@
 {
-  "_LRM_PKTAG268": "birch-standards-picker_4_155 - CHANGES-ONLY",
   "DATE_PLACEHOLDER": "Ввести дату",
   "EVENT_DATE_LABEL": "Дата события",
   "EVENT_PLACE_LABEL": "Местоположение события",
   "NONE_OF_THE_ABOVE": "Ничего из вышеперечисленного",
-  "NO_STANDARD_DATE_AVAILABLE": "Не стандартизованная  дата",
-  "NO_STANDARD_PLACE_AVAILABLE": "Не стандартизованное местоположение",
+  "NO_STANDARD_DATE_AVAILABLE": "Не стандартизовано",
+  "NO_STANDARD_PLACE_AVAILABLE": "Не стандартизовано",
   "NO_STANDARD_SELECTED": "Стандартизованное значение не выбрано.",
   "PLACE_PLACEHOLDER": "Ввести местоположение.",
   "STANDARDIZED_DATE": "Стандартизированная дата",
