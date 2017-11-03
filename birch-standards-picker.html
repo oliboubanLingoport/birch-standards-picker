@@ -459,16 +459,18 @@ Example:
           //Add the currently entered value as the first option if it differs from the first standard
           var isStandard = (options.length && options[0].label.toLowerCase() === this.searchTerm.toLowerCase());
           if(!isStandard){
-            options.unshift({
+            // New option to unshift
+            var firstOption = {
               label: this.searchTerm,
               customText: this.searchTerm
-            });
-            if (options.length > 1){
-              options[0] = Object.assign({}, options[0], {
-                id: options[1].id,
-                standardText: options[1].standardText
-              });
+            };
+
+            // If standard options exist
+            if(options.length > 0){
+              firstOption = Object.assign({}, options[0], firstOption);
             }
+
+            options.unshift(firstOption);
           }
         }
 
