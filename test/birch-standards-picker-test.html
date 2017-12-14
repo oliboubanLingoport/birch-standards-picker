@@ -44,7 +44,7 @@
 
         beforeEach(function() {
           myEl = fixture('birch-standards-picker-fixture');
-          myEl.reset();
+          if (myEl.reset) myEl.reset();
           // mock out i18n - the mock behaves like the real one
           // when there are no translation files loaded. This is
           // so that when on occasion the real one loads, we don't
