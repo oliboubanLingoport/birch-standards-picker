@@ -255,25 +255,27 @@ Example:
       </template>
     </birch-typeahead>
 
-    <template is="dom-if" if="[[!loading]]">
-      <template is="dom-if" if="[[_showStandardSelectedIndicator(data, searchTerm)]]">
-        <div class="standard-indicator standard small" data-test-standard-indicator>
-          <small>[[_getStandardizedIndicatorText(standardType, i18n)]]</small>
-        </div>
-      </template>
+    <div aria-live="polite">
+      <template is="dom-if" if="[[!loading]]" aria-live="polite">
+        <template is="dom-if" if="[[_showStandardSelectedIndicator(data, searchTerm)]]">
+          <div class="standard-indicator standard small" data-test-standard-indicator>
+            <small>[[_getStandardizedIndicatorText(standardType, i18n)]]</small>
+          </div>
+        </template>
 
-      <template is="dom-if" if="[[_showNonStandardSelectedIndicator]]">
-        <div class="standard-indicator non-standard small" data-test-nonStandard-indicator>
-          <small>[[_getNonStandardizedIndicatorText(standardType, i18n)]]</small>
-        </div>
-      </template>
+        <template is="dom-if" if="[[_showNonStandardSelectedIndicator]]">
+          <div class="standard-indicator non-standard small" data-test-nonStandard-indicator>
+            <small>[[_getNonStandardizedIndicatorText(standardType, i18n)]]</small>
+          </div>
+        </template>
 
-      <template is="dom-if" if="[[_isNonStandardSelected(data, i18n, 'true')]]">
-        <div class="standard-indicator non-standard small" data-test-nonStandard-indicator>
-          <small>[[_getStandardLabel(data)]]</small>
-        </div>
+        <template is="dom-if" if="[[_isNonStandardSelected(data, i18n, 'true')]]">
+          <div class="standard-indicator non-standard small" data-test-nonStandard-indicator>
+            <small>[[_getStandardLabel(data)]]</small>
+          </div>
+        </template>
       </template>
-    </template>
+    </div>
 
     <div class="standard-container" hidden$='[[_hideStandardsContainer(data, standardType, i18n, hideStandardsMenu)]]'>
       <p>
