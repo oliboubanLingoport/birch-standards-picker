@@ -462,7 +462,7 @@ Example:
 
       observers: [
         '_updateLabels(i18n, standardType)',
-        '_setIsDateOrPlace(standardType, i18n)'
+        '_setIsDateOrPlace(standardType)'
       ],
 
       /**
@@ -550,18 +550,19 @@ Example:
       },
 
       // Can't do _is(standardType, 'place') here because the markup gets templatized
-      _setIsDateOrPlace: function(standardType, i18n) {
+      _setIsDateOrPlace: function(standardType) {
         this.isDate = standardType === 'date';
         this.isPlace = standardType === 'place';
       },
 
       _updateLabels: function(i18n, standardType) {
+        if(!i18n) return;
         this.standardsDropdownLabel = this.i18n('STANDARD_' + this.standardType.toUpperCase() + '_LABEL');
         this.inputLabel = this.inputLabel || this.i18n('EVENT_' + this.standardType.toUpperCase() + '_LABEL');
       },
 
       _getPlaceholder: function(type, i18n, disabled) {
-        if (disabled) return '';
+        if (!i18n || disabled) return '';
         var string = type.toUpperCase() + '_PLACEHOLDER';
         return i18n(string);
       },
@@ -826,11 +827,12 @@ Example:
       },
 
       _hideStandardIcon: function(label, i18n) {
+        if(!i18n) return;
         return label === i18n('NO_STANDARD_SELECTED');
       },
 
       _hideStandardsContainer: function(data, standardType, i18n, hideStandardsMenu) {
-        if(hideStandardsMenu) return true;
+        if(! i18n || hideStandardsMenu) return true;
         var standardType = standardType.toUpperCase();
         var noStandardText = i18n('NO_STANDARD_' + standardType + '_AVAILABLE');
         return !data.customText || data.label === noStandardText;
@@ -846,10 +848,12 @@ Example:
       },
 
       _getStandardizedIndicatorText: function(standardType, i18n) {
+        if(!i18n) return;
         return (standardType === 'place') ? i18n('STANDARDIZED_PLACE') : i18n('STANDARDIZED_DATE');
       },
 
       _getNonStandardizedIndicatorText: function(standardType, i18n) {
+        if(!i18n) return;
         return (standardType === 'place') ? i18n('NO_STANDARD_PLACE_AVAILABLE') : i18n('NO_STANDARD_DATE_AVAILABLE');
       },
 
