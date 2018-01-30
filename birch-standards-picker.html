@@ -513,6 +513,7 @@ Example:
       },
 
       _isNonStandardSelected: function(data, i18n, showOnlyIfStandardsMenuHidden) {
+        if(!i18n) return;
         if(showOnlyIfStandardsMenuHidden && !this.hideStandardsMenu) return false;
         return this._getStandardLabel(data) === i18n('NO_STANDARD_SELECTED');
       },
