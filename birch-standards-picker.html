@@ -233,7 +233,7 @@ Example:
       on-birch-typeahead:blur='_handleCancel'
       on-birch-typeahead:selected='_handleSelect'>
 
-      <template>
+      <template slot="item-template">
         <template is="dom-if" if="[[item.icon]]">
           <paper-icon-item style="display: flex; align-items: center;">
             <template is="dom-if" if="[[isDate]]">
