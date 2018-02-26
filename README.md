@@ -2,6 +2,11 @@
 # birch-standards-picker
 An element that chooses standard dates and places.
 
+## Styling
+The following custom properties and mixins are available for styling:
+| Custom Property                       | Description               | Default |
+|---------------------------------------|---------------------------|---------|
+| `--birch-standards-picker-paper-item` | Mixin applied to the item | `{}`    |
 
 ## Dependencies
 
