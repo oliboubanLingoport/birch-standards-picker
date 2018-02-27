@@ -28,6 +28,14 @@ Example:
 
     <birch-standards-picker standard-type="place"></birch-standards-picker>
 
+Styling:
+
+The following custom properties and mixins are available for styling:
+
+| Custom Property                        | Description                | Default  |
+|:---------------------------------------|:---------------------------|:---------|
+| `--birch-standards-picker-paper-item`  | Mixin applied to the item  | `{}`     |
+
 @demo demo/index.html
 
 -->
@@ -193,6 +201,10 @@ Example:
         --birch-typeahead-input-disabled: {
           background-color: #eee;
         };
+
+        --birch-typeahead-paper-item: {
+          @apply --birch-standards-picker-paper-item;
+        };
       }
       paper-item, paper-icon-item, paper-item-body {
         --paper-item: {
@@ -252,7 +264,6 @@ Example:
           <paper-icon-item>
             <paper-item-body style="display: flex; flex-direction: column; justify-content: center; flex: 1; flex-basis: .000000001px;">
               <div class="standard-label" style="white-space:normal;color:#333331;">[[item.label]]</div>
-              
             </paper-item-body>
           </paper-icon-item>
         </template>
