@@ -282,7 +282,7 @@ The following custom properties and mixins are available for styling:
     </birch-typeahead>
 
     <div aria-live="polite">
-      <template is="dom-if" if="[[!loading]]" aria-live="polite">
+      <!-- <template is="dom-if" if="[[!loading]]" aria-live="polite"> -->
         <template is="dom-if" if="[[_showStandardSelectedIndicator(data, searchTerm)]]">
           <div class="standard-indicator standard small" data-test-standard-indicator>
             <small>[[_getStandardizedIndicatorText(standardType, i18n)]]</small>
@@ -300,7 +300,7 @@ The following custom properties and mixins are available for styling:
             <small>[[_getStandardLabel(data)]]</small>
           </div>
         </template>
-      </template>
+      <!-- </template> -->
     </div>
 
     <div class="standard-container" hidden$='[[_hideStandardsContainer(data, standardType, i18n, hideStandardsMenu)]]'>
@@ -861,7 +861,9 @@ The following custom properties and mixins are available for styling:
       },
 
       _setShowNonStandardSelectedIndicator: function(data, searchTerm, standardOptions) {
-        this._showNonStandardSelectedIndicator = !data.standardText && searchTerm && !standardOptions.length;
+        this.debounce('_setShowNonStandardSelectedIndicator', function(){
+          this._showNonStandardSelectedIndicator = !data.standardText && searchTerm && !standardOptions.length;
+        }, 1000);
       },
 
       _getStandardizedIndicatorText: function(standardType, i18n) {
