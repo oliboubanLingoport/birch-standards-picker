@@ -859,6 +859,8 @@ The following custom properties and mixins are available for styling:
       },
 
       _setShowNonStandardSelectedIndicator: function(data, searchTerm, standardOptions) {
+        // I'm likely to add this debounce in the next release,
+        // so I'm going to leave it here for now.
         // this.debounce('_setShowNonStandardSelectedIndicator', function(){
           this._showNonStandardSelectedIndicator = !data.standardText && searchTerm && !standardOptions.length;
         // }, 1000);
