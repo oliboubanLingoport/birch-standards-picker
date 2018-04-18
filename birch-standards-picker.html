@@ -282,25 +282,23 @@ The following custom properties and mixins are available for styling:
     </birch-typeahead>
 
     <div aria-live="polite">
-      <!-- <template is="dom-if" if="[[!loading]]" aria-live="polite"> -->
-        <template is="dom-if" if="[[_showStandardSelectedIndicator(data, searchTerm)]]">
-          <div class="standard-indicator standard small" data-test-standard-indicator>
-            <small>[[_getStandardizedIndicatorText(standardType, i18n)]]</small>
-          </div>
-        </template>
+      <template is="dom-if" if="[[_showStandardSelectedIndicator(data, searchTerm)]]">
+        <div class="standard-indicator standard small" data-test-standard-indicator>
+          <small>[[_getStandardizedIndicatorText(standardType, i18n)]]</small>
+        </div>
+      </template>
 
-        <template is="dom-if" if="[[_showNonStandardSelectedIndicator]]">
-          <div class="standard-indicator non-standard small" data-test-nonStandard-indicator>
-            <small>[[_getNonStandardizedIndicatorText(standardType, i18n)]]</small>
-          </div>
-        </template>
+      <template is="dom-if" if="[[_showNonStandardSelectedIndicator]]">
+        <div class="standard-indicator non-standard small" data-test-nonStandard-indicator>
+          <small>[[_getNonStandardizedIndicatorText(standardType, i18n)]]</small>
+        </div>
+      </template>
 
-        <template is="dom-if" if="[[_isNonStandardSelected(data, i18n, 'true')]]">
-          <div class="standard-indicator non-standard small" data-test-nonStandard-indicator>
-            <small>[[_getStandardLabel(data)]]</small>
-          </div>
-        </template>
-      <!-- </template> -->
+      <template is="dom-if" if="[[_isNonStandardSelected(data, i18n, 'true')]]">
+        <div class="standard-indicator non-standard small" data-test-nonStandard-indicator>
+          <small>[[_getStandardLabel(data)]]</small>
+        </div>
+      </template>
     </div>
 
     <div class="standard-container" hidden$='[[_hideStandardsContainer(data, standardType, i18n, hideStandardsMenu)]]'>
@@ -322,13 +320,13 @@ The following custom properties and mixins are available for styling:
               <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="11" height="16" viewBox="0 0 11 16"><path d="M5.5,15.79a.39.39,0,0,1-.37-.24.36.36,0,0,1,0-.13A7.49,7.49,0,0,0,2.9,10.31c-.37-.44-.79-.94-1.27-1.57L1.4,8.42a5,5,0,0,1-1-3.08,5.13,5.13,0,1,1,10.27,0,5.08,5.08,0,0,1-1,3.08l-.24.32h0c-.48.63-.9,1.13-1.27,1.57a7.46,7.46,0,0,0-2.21,5.08A.39.39,0,0,1,5.5,15.79ZM5.5,3a2,2,0,1,0,2,2A2,2,0,0,0,5.5,3Z" style="fill:#333331"/><rect width="11" height="16" style="fill:none"/></svg>
             </template>
           </span>
-          <template is="dom-if" if="[[_isNonStandardSelected(data, i18n, 'true')]]">
+          <template is="dom-if" if="[[_isNonStandardSelected(data, i18n)]]">
             <div class="standard-indicator non-standard small" data-test-nonStandard-indicator>
               <small>[[_getStandardLabel(data)]]</small>
               <span class="carat">▾</span>
             </div>
           </template>
-          <template is="dom-if" if="[[!_isNonStandardSelected(data, i18n, true)]]">
+          <template is="dom-if" if="[[!_isNonStandardSelected(data, i18n)]]">
             <span class="label-text">[[_getStandardLabel(data)]]</span>
             <span class="carat" hidden$="[[loading]]">▾</span>
             <span class="loading" hidden$="[[!loading]]"></span>
