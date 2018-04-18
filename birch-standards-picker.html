@@ -859,9 +859,9 @@ The following custom properties and mixins are available for styling:
       },
 
       _setShowNonStandardSelectedIndicator: function(data, searchTerm, standardOptions) {
-        this.debounce('_setShowNonStandardSelectedIndicator', function(){
+        // this.debounce('_setShowNonStandardSelectedIndicator', function(){
           this._showNonStandardSelectedIndicator = !data.standardText && searchTerm && !standardOptions.length;
-        }, 1000);
+        // }, 1000);
       },
 
       _getStandardizedIndicatorText: function(standardType, i18n) {
