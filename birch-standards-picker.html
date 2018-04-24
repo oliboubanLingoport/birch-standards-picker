@@ -59,6 +59,9 @@ The following custom properties and mixins are available for styling:
         padding-top: 10px;
         min-height: 40px;
       }
+      .status-container {
+        height: 14px;
+      }
       #optionsMenu {
         position: absolute;
         z-index: 100000;
@@ -281,7 +284,7 @@ The following custom properties and mixins are available for styling:
       </div>
     </birch-typeahead>
 
-    <div aria-live="polite">
+    <div aria-live="polite" class="status-container">
       <template is="dom-if" if="[[_showStandardSelectedIndicator(data, searchTerm)]]">
         <div class="standard-indicator standard small" data-test-standard-indicator>
           <small>[[_getStandardizedIndicatorText(standardType, i18n)]]</small>
@@ -859,11 +862,7 @@ The following custom properties and mixins are available for styling:
       },
 
       _setShowNonStandardSelectedIndicator: function(data, searchTerm, standardOptions) {
-        // I'm likely to add this debounce in the next release,
-        // so I'm going to leave it here for now.
-        // this.debounce('_setShowNonStandardSelectedIndicator', function(){
-          this._showNonStandardSelectedIndicator = !data.standardText && searchTerm && !standardOptions.length;
-        // }, 1000);
+        this._showNonStandardSelectedIndicator = !data.standardText && searchTerm && !standardOptions.length;
       },
 
       _getStandardizedIndicatorText: function(standardType, i18n) {
