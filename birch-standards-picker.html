@@ -340,7 +340,7 @@ The following custom properties and mixins are available for styling:
         <paper-listbox id="optionsMenu" tabindex="-1" hidden$="[[_hideStandards]]">
           <template is="dom-repeat" items="[[_standardOptions]]">
 
-            <paper-icon-item on-tap="_handleChangeStandard" style="display: flex; align-items: center;">
+            <paper-icon-item on-tap="_handleChangeStandard" style="display: flex; align-items: center;" title$="[[item.label]]">
               <template is="dom-if" if="[[item.icon]]">
                 <template is="dom-if" if="[[isDate]]">
                   <span item-icon style="width: 25px; position: absolute;">
@@ -637,8 +637,9 @@ The following custom properties and mixins are available for styling:
         }
         options = options.map(this._mapOptionsCB.bind(this));
         this._standardOptions = [].concat(options);
-        if(onlySetStandardOptions !== true){
-          this._typeaheadOptions = this._setupTypeaheadOptions([].concat(options));
+        this._typeaheadOptions = this._setupTypeaheadOptions([].concat(options));
+        if(onlySetStandardOptions){
+          this.$.typeahead.hideOptions();
         }
 
         this._setShowNonStandardSelectedIndicator(this.data, this.searchTerm, this._standardOptions);
