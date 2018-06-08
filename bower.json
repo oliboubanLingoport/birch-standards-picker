@@ -16,7 +16,7 @@
     "tests"
   ],
   "dependencies": {
-    "birch-typeahead": "fs-webdev/birch-typeahead#^2.0.0",
+    "birch-typeahead": "fs-webdev/birch-typeahead#^2.3.0",
     "oak-i18n-behavior": "fs-webdev/oak-i18n-behavior#^1.3.0",
     "polymer": "Polymer/polymer#1.9 - 2",
     "es6-promise": "stefanpenner/es6-promise#^4.1.0",
