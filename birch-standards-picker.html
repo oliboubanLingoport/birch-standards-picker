@@ -638,7 +638,7 @@ The following custom properties and mixins are available for styling:
         options = options.map(this._mapOptionsCB.bind(this));
         this._standardOptions = [].concat(options);
         this._typeaheadOptions = this._setupTypeaheadOptions([].concat(options));
-        if(onlySetStandardOptions){
+        if(onlySetStandardOptions === true){
           this.$.typeahead.hideOptions();
         }
 
