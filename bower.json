@@ -21,7 +21,7 @@
     "polymer": "Polymer/polymer#1.9 - 2",
     "es6-promise": "stefanpenner/es6-promise#^4.1.0",
     "wc-i18n": "jshcrowthe/wc-i18n#2 - 3",
-    "fs-styles": "fs-webdev/fs-styles#3.x",
+    "fs-styles": "fs-webdev/fs-styles#3 - 5",
     "object-assign-shim": "^1.0.0",
     "paper-listbox": "PolymerElements/paper-listbox#1 - 2",
     "fs-metrics": "fs-webdev/fs-metrics#1.x"
@@ -29,7 +29,7 @@
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#1 - 2",
     "web-component-tester": "Polymer/web-component-tester#6.1.0",
-    "fs-demo": "fs-webdev/fs-demo#^1.3.5",
+    "fs-demo": "fs-webdev/fs-demo#^1.9.1",
     "fetch": "^2.0.2",
     "qa-shared-mock-json": "fs-eng/qa-shared-mock-json",
     "webcomponentsjs": "webcomponents/webcomponentsjs#0.7.0 - 1.0.0"
@@ -53,7 +53,6 @@
     }
   },
   "resolutions": {
-    "fs-styles": "3.x",
     "webcomponentsjs": "^v1.0.19"
   }
 }
