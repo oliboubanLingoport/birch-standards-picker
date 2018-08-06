@@ -145,7 +145,6 @@ The following custom properties and mixins are available for styling:
         font-size: 14px;
         padding: 5px;
         border-radius: 5px;
-        max-width: 300px;
         overflow: hidden;
       }
       #button .standard-indicator {
@@ -199,14 +198,13 @@ The following custom properties and mixins are available for styling:
           color: #333331;
           padding: 6px 10px 6px 25px;
         };
-
         --birch-typeahead-input-disabled: {
           background-color: #eee;
         };
-
         --birch-typeahead-paper-item: {
           @apply --birch-standards-picker-paper-item;
         };
+        --paper-item-body-two-line-min-height: 50px;
       }
       paper-item, paper-icon-item, paper-item-body {
         --paper-item: {
@@ -420,7 +418,9 @@ The following custom properties and mixins are available for styling:
         },
 
         /**
-         * The object containing the standards picker's current state
+         * The object containing the standards picker's current state.
+         * `customText` and `standardText` should never be identical.
+         * If they are, `customeText` will be deleted.
          *
          * @type {Object}
          */
@@ -492,6 +492,8 @@ The following custom properties and mixins are available for styling:
         this.$.optionsMenu.select(-1);
         this.$.typeahead.hideOptionsAndBlur(false);
         this._showNonStandardSelectedIndicator = false;
+        this._hideStandards = true;
+        this.loading = false;
       },
 
       _resetArrays: function(){
@@ -508,12 +510,24 @@ The following custom properties and mixins are available for styling:
       _handleDataChange: function(data) {
         if(!this.searchTerm && (data.customText || data.standardText)){
           this.searchTerm = data.customText || data.standardText;
+
           if(!data.label){
             var clonedData = this._clone(this.data);
             clonedData.label = clonedData.standardText || undefined;
             this._updateData(clonedData);
             this._handleDataChange(this.data);
           }
+
+          // If customText matches standardText exactly,
+          // delete customText and run this function again.
+          if(data.customText === data.standardText){
+            delete data.customText;
+            this._updateData(this._clone(data));
+            this._handleDataChange(this.data);
+          }
+
+          // Must trigger the input handler so that standards
+          // will get fetched even though the user has not typed.
           var fakeEvent = {
             detail: {
               value: this.searchTerm
@@ -740,7 +754,11 @@ The following custom properties and mixins are available for styling:
         this._setShowNonStandardSelectedIndicator(this.data, this.searchTerm, this._standardOptions);
       },
 
-      _openStandardSelector: function() {
+      _openStandardSelector: function(e) {
+        // We have to programmatically focus the button on
+        // click because firefox doesn't do it automatically.
+        e.target.focus();
+
         if (this._standardOptions.length < 1) return;
         this._hideStandards = this._hideStandards ? false : true;
       },
@@ -851,7 +869,7 @@ The following custom properties and mixins are available for styling:
       },
 
       _hideStandardsContainer: function(data, standardType, i18n, hideStandardsMenu) {
-        if(! i18n || hideStandardsMenu) return true;
+        if(!i18n || hideStandardsMenu) return true;
         var standardType = standardType.toUpperCase();
         var noStandardText = i18n('NO_STANDARD_' + standardType + '_AVAILABLE');
         return !data.customText || data.label === noStandardText;
