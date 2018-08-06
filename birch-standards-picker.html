@@ -597,7 +597,7 @@ The following custom properties and mixins are available for styling:
         return i18n(string);
       },
 
-      _handleInput: function(e, onlySetStandardOptions) {
+      _handleInput: function(e, isProgramaticFetch) {
         if(!e || !e.detail || !e.detail.value){
           this._cancelActiveRequest();
           this.loading = false;
@@ -606,23 +606,23 @@ The following custom properties and mixins are available for styling:
         this.standardSelected = false;
         if(!e.detail.value.trim()) return;
         this.loading = true;
-        this._fetchData(e.detail.value, onlySetStandardOptions);
+        this._fetchData(e.detail.value, isProgramaticFetch);
       },
 
-      _fetchData: function(term, onlySetStandardOptions) {
+      _fetchData: function(term, isProgramaticFetch) {
         var self = this;
         var url = '/tree-data/authorities/' + this.standardType + '?term=' + term + '&locale=' + this.lang;
         this._req('GET', url).then(function (data){
-          self._handleResponse(data, onlySetStandardOptions);
+          self._handleResponse(data, isProgramaticFetch);
         }).catch(function (err){
           if(err.aborted) return;
-          self._handleResponse([], onlySetStandardOptions);
+          self._handleResponse([], isProgramaticFetch);
           self.fire('birch-standards-picker:error', err);
           console.error('birch-standards-picker:error', err);
         });
       },
 
-      _handleResponse: function(options, onlySetStandardOptions) {
+      _handleResponse: function(options, isProgramaticFetch) {
         this.loading = false;
         if(!options || !Array.isArray(options)){
           options = [];
@@ -652,7 +652,7 @@ The following custom properties and mixins are available for styling:
         options = options.map(this._mapOptionsCB.bind(this));
         this._standardOptions = [].concat(options);
         this._typeaheadOptions = this._setupTypeaheadOptions([].concat(options));
-        if(onlySetStandardOptions === true){
+        if(isProgramaticFetch === true){
           this.$.typeahead.hideOptions();
         }
 
