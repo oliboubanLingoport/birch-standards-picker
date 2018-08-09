@@ -655,9 +655,17 @@ The following custom properties and mixins are available for styling:
         this._typeaheadOptions = this._setupTypeaheadOptions([].concat(options));
         if(isProgramaticFetch === true){
           this.$.typeahead.hideOptions();
+          if(!this.standardSelected && this.data.standardText){
+            this._selectStandardOptionByStandardizedText(this.data.standardText);
+          }
         }
 
         this._setShowNonStandardSelectedIndicator(this.data, this.searchTerm, this._standardOptions);
+      },
+
+      _selectStandardOptionByStandardizedText: function(text) {
+        const index = this._standardOptions.map(item => item.standardText).indexOf(text);
+        if(~index) this.$.optionsMenu.select(index);
       },
 
       _mapOptionsCB: function(option) {
@@ -719,8 +727,8 @@ The following custom properties and mixins are available for styling:
         if(e.model.item.label === this.i18n('NONE_OF_THE_ABOVE')){
           e.model.item.label = this.i18n('NO_STANDARD_SELECTED');
         }
-        e.model.item.customText = this.data.customText;
-        this._updateData(e.model.item);
+        var data = Object.assign({}, e.model.item, this.data, { customText: this.searchTerm });
+        this._updateData(data);
         this._hideStandards = true;
       },
 
