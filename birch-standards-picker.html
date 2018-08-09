@@ -727,7 +727,7 @@ The following custom properties and mixins are available for styling:
         if(e.model.item.label === this.i18n('NONE_OF_THE_ABOVE')){
           e.model.item.label = this.i18n('NO_STANDARD_SELECTED');
         }
-        var data = Object.assign({}, e.model.item, this.data, { customText: this.searchTerm });
+        var data = Object.assign({}, e.model.item, { customText: this.searchTerm });
         this._updateData(data);
         this._hideStandards = true;
       },
