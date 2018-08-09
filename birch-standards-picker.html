@@ -312,7 +312,8 @@ The following custom properties and mixins are available for styling:
           data-test="PickStandardBtn"
           on-focusout="_handleFocusout"
           on-tap="_openStandardSelector"
-          on-keydown="_handleKeydown">
+          on-keydown="_handleKeydown"
+          title$="[[_getStandardLabel(data)]]">
 
           <span class="standardIcon" hidden$="[[_hideStandardIcon(data.label, i18n)]]">
             <template is="dom-if" if="[[isDate]]">
