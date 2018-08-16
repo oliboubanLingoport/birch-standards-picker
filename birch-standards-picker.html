@@ -237,6 +237,7 @@ The following custom properties and mixins are available for styling:
       loading="[[loading]]"
       disabled="[[disabled]]"
       debounce-input-duration="200"
+      is-dirty="{{isDirty}}"
       value="{{searchTerm::birch-typeahead:input}}"
       placeholder="[[_getPlaceholder(standardType, i18n, disabled)]]"
       options="[[_typeaheadOptions]]"
@@ -422,7 +423,7 @@ The following custom properties and mixins are available for styling:
         /**
          * The object containing the standards picker's current state.
          * `customText` and `standardText` should never be identical.
-         * If they are, `customeText` will be deleted.
+         * If they are, `customText` will be deleted.
          *
          * @type {Object}
          */
@@ -474,7 +475,16 @@ The following custom properties and mixins are available for styling:
         standardSelected: {
           type: Boolean,
           value: false
-        }
+        },
+        
+        /**
+         * Way to confirm if change has occurred
+         */
+         isDirty: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
       },
 
       observers: [
@@ -496,6 +506,7 @@ The following custom properties and mixins are available for styling:
         this._showNonStandardSelectedIndicator = false;
         this._hideStandards = true;
         this.loading = false;
+        this.isDirty = false;
       },
 
       _resetArrays: function(){
@@ -732,6 +743,7 @@ The following custom properties and mixins are available for styling:
         var data = Object.assign({}, e.model.item, { customText: this.searchTerm });
         this._updateData(data);
         this._hideStandards = true;
+        this.isDirty = true;
       },
 
       _handleSelect: function(e) {
