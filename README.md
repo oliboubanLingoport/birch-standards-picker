@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/fs-webdev/birch-standards-picker.svg?branch=master)](https://travis-ci.org/fs-webdev/birch-standards-picker)
+[![Build Status](https://travis-ci.com/fs-webdev/birch-standards-picker.svg?branch=master)](https://travis-ci.com/fs-webdev/birch-standards-picker)
 # birch-standards-picker
 An element that chooses standard dates and places.
 
