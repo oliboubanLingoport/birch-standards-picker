@@ -779,7 +779,7 @@ The following custom properties and mixins are available for styling:
       _openStandardSelector: function(e) {
         // We have to programmatically focus the button on
         // click because firefox doesn't do it automatically.
-        e.target.focus();
+        if (e && e.target) e.target.focus();
 
         if (this._standardOptions.length < 1) return;
         this._hideStandards = this._hideStandards ? false : true;
