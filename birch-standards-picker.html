@@ -182,6 +182,9 @@ The following custom properties and mixins are available for styling:
         background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.2%22%20baseProfile%3D%22tiny%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2020%2020%22%20xml%3Aspace%3D%22preserve%22%3E%3Crect%20fill%3D%22none%22%20width%3D%2220%22%20height%3D%2220%22%2F%3E%3Cpath%20fill%3D%22%2379520F%22%20d%3D%22M10%208.7l3.2%205.4H6.8L10%208.7M10%202.2c-0.4%200-0.7%200.2-1%200.7L1.2%2016.2C0.6%2017.1%201.1%2017.9%202.2%2017.9h15.7c1.1%200%201.5-0.8%201-1.7L11%202.9C10.7%202.4%2010.4%202.2%2010%202.2L10%202.2z%22%2F%3E%3C%2Fsvg%3E") !important
       }
       .small {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
         font-size: 12px;
       }
       #Layer_1 {
@@ -285,19 +288,19 @@ The following custom properties and mixins are available for styling:
 
     <div aria-live="polite" class="status-container">
       <template is="dom-if" if="[[_showStandardSelectedIndicator(data, searchTerm)]]">
-        <div class="standard-indicator standard small" data-test-standard-indicator>
+        <div class="standard-indicator standard small" data-test-standard-indicator title="[[_getStandardizedIndicatorText(standardType, i18n)]]">
           <small data-test="StandardIndicator">[[_getStandardizedIndicatorText(standardType, i18n)]]</small>
         </div>
       </template>
 
       <template is="dom-if" if="[[_showNonStandardSelectedIndicator]]">
-        <div class="standard-indicator non-standard small" data-test-nonStandard-indicator>
+        <div class="standard-indicator non-standard small" data-test-nonStandard-indicator title="[[_getNonStandardizedIndicatorText(standardType, i18n)]]">
           <small data-test="NonstandardIndicator">[[_getNonStandardizedIndicatorText(standardType, i18n)]]</small>
         </div>
       </template>
 
       <template is="dom-if" if="[[_isNonStandardSelected(data, i18n, 'true')]]">
-        <div class="standard-indicator non-standard small" data-test-nonStandard-indicator>
+        <div class="standard-indicator non-standard small" data-test-nonStandard-indicator title="[[_getStandardLabel(data)]]">
           <small data-test="NonstandardIndicator2">[[_getStandardLabel(data)]]</small>
         </div>
       </template>
@@ -325,7 +328,7 @@ The following custom properties and mixins are available for styling:
             </template>
           </span>
           <template is="dom-if" if="[[_isNonStandardSelected(data, i18n)]]">
-            <div class="standard-indicator non-standard small" data-test-nonStandard-indicator>
+            <div class="standard-indicator non-standard small" data-test-nonStandard-indicator title="[[_getStandardLabel(data)]]">
               <small data-test="NonstandardIndicator3">[[_getStandardLabel(data)]]</small>
               <span class="carat">▾</span>
             </div>
@@ -500,6 +503,7 @@ The following custom properties and mixins are available for styling:
         this._updateData({});
         this.standardSelected = false;
         this.searchTerm = '';
+        this.inputLabel = '';
         this.$.typeahead.value = '';
         this.$.optionsMenu.select(-1);
         this.$.typeahead.hideOptionsAndBlur(false);
