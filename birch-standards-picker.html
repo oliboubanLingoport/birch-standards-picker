@@ -631,7 +631,6 @@ The following custom properties and mixins are available for styling:
         if (_isDate && _showThinDate) return 'thinDate';
       },
       _setThinDateStyles(_isDate, _showThinDate) {
-        if (!_isDate && this.standardType && this.standardType === 'date') _isDate = true;
         if (_isDate && _showThinDate) return 'max-height: 50px; font-weight: 100;';
       },
 
