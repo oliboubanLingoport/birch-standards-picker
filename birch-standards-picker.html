@@ -203,7 +203,7 @@ The following custom properties and mixins are available for styling:
         };
 
         --birch-typeahead-paper-item-body-children: {
-          font-weight: bold !important;
+          font-weight: bold;
         };
 
         --birch-typeahead-paper-item: {
@@ -212,20 +212,11 @@ The following custom properties and mixins are available for styling:
         --paper-item-body-two-line-min-height: 50px;
       }
 
-      birch-typeahead.thinDate {
-        --birch-typeahead-paper-item: {
-          padding-top: 0px;
-          padding-bottom: 0px;
-        };
-        --birch-typeahead-paper-item-body-children: {
-          font-weight: 100 !important;
-        };
-      }
-
       paper-item, paper-icon-item, paper-item-body {
         --paper-item: {
           font-family: verdana;
           font-size: 14px;
+          font-weight: bold;
         };
         --paper-item-selected: {
           font-weight: 100 !important;
@@ -241,6 +232,16 @@ The following custom properties and mixins are available for styling:
       paper-item > *, paper-icon-item > *, paper-item-body > * {
         white-space: normal !important;
         font-size: 14px !important;
+      }
+
+      birch-typeahead.thinDate {
+        --birch-typeahead-paper-item: {
+          padding-top: 0px;
+          padding-bottom: 0px;
+        };
+        --birch-typeahead-paper-item-body-children: {
+          font-weight: 100 !important;
+        };
       }
     </style>
 
@@ -359,7 +360,7 @@ The following custom properties and mixins are available for styling:
         <paper-listbox id="optionsMenu" tabindex="-1" hidden$="[[_hideStandards]]">
           <template is="dom-repeat" items="[[_standardOptions]]">
 
-            <paper-icon-item on-tap="_handleChangeStandard" style$="display: flex; align-items: center; [[_setMaxHeight(isDate, showThinDate)]]" title$="[[item.label]]">
+            <paper-icon-item on-tap="_handleChangeStandard" style$="display: flex; align-items: center; [[_setThinDateStyles(isDate, showThinDate)]]" title$="[[item.label]]">
               <template is="dom-if" if="[[item.icon]]">
                 <template is="dom-if" if="[[isDate]]">
                   <span item-icon style="width: 25px; position: absolute;">
@@ -629,9 +630,9 @@ The following custom properties and mixins are available for styling:
       _setItemClass(_isDate, _showThinDate) {
         if (_isDate && _showThinDate) return 'thinDate';
       },
-      _setMaxHeight(_isDate, _showThinDate) {
+      _setThinDateStyles(_isDate, _showThinDate) {
         if (!_isDate && this.standardType && this.standardType === 'date') _isDate = true;
-        if (_isDate && _showThinDate) return 'max-height: 50px;';
+        if (_isDate && _showThinDate) return 'max-height: 50px; font-weight: 100;';
       },
 
       _updateLabels: function(i18n, standardType) {
