@@ -209,7 +209,6 @@ The following custom properties and mixins are available for styling:
         --birch-typeahead-paper-item: {
           @apply --birch-standards-picker-paper-item;
         };
-        --paper-item-body-two-line-min-height: 50px;
       }
 
       birch-typeahead.thinDate {
@@ -245,7 +244,7 @@ The following custom properties and mixins are available for styling:
     </style>
 
     <birch-typeahead
-      class$="[[_setItemClass(isDate)]]"
+      class$="[[_setItemClass(isDate, showThinDate)]]"
       focusable-component
       id='typeahead'
       input-label="[[inputLabel]]"
@@ -359,7 +358,7 @@ The following custom properties and mixins are available for styling:
         <paper-listbox id="optionsMenu" tabindex="-1" hidden$="[[_hideStandards]]">
           <template is="dom-repeat" items="[[_standardOptions]]">
 
-            <paper-icon-item on-tap="_handleChangeStandard" style="display: flex; align-items: center;" title$="[[item.label]]">
+            <paper-icon-item on-tap="_handleChangeStandard" style$="display: flex; align-items: center; [[_setMaxHeight(isDate, showThinDate)]]" title$="[[item.label]]">
               <template is="dom-if" if="[[item.icon]]">
                 <template is="dom-if" if="[[isDate]]">
                   <span item-icon style="width: 25px; position: absolute;">
@@ -626,8 +625,12 @@ The following custom properties and mixins are available for styling:
         this.isPlace = standardType === 'place';
       },
 
-      _setItemClass(_isDate) {
-        if (_isDate && this.showThinDate) return 'thinDate';
+      _setItemClass(_isDate, _showThinDate) {
+        if (_isDate && _showThinDate) return 'thinDate';
+      },
+      _setMaxHeight(_isDate, _showThinDate) {
+        if (!_isDate && this.standardType && this.standardType === 'date') _isDate = true;
+        if (_isDate && _showThinDate) return 'max-height: 50px;';
       },
 
       _updateLabels: function(i18n, standardType) {
