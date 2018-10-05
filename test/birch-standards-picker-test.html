@@ -446,6 +446,11 @@
           it('should return an i18n translated string (mocked to return key)', function(){
             expect(myEl._getPlaceholder(type, i18n, disabled)).to.equal("DATE_PLACEHOLDER");
           });
+
+          it('should return a custom placeholder if the property is set', function() {
+            myEl.customPlaceholder = 'Custom placeholder value';
+            expect(myEl._getPlaceholder(type, i18n, disabled)).to.equal('Custom placeholder value');
+          });
         });
 
       });

@@ -455,6 +455,26 @@ The following custom properties and mixins are available for styling:
           value: false
         },
 
+        /**
+         * Custom URL to use to pull data
+         *
+         * @type {String}
+         */
+        customUrl: {
+          type: String,
+          value: ''
+        },
+
+        /**
+         * Custom placeholder for the input field
+         *
+         * @type {String}
+         */
+        customPlaceholder: {
+          type: String,
+          value: ''
+        },
+
         _typeaheadOptions: {
           type: Array,
           value: function() { return []; }
@@ -611,8 +631,8 @@ The following custom properties and mixins are available for styling:
 
       _getPlaceholder: function(type, i18n, disabled) {
         if (!i18n || disabled) return '';
-        var string = type.toUpperCase() + '_PLACEHOLDER';
-        return i18n(string);
+        var string = this.customPlaceholder || i18n(type.toUpperCase() + '_PLACEHOLDER');
+        return string;
       },
 
       _handleInput: function(e, isProgramaticFetch) {
@@ -629,7 +649,7 @@ The following custom properties and mixins are available for styling:
 
       _fetchData: function(term, isProgramaticFetch) {
         var self = this;
-        var url = '/tree-data/authorities/' + this.standardType + '?term=' + term + '&locale=' + this.lang;
+        var url = (self.customUrl || '/tree-data/authorities/') + this.standardType + '?term=' + term + '&locale=' + this.lang;
         this._req('GET', url).then(function (data){
           self._handleResponse(data, isProgramaticFetch);
         }).catch(function (err){
