@@ -305,22 +305,26 @@ The following custom properties and mixins are available for styling:
     </birch-typeahead>
 
     <div aria-live="polite" class="status-container">
-      <template is="dom-if" if="[[_showStandardSelectedIndicator(data, searchTerm)]]">
-        <div class="standard-indicator standard small" data-test-standard-indicator title="[[_getStandardizedIndicatorText(standardType, i18n)]]">
-          <small data-test="StandardIndicator">[[_getStandardizedIndicatorText(standardType, i18n)]]</small>
-        </div>
+      <template is="dom-if" if="[[!hideStandardsNotification]]">
+        <template is="dom-if" if="[[_showStandardSelectedIndicator(data, searchTerm)]]">
+          <div class="standard-indicator standard small" data-test-standard-indicator title="[[_getStandardizedIndicatorText(standardType, i18n)]]">
+            <small data-test="StandardIndicator">[[_getStandardizedIndicatorText(standardType, i18n)]]</small>
+          </div>
+        </template>
       </template>
-
-      <template is="dom-if" if="[[_showNonStandardSelectedIndicator]]">
-        <div class="standard-indicator non-standard small" data-test-nonStandard-indicator title="[[_getNonStandardizedIndicatorText(standardType, i18n)]]">
-          <small data-test="NonstandardIndicator">[[_getNonStandardizedIndicatorText(standardType, i18n)]]</small>
-        </div>
+      <template is="dom-if" if="[[!hideStandardsNotification]]">
+        <template is="dom-if" if="[[_showNonStandardSelectedIndicator]]">
+          <div class="standard-indicator non-standard small" data-test-nonStandard-indicator title="[[_getNonStandardizedIndicatorText(standardType, i18n)]]">
+            <small data-test="NonstandardIndicator">[[_getNonStandardizedIndicatorText(standardType, i18n)]]</small>
+          </div>
+        </template>
       </template>
-
-      <template is="dom-if" if="[[_isNonStandardSelected(data, i18n, 'true')]]">
-        <div class="standard-indicator non-standard small" data-test-nonStandard-indicator title="[[_getStandardLabel(data)]]">
-          <small data-test="NonstandardIndicator2">[[_getStandardLabel(data)]]</small>
-        </div>
+      <template is="dom-if" if="[[!hideStandardsNotification]]">
+        <template is="dom-if" if="[[_isNonStandardSelected(data, i18n, 'true')]]">
+          <div class="standard-indicator non-standard small" data-test-nonStandard-indicator title="[[_getStandardLabel(data)]]">
+            <small data-test="NonstandardIndicator2">[[_getStandardLabel(data)]]</small>
+          </div>
+        </template>
       </template>
     </div>
 
@@ -535,6 +539,15 @@ The following custom properties and mixins are available for styling:
           value: false,
           notify: true
         },
+
+        /**
+         * Opt-in for hidding the standardized/not-standardized text
+         * below the the text field
+         */
+        hideStandardsNotification: {
+          type: Boolean,
+          value: false
+        }
       },
 
       observers: [
