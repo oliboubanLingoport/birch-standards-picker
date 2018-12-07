@@ -199,10 +199,16 @@ The following custom properties and mixins are available for styling:
           box-sizing: border-box;
           color: #333331;
           padding: 6px 10px 6px 25px;
+          @apply --birch-standards-picker-input;
         };
+
         --birch-typeahead-input-disabled: {
           background-color: #eee;
         };
+
+        --birch-typeahead-input-focus: {
+          @apply --birch-standards-picker-input-focus;
+        }
 
         --birch-typeahead-paper-item-body-children: {
           font-weight: bold;
