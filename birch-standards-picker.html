@@ -3,6 +3,7 @@
 <link rel="import" href="../birch-typeahead/birch-typeahead.html">
 <link rel="import" href="../wc-i18n/wc-i18n.html">
 <link rel="import" href="../paper-listbox/paper-listbox.html">
+<link rel="import" href="../fs-helplet/fs-helplet.html">
 <link rel="import" href="../oak-i18n-behavior/oak-i18n-behavior.html">
 <link rel="import" href="../fs-metrics/fs-metrics.html">
 <!-- object-assign-shim is only to support IE11 and Android webview, but it's tiny anyhow -->
@@ -305,13 +306,12 @@ The following custom properties and mixins are available for styling:
       </template>
 
       <div slot="helplet-icon">
-        <template is="dom-if" if="[[showHelplets]]">
-          <fs-icon icon="alert-medium" style="display:inline-block;height:20px;vertical-align:top"></fs-icon>
+        <template is="dom-if" if="[[showFieldHelp]]">
           <template is="dom-if" if="[[isDate]]">
-              [[HELPLET_DATE]]
+            <fs-helplet content="[[i18n('HELPLET_DATE')]]"></fs-helplet>
           </template>
           <template is="dom-if" if="[[isPlace]]">
-              [[HELPLET_PLACE]]
+            <fs-helplet content="[[i18n('HELPLET_PLACE')]]"></fs-helplet>
           </template>
         </template>
       </div>
@@ -354,13 +354,12 @@ The following custom properties and mixins are available for styling:
       <p>
         <div class="flex-row">
           <small>[[standardsDropdownLabel]]</small>
-          <template is="dom-if" if="[[showHelplets]]">
-            <fs-icon icon="alert-medium" style="display:inline-block;height:20px;vertical-align:top"></fs-icon>
+          <template is="dom-if" if="[[showFieldHelp]]">
             <template is="dom-if" if="[[isDate]]">
-                [[HELPLET_STANDARDIZED_DATE]]
+              <fs-helplet content="[[i18n('HELPLET_STANDARDIZED_DATE')]]"></fs-helplet>
             </template>
             <template is="dom-if" if="[[isPlace]]">
-                [[HELPLET_STANDARDIZED_PLACE]]
+                <fs-helplet content="[[i18n('HELPLET_STANDARDIZED_PLACE')]]"></fs-helplet>
             </template>
           </template>
         </div>
@@ -503,7 +502,8 @@ The following custom properties and mixins are available for styling:
         /** Whether the typeahead input label should show helplet ('i') icon/text
          * @type {Boolean}
          */
-         showHelplets: {
+         showFieldHelp: {
+          reflectToAttribute: true,
           type: Boolean,
           value: false
         },
@@ -586,6 +586,7 @@ The following custom properties and mixins are available for styling:
          * below the the text field
          */
         hideStandardsNotification: {
+          reflectToAttribute: true,
           type: Boolean,
           value: false
         }
