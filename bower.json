@@ -31,7 +31,9 @@
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#1 - 2",
     "web-component-tester": "Polymer/web-component-tester#6.5.0",
+    "fs-checkbox": "fs-webdev/fs-checkbox#^1",
     "fs-demo": "fs-webdev/fs-demo#^1.9.1",
+    "fs-styles": "fs-webdev/fs-styles#^4",
     "fetch": "^2.0.2",
     "qa-shared-mock-json": "fs-eng/qa-shared-mock-json",
     "webcomponentsjs": "webcomponents/webcomponentsjs#0.7.0 - 1.0.0"
