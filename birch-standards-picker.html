@@ -3,6 +3,7 @@
 <link rel="import" href="../birch-typeahead/birch-typeahead.html">
 <link rel="import" href="../wc-i18n/wc-i18n.html">
 <link rel="import" href="../paper-listbox/paper-listbox.html">
+<link rel="import" href="../fs-helplet/fs-helplet.html">
 <link rel="import" href="../oak-i18n-behavior/oak-i18n-behavior.html">
 <link rel="import" href="../fs-metrics/fs-metrics.html">
 <!-- object-assign-shim is only to support IE11 and Android webview, but it's tiny anyhow -->
@@ -54,7 +55,7 @@ The following custom properties and mixins are available for styling:
       .standard-container {
         position: relative;
       }
-      .standard-container p {
+      .standard-container .standards-inner-container {
         margin: 0;
         padding-top: 10px;
         min-height: 40px;
@@ -251,6 +252,14 @@ The following custom properties and mixins are available for styling:
           font-weight: 100 !important;
         };
       }
+      .flex-row {
+        display: flex;
+        flex-direction: row;
+      }
+
+      fs-helplet {
+        margin: 0 0 5px 5px;
+      }
     </style>
 
     <birch-typeahead
@@ -300,6 +309,17 @@ The following custom properties and mixins are available for styling:
         </template>
       </template>
 
+      <div slot="helplet-icon">
+        <template is="dom-if" if="[[showFieldHelp]]">
+          <template is="dom-if" if="[[isDate]]">
+            <fs-helplet content="[[i18n('HELPLET_DATE')]]"></fs-helplet>
+          </template>
+          <template is="dom-if" if="[[isPlace]]">
+            <fs-helplet content="[[i18n('HELPLET_PLACE')]]"></fs-helplet>
+          </template>
+        </template>
+      </div>
+
       <div slot="input-icon">
         <template is="dom-if" if="[[_showStandardInputIcon(isDate, standardSelected)]]">
           <svg width="14" height="16" viewBox="0 0 14 16"><path d="M1,15.9A.94.94,0,0,1,.1,15V3.6A1.5,1.5,0,0,1,1.6,2.1h.3V3A1.1,1.1,0,0,0,3,4.1h.1V.1H4a.9.9,0,0,1,.9.9V2.1h4V3A1.1,1.1,0,0,0,10,4.1h.1V.1H11a.9.9,0,0,1,.9.9V2.1h.5a1.5,1.5,0,0,1,1.5,1.5V15a.94.94,0,0,1-.94.94Zm.86-1.8H12.1V5.9H1.9Z" style="fill:#333331"/><rect width="14" height="16" style="fill:none"/><path d="M3.17,12.24l.59-.76a2.12,2.12,0,0,0,1.47.61c.65,0,1-.28,1-.68s-.33-.62-1.07-.62l-.66,0v-1h.66c.59,0,1-.18,1-.57s-.43-.63-1-.63a1.92,1.92,0,0,0-1.35.55l-.57-.71a2.63,2.63,0,0,1,2-.85c1.25,0,2,.56,2,1.45a1.31,1.31,0,0,1-1.17,1.22,1.34,1.34,0,0,1,1.25,1.28c0,.92-.82,1.57-2.1,1.57A2.67,2.67,0,0,1,3.17,12.24Z" style="fill:#333331"/><path d="M9.33,13V9.13l-.89.9-.65-.68L9.47,7.67h1V13Z" style="fill:#333331"/></svg>
@@ -335,8 +355,18 @@ The following custom properties and mixins are available for styling:
     </div>
 
     <div class="standard-container" hidden$='[[_hideStandardsContainer(data, standardType, i18n, hideStandardsMenu)]]'>
-      <p>
-        <small>[[standardsDropdownLabel]]</small>
+      <div class="standards-inner-container">
+        <div class="flex-row">
+          <small>[[standardsDropdownLabel]]</small>
+          <template is="dom-if" if="[[showFieldHelp]]">
+            <template is="dom-if" if="[[isDate]]">
+              <fs-helplet content="[[i18n('HELPLET_STANDARDIZED_DATE')]]"></fs-helplet>
+            </template>
+            <template is="dom-if" if="[[isPlace]]">
+                <fs-helplet content="[[i18n('HELPLET_STANDARDIZED_PLACE')]]"></fs-helplet>
+            </template>
+          </template>
+        </div>
         <button
           id="button"
           type="button"
@@ -367,7 +397,7 @@ The following custom properties and mixins are available for styling:
             <span class="loading" hidden$="[[!loading]]"></span>
           </template>
         </button>
-      </p>
+      </div>
       <div id="optionsMenuWrapper" tabindex="-1" hidden$="[[_hideStandards]]">
         <paper-listbox id="optionsMenu" tabindex="-1" hidden$="[[_hideStandards]]">
           <template is="dom-repeat" items="[[_standardOptions]]">
@@ -473,6 +503,15 @@ The following custom properties and mixins are available for styling:
           value: false
         },
 
+        /** Whether the typeahead input label should show helplet ('i') icon/text
+         * @type {Boolean}
+         */
+         showFieldHelp: {
+          reflectToAttribute: true,
+          type: Boolean,
+          value: false
+        },
+
         /**
          * Whether a network call is pending and spinners should show
          *
@@ -551,6 +590,7 @@ The following custom properties and mixins are available for styling:
          * below the the text field
          */
         hideStandardsNotification: {
+          reflectToAttribute: true,
           type: Boolean,
           value: false
         }
