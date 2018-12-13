@@ -55,7 +55,7 @@ The following custom properties and mixins are available for styling:
       .standard-container {
         position: relative;
       }
-      .standard-container p {
+      .standard-container .standards-inner-container {
         margin: 0;
         padding-top: 10px;
         min-height: 40px;
@@ -355,7 +355,7 @@ The following custom properties and mixins are available for styling:
     </div>
 
     <div class="standard-container" hidden$='[[_hideStandardsContainer(data, standardType, i18n, hideStandardsMenu)]]'>
-      <p>
+      <div class="standards-inner-container">
         <div class="flex-row">
           <small>[[standardsDropdownLabel]]</small>
           <template is="dom-if" if="[[showFieldHelp]]">
@@ -397,7 +397,7 @@ The following custom properties and mixins are available for styling:
             <span class="loading" hidden$="[[!loading]]"></span>
           </template>
         </button>
-      </p>
+      </div>
       <div id="optionsMenuWrapper" tabindex="-1" hidden$="[[_hideStandards]]">
         <paper-listbox id="optionsMenu" tabindex="-1" hidden$="[[_hideStandards]]">
           <template is="dom-repeat" items="[[_standardOptions]]">
