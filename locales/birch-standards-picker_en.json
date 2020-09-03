@@ -7,5 +7,8 @@
   "EVENT_DATE_LABEL":"Event Date",
   "EVENT_PLACE_LABEL":"Event Place",
   "STANDARD_DATE_LABEL":"Standardized Event Date",
-  "STANDARD_PLACE_LABEL":"Standardized Event Place"
+  "STANDARD_PLACE_LABEL":"Standardized Event Place",
+  "STANDARD_ICE_CREAM":"Vanilla Ice Cream",
+  "NO_STANDARD_LUNCH":"Number One on the Menu",
+  "STANDARD_COCKTAIL":"Blue Whale"
 }
