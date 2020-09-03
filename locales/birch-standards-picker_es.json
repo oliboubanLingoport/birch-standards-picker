@@ -1,12 +1,14 @@
 {
-  "_LRM_PKTAG460": "birch-standards-picker_1_149 - FULL-FILE",
+  "PLACE_PLACEHOLDER": "Ingresar un lugar",
   "DATE_PLACEHOLDER": "Ingresar una fecha",
-  "EVENT_DATE_LABEL": "Fecha del acontecimiento",
-  "EVENT_PLACE_LABEL": "Lugar del acontecimiento",
   "NO_STANDARD_DATE_AVAILABLE": "No está disponible ninguna fecha estandarizada.",
   "NO_STANDARD_PLACE_AVAILABLE": "No está disponible ningún lugar estandarizado.",
   "NO_STANDARD_SELECTED": "No se ha seleccionado un modelo estándar.",
-  "PLACE_PLACEHOLDER": "Ingresar un lugar",
+  "EVENT_DATE_LABEL": "Fecha del acontecimiento",
+  "EVENT_PLACE_LABEL": "Lugar del acontecimiento",
   "STANDARD_DATE_LABEL": "Fecha estandarizada del acontecimiento",
-  "STANDARD_PLACE_LABEL": "Lugar estandarizado del acontecimiento"
+  "STANDARD_PLACE_LABEL": "Lugar estandarizado del acontecimiento",
+  "STANDARD_ICE_CREAM": "Helado de vainilla",
+  "NO_STANDARD_LUNCH": "Número uno en el menú",
+  "STANDARD_COCKTAIL": "Ballena Azul"
 }

@@ -1,12 +1,14 @@
 {
-  "_LRM_PKTAG179": "birch-standards-picker_1_157 - FULL-FILE",
+  "PLACE_PLACEHOLDER": "Ort eingeben",
   "DATE_PLACEHOLDER": "Datum eingeben",
-  "EVENT_DATE_LABEL": "Datum des Ereignisses",
-  "EVENT_PLACE_LABEL": "Ort des Ereignisses",
   "NO_STANDARD_DATE_AVAILABLE": "Keine standardisierte Datumsangabe verfügbar",
   "NO_STANDARD_PLACE_AVAILABLE": "Keine standardisierte Ortsangabe verfügbar",
   "NO_STANDARD_SELECTED": "Es wurde kein Standard ausgewählt",
-  "PLACE_PLACEHOLDER": "Ort eingeben",
+  "EVENT_DATE_LABEL": "Datum des Ereignisses",
+  "EVENT_PLACE_LABEL": "Ort des Ereignisses",
   "STANDARD_DATE_LABEL": "Standardisiertes Datum des Ereignisses",
-  "STANDARD_PLACE_LABEL": "Standardisierter Ort des Ereignisses"
+  "STANDARD_PLACE_LABEL": "Standardisierter Ort des Ereignisses",
+  "STANDARD_ICE_CREAM": "Vanille-Eis",
+  "NO_STANDARD_LUNCH": "Nummer eins im Menü",
+  "STANDARD_COCKTAIL": "Blauwal"
 }
