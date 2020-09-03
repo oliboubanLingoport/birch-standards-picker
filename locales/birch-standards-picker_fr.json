@@ -1,12 +1,14 @@
 {
-  "_LRM_PKTAG890": "birch-standards-picker_1_150 - FULL-FILE",
+  "PLACE_PLACEHOLDER": "Saisir un lieu",
   "DATE_PLACEHOLDER": "Saisir une date",
-  "EVENT_DATE_LABEL": "Date de l’événement",
-  "EVENT_PLACE_LABEL": "Lieu de l’événement",
   "NO_STANDARD_DATE_AVAILABLE": "Aucune date normalisée n’est disponible",
   "NO_STANDARD_PLACE_AVAILABLE": "Aucun lieu normalisé n’est disponible",
   "NO_STANDARD_SELECTED": "Aucune norme n’est sélectionnée",
-  "PLACE_PLACEHOLDER": "Saisir un lieu",
+  "EVENT_DATE_LABEL": "Date de l’événement",
+  "EVENT_PLACE_LABEL": "Lieu de l’événement",
   "STANDARD_DATE_LABEL": "Date de l’événement normalisée",
-  "STANDARD_PLACE_LABEL": "Lieu de l’événement normalisé"
+  "STANDARD_PLACE_LABEL": "Lieu de l’événement normalisé",
+  "STANDARD_ICE_CREAM": "Glace à la vanille",
+  "NO_STANDARD_LUNCH": "Numéro un dans le menu",
+  "STANDARD_COCKTAIL": "Baleine bleue"
 }
