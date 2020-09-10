@@ -1,14 +1,18 @@
 {
+  "PLACE_PLACEHOLDER": "Ввести местоположение.",
   "DATE_PLACEHOLDER": "Ввести дату",
-  "EVENT_DATE_LABEL": "Дата события",
-  "EVENT_PLACE_LABEL": "Местоположение события",
-  "NONE_OF_THE_ABOVE": "Ничего из вышеперечисленного",
   "NO_STANDARD_DATE_AVAILABLE": "Не стандартизовано",
   "NO_STANDARD_PLACE_AVAILABLE": "Не стандартизовано",
   "NO_STANDARD_SELECTED": "Стандартизованное значение не выбрано.",
-  "PLACE_PLACEHOLDER": "Ввести местоположение.",
-  "STANDARDIZED_DATE": "Стандартизированная дата",
-  "STANDARDIZED_PLACE": "Стандартизированное местоположение",
+  "EVENT_DATE_LABEL": "Дата события",
+  "EVENT_PLACE_LABEL": "Местоположение события",
   "STANDARD_DATE_LABEL": "Стандартизованная дата события",
-  "STANDARD_PLACE_LABEL": "Стандартизованное местоположение события"
+  "STANDARD_PLACE_LABEL": "Стандартизованное местоположение события",
+  "NONE_OF_THE_ABOVE": "Ничего из вышеперечисленного",
+  "STANDARDIZED_PLACE": "Стандартизированное местоположение",
+  "STANDARDIZED_DATE": "Стандартизированная дата",
+  "HELPLET_DATE": "Введите дату в правильном стандартизованном формате.<br /> Например: 24 июня 1962 года. Модификаторы также могут использоваться до даты: До, О программе, После, От и До.<br/> Пример: около 1962 года. <a href='https://www.familysearch.org/ask/salesforce/viewArticle?urlname=Do-not-know-exact-birth-date-or-death-date&lang=en' title='Click to learn more about standardized dates'>Нажмите здесь для получения дополнительной информации</a>",
+  "HELPLET_PLACE": "Введите место в правильном стандартизованном формате.<br/> Например: Рочдейл, Ландкашир, Англия.",
+  "HELPLET_STANDARDIZED_DATE": "Выберите стандартизованную дату, которая лучше соответствует введенной дате.",
+  "HELPLET_STANDARDIZED_PLACE": "Выберите стандартизированное место, которое лучше соответствует введенному вами месту."
 }

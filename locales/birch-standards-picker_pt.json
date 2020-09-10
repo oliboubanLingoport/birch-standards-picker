@@ -1,14 +1,18 @@
 {
+  "PLACE_PLACEHOLDER": "Digite o local",
   "DATE_PLACEHOLDER": "Digite a data",
-  "EVENT_DATE_LABEL": "Data do Evento",
-  "EVENT_PLACE_LABEL": "Local do Evento",
-  "NONE_OF_THE_ABOVE": "Nenhuma das opções acima",
   "NO_STANDARD_DATE_AVAILABLE": "Data não padronizada",
   "NO_STANDARD_PLACE_AVAILABLE": "Local não padronizado",
   "NO_STANDARD_SELECTED": "Nenhum padrão foi selecionado",
-  "PLACE_PLACEHOLDER": "Digite o local",
-  "STANDARDIZED_DATE": "Data Padronizada",
-  "STANDARDIZED_PLACE": "Local Padronizado",
+  "EVENT_DATE_LABEL": "Data do Evento",
+  "EVENT_PLACE_LABEL": "Local do Evento",
   "STANDARD_DATE_LABEL": "Data Padronizada do Evento",
-  "STANDARD_PLACE_LABEL": "Local Padronizado do Evento"
+  "STANDARD_PLACE_LABEL": "Local Padronizado do Evento",
+  "NONE_OF_THE_ABOVE": "Nenhuma das opções acima",
+  "STANDARDIZED_PLACE": "Local Padronizado",
+  "STANDARDIZED_DATE": "Data Padronizada",
+  "HELPLET_DATE": "Insira uma data em um formato padronizado correto.<br /> Por exemplo: 24 de Junho de 1962. Modificadores também pode ser usado antes da data: Antes, Sobre, Depois, De e Para.<br/> Exemplo: cerca de 1962. <a href='https://www.familysearch.org/ask/salesforce/viewArticle?urlname=Do-not-know-exact-birth-date-or-death-date&lang=en' title='Click to learn more about standardized dates'>Clique aqui para mais informações</a>",
+  "HELPLET_PLACE": "Insira um local em um formato padronizado correto.<br/> Por exemplo: Rochdale, Landcashire, Inglaterra.",
+  "HELPLET_STANDARDIZED_DATE": "Selecione uma data padronizada que corresponda melhor à data inserida.",
+  "HELPLET_STANDARDIZED_PLACE": "Selecione um local padronizado que melhor corresponda ao local inserido."
 }

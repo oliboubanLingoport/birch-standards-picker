@@ -1,14 +1,18 @@
 {
+  "PLACE_PLACEHOLDER": "場所を入力してください。",
   "DATE_PLACEHOLDER": "日付を入力してください。",
-  "EVENT_DATE_LABEL": "出来事の日付",
-  "EVENT_PLACE_LABEL": "出来事の場所",
-  "NONE_OF_THE_ABOVE": "上記のいずれでもない",
   "NO_STANDARD_DATE_AVAILABLE": "標準化された日付ではありません",
   "NO_STANDARD_PLACE_AVAILABLE": "標準化された場所ではありません",
   "NO_STANDARD_SELECTED": "標準が選択されていません。",
-  "PLACE_PLACEHOLDER": "場所を入力してください。",
-  "STANDARDIZED_DATE": "標準化した日付",
-  "STANDARDIZED_PLACE": "標準化した場所",
+  "EVENT_DATE_LABEL": "出来事の日付",
+  "EVENT_PLACE_LABEL": "出来事の場所",
   "STANDARD_DATE_LABEL": "標準化した出来事の日付",
-  "STANDARD_PLACE_LABEL": "標準化した出来事の場所"
+  "STANDARD_PLACE_LABEL": "標準化した出来事の場所",
+  "NONE_OF_THE_ABOVE": "上記のいずれでもない",
+  "STANDARDIZED_PLACE": "標準化した場所",
+  "STANDARDIZED_DATE": "標準化した日付",
+  "HELPLET_DATE": "正しい標準化された形式で日付を入力します。<br />例:1962 年 6 月 24 日。変更項目は、[前]、[バージョン情報]、[後]、[開始日]、[終了日] の日付の前にも使用できます。<br/>例：1962年頃。<a href='https://www.familysearch.org/ask/salesforce/viewArticle?urlname=Do-not-know-exact-birth-date-or-death-date&lang=en' title='Click to learn more about standardized dates'>詳細はこちらをクリック </a>",
+  "HELPLET_PLACE": "正しい標準化された形式で場所を入力します。<br/>例：ロッチデール、ランドカシア、イングランド。",
+  "HELPLET_STANDARDIZED_DATE": "入力した日付と一致する標準化された日付を選択します。",
+  "HELPLET_STANDARDIZED_PLACE": "入力した場所に一致する、標準化された場所を選択します。"
 }

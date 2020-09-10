@@ -1,14 +1,18 @@
 {
+  "PLACE_PLACEHOLDER": "Saisir un lieu.",
   "DATE_PLACEHOLDER": "Saisir une date.",
-  "EVENT_DATE_LABEL": "Date de l’événement",
-  "EVENT_PLACE_LABEL": "Lieu de l’événement",
-  "NONE_OF_THE_ABOVE": "Aucune des réponses précédentes",
   "NO_STANDARD_DATE_AVAILABLE": "Date non normalisée",
   "NO_STANDARD_PLACE_AVAILABLE": "Lieu non normalisé",
   "NO_STANDARD_SELECTED": "Aucune norme n’est sélectionnée.",
-  "PLACE_PLACEHOLDER": "Saisir un lieu.",
-  "STANDARDIZED_DATE": "Date normalisée",
-  "STANDARDIZED_PLACE": "Nom de lieu normalisé",
+  "EVENT_DATE_LABEL": "Date de l’événement",
+  "EVENT_PLACE_LABEL": "Lieu de l’événement",
   "STANDARD_DATE_LABEL": "Date de l’événement normalisée",
-  "STANDARD_PLACE_LABEL": "Lieu de l’événement normalisé"
+  "STANDARD_PLACE_LABEL": "Lieu de l’événement normalisé",
+  "NONE_OF_THE_ABOVE": "Aucune des réponses précédentes",
+  "STANDARDIZED_PLACE": "Nom de lieu normalisé",
+  "STANDARDIZED_DATE": "Date normalisée",
+  "HELPLET_DATE": "Entrez une date dans un format normalisé correct.<br /> Par exemple : 24 juin 1962. Les modificateurs peuvent également être utilisés avant la date : Avant, À propos, Après, De et À.<br/> Exemple : vers 1962. <a href='https://www.familysearch.org/ask/salesforce/viewArticle?urlname=Do-not-know-exact-birth-date-or-death-date&lang=en' title='Click to learn more about standardized dates'>Cliquez ici pour plus d'informations</a>",
+  "HELPLET_PLACE": "Entrez un endroit dans un format normalisé correct.<br/> Par exemple : Rochdale, Landcashire, Angleterre.",
+  "HELPLET_STANDARDIZED_DATE": "Sélectionnez une date standardisée qui correspond mieux à la date que vous avez saisie.",
+  "HELPLET_STANDARDIZED_PLACE": "Sélectionnez un endroit standardisé qui correspond le mieux à celui que vous avez entré."
 }

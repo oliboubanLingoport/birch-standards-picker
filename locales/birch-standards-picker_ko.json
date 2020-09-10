@@ -1,14 +1,18 @@
 {
+  "PLACE_PLACEHOLDER": "장소 입력.",
   "DATE_PLACEHOLDER": "날짜 입력.",
-  "EVENT_DATE_LABEL": "사건 날짜",
-  "EVENT_PLACE_LABEL": "사건 장소",
-  "NONE_OF_THE_ABOVE": "위에 해당 사항 없음",
   "NO_STANDARD_DATE_AVAILABLE": "표준화되지 않은 날짜",
   "NO_STANDARD_PLACE_AVAILABLE": "표준화되지 않은 장소",
   "NO_STANDARD_SELECTED": "표준이 선택되지 않았습니다.",
-  "PLACE_PLACEHOLDER": "장소 입력.",
-  "STANDARDIZED_DATE": "표준화된 날짜",
-  "STANDARDIZED_PLACE": "표준화된 장소",
+  "EVENT_DATE_LABEL": "사건 날짜",
+  "EVENT_PLACE_LABEL": "사건 장소",
   "STANDARD_DATE_LABEL": "표준화된 사건 날짜 ",
-  "STANDARD_PLACE_LABEL": "표준화된 사건 장소 "
+  "STANDARD_PLACE_LABEL": "표준화된 사건 장소 ",
+  "NONE_OF_THE_ABOVE": "위에 해당 사항 없음",
+  "STANDARDIZED_PLACE": "표준화된 장소",
+  "STANDARDIZED_DATE": "표준화된 날짜",
+  "HELPLET_DATE": "올바른 표준화된 형식으로 날짜를 입력합니다.<br /> 예: 1962년 6월 24일.수정자는 날짜 이전에 사용할 수도 있습니다: 이전, 정보, 이후, 시작 및 종료.<br/> 예: 약 1962.<a href='https://www.familysearch.org/ask/salesforce/viewArticle?urlname=Do-not-know-exact-birth-date-or-death-date&lang=en' title='Click to learn more about standardized dates'>자세한 내용을 보려면 여기를 클릭하십시오.</a>",
+  "HELPLET_PLACE": "올바른 표준화된 형식으로 장소를 입력합니다.<br/> 예: 로치 데일, 랜드 커 셔, 영국.",
+  "HELPLET_STANDARDIZED_DATE": "입력한 날짜와 더 잘 일치하는 표준화된 날짜를 선택합니다.",
+  "HELPLET_STANDARDIZED_PLACE": "입력한 장소와 더 잘 일치하는 표준화된 장소를 선택합니다."
 }

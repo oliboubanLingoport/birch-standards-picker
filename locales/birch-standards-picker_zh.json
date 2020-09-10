@@ -1,14 +1,18 @@
 {
+  "PLACE_PLACEHOLDER": "輸入地點。",
   "DATE_PLACEHOLDER": "輸入日期。",
-  "EVENT_DATE_LABEL": "事項日期",
-  "EVENT_PLACE_LABEL": "事項地點",
-  "NONE_OF_THE_ABOVE": "以上皆非",
   "NO_STANDARD_DATE_AVAILABLE": "非標準化日期",
   "NO_STANDARD_PLACE_AVAILABLE": "非標準化地點",
   "NO_STANDARD_SELECTED": "未選取標準。",
-  "PLACE_PLACEHOLDER": "輸入地點。",
-  "STANDARDIZED_DATE": "標準化日期",
-  "STANDARDIZED_PLACE": "標準化地點",
+  "EVENT_DATE_LABEL": "事項日期",
+  "EVENT_PLACE_LABEL": "事項地點",
   "STANDARD_DATE_LABEL": "標準化事項日期",
-  "STANDARD_PLACE_LABEL": "標準化事項地點"
+  "STANDARD_PLACE_LABEL": "標準化事項地點",
+  "NONE_OF_THE_ABOVE": "以上皆非",
+  "STANDARDIZED_PLACE": "標準化地點",
+  "STANDARDIZED_DATE": "標準化日期",
+  "HELPLET_DATE": "以正确的标准化格式输入日期。<br />例如：1962 年 6 月 24 日。修改器也可以在日期之前使用：“前”、“关于”、“后”、“自” 和 “至”。<br/>例如：大约 1962 年。<a href='https://www.familysearch.org/ask/salesforce/viewArticle?urlname=Do-not-know-exact-birth-date-or-death-date&lang=en' title='Click to learn more about standardized dates'>点击这里了解更多信息 </a>",
+  "HELPLET_PLACE": "以正确的标准化格式输入位置。<br/>例如：罗奇代尔，兰开郡，英国。",
+  "HELPLET_STANDARDIZED_DATE": "选择与您输入的日期更好匹配的标准化日期。",
+  "HELPLET_STANDARDIZED_PLACE": "选择与您输入的地点更匹配的标准化地点。"
 }

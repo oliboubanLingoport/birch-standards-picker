@@ -1,14 +1,18 @@
 {
+  "PLACE_PLACEHOLDER": "Inserisci un luogo.",
   "DATE_PLACEHOLDER": "Inserisci una data.",
-  "EVENT_DATE_LABEL": "Data dell’evento",
-  "EVENT_PLACE_LABEL": "Luogo dell’evento",
-  "NONE_OF_THE_ABOVE": "Nessuno dei suddetti",
   "NO_STANDARD_DATE_AVAILABLE": "Data non standard",
   "NO_STANDARD_PLACE_AVAILABLE": "Luogo non standard",
   "NO_STANDARD_SELECTED": "Non è stato scelto nessuno standard.",
-  "PLACE_PLACEHOLDER": "Inserisci un luogo.",
-  "STANDARDIZED_DATE": "Data standardizzata",
-  "STANDARDIZED_PLACE": "Luogo standardizzato",
+  "EVENT_DATE_LABEL": "Data dell’evento",
+  "EVENT_PLACE_LABEL": "Luogo dell’evento",
   "STANDARD_DATE_LABEL": "Data standardizzata dell’evento",
-  "STANDARD_PLACE_LABEL": "Luogo standardizzato dell’evento"
+  "STANDARD_PLACE_LABEL": "Luogo standardizzato dell’evento",
+  "NONE_OF_THE_ABOVE": "Nessuno dei suddetti",
+  "STANDARDIZED_PLACE": "Luogo standardizzato",
+  "STANDARDIZED_DATE": "Data standardizzata",
+  "HELPLET_DATE": "Immettere una data in un formato standardizzato corretto.<br /> Ad esempio: 24 giugno 1962. Modifieres può essere utilizzato anche prima della data: Prima, About, Dopo, Da e A.<br/> Esempio: circa 1962. <a href='https://www.familysearch.org/ask/salesforce/viewArticle?urlname=Do-not-know-exact-birth-date-or-death-date&lang=en' title='Click to learn more about standardized dates'>Clicca qui per maggiori informazioni</a>",
+  "HELPLET_PLACE": "Immettere una posizione in un formato standardizzato corretto.<br/> Ad esempio: Rochdale, Landcashire, Inghilterra.",
+  "HELPLET_STANDARDIZED_DATE": "Selezionare una data standardizzata che corrisponda meglio alla data immessa.",
+  "HELPLET_STANDARDIZED_PLACE": "Seleziona un luogo standardizzato che corrisponda meglio al luogo inserito."
 }
