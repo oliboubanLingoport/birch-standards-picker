@@ -1,14 +1,18 @@
 {
+  "PLACE_PLACEHOLDER": "Introduzca un lugar.",
   "DATE_PLACEHOLDER": "Introduzca una fecha.",
-  "EVENT_DATE_LABEL": "Fecha del evento",
-  "EVENT_PLACE_LABEL": "Lugar de Evento",
-  "NONE_OF_THE_ABOVE": "Ninguna de las anteriores",
   "NO_STANDARD_DATE_AVAILABLE": "Fecha no estandarizada",
   "NO_STANDARD_PLACE_AVAILABLE": "Lugar no estandarizado",
   "NO_STANDARD_SELECTED": "No se ha seleccionado ninguna norma.",
-  "PLACE_PLACEHOLDER": "Introduzca un lugar.",
-  "STANDARDIZED_DATE": "Fecha estandarizada",
-  "STANDARDIZED_PLACE": "Lugar estandarizado",
+  "EVENT_DATE_LABEL": "Fecha del evento",
+  "EVENT_PLACE_LABEL": "Lugar de Evento",
   "STANDARD_DATE_LABEL": "Fecha de evento estandarizada",
-  "STANDARD_PLACE_LABEL": "Lugar de evento estandarizado"
+  "STANDARD_PLACE_LABEL": "Lugar de evento estandarizado",
+  "NONE_OF_THE_ABOVE": "Ninguna de las anteriores",
+  "STANDARDIZED_PLACE": "Lugar estandarizado",
+  "STANDARD_DATE_LABEL2": "Fecha de evento estandarizada",
+  "STANDARD_PLACE_LABEL2": "Lugar de evento estandarizado",
+  "NONE_OF_THE_ABOVE2": "Ninguna de las anteriores",
+  "STANDARDIZED_PLACE2": "Lugar estandarizado",
+  "STANDARDIZED_DATE": "Fecha estandarizada"
 }

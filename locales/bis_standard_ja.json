@@ -1,14 +1,18 @@
 {
+  "PLACE_PLACEHOLDER": "場所を入力します。",
   "DATE_PLACEHOLDER": "日付を入力します。",
-  "EVENT_DATE_LABEL": "イベント開催日",
-  "EVENT_PLACE_LABEL": "イベント場所",
-  "NONE_OF_THE_ABOVE": "上記のいずれも",
   "NO_STANDARD_DATE_AVAILABLE": "非標準化日付",
   "NO_STANDARD_PLACE_AVAILABLE": "標準化されていない場所",
   "NO_STANDARD_SELECTED": "規格が選択されていません。",
-  "PLACE_PLACEHOLDER": "場所を入力します。",
-  "STANDARDIZED_DATE": "標準化された日付",
-  "STANDARDIZED_PLACE": "標準化された場所",
+  "EVENT_DATE_LABEL": "イベント開催日",
+  "EVENT_PLACE_LABEL": "イベント場所",
   "STANDARD_DATE_LABEL": "標準化されたイベント日付",
-  "STANDARD_PLACE_LABEL": "標準化されたイベント場所"
+  "STANDARD_PLACE_LABEL": "標準化されたイベント場所",
+  "NONE_OF_THE_ABOVE": "上記のいずれも",
+  "STANDARDIZED_PLACE": "標準化された場所",
+  "STANDARD_DATE_LABEL2": "標準化されたイベント日付",
+  "STANDARD_PLACE_LABEL2": "標準化されたイベント場所",
+  "NONE_OF_THE_ABOVE2": "上記のいずれも",
+  "STANDARDIZED_PLACE2": "標準化された場所",
+  "STANDARDIZED_DATE": "標準化された日付"
 }

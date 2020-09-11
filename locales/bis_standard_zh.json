@@ -1,14 +1,18 @@
 {
+  "PLACE_PLACEHOLDER": "输入地点。",
   "DATE_PLACEHOLDER": "输入日期。",
-  "EVENT_DATE_LABEL": "事件日期",
-  "EVENT_PLACE_LABEL": "活动地点",
-  "NONE_OF_THE_ABOVE": "以上任何一项",
   "NO_STANDARD_DATE_AVAILABLE": "非标准化日期",
   "NO_STANDARD_PLACE_AVAILABLE": "非标准化地点",
   "NO_STANDARD_SELECTED": "未选择标准。",
-  "PLACE_PLACEHOLDER": "输入地点。",
-  "STANDARDIZED_DATE": "标准化日期",
-  "STANDARDIZED_PLACE": "标准化地点",
+  "EVENT_DATE_LABEL": "事件日期",
+  "EVENT_PLACE_LABEL": "活动地点",
   "STANDARD_DATE_LABEL": "标准化事件日期",
-  "STANDARD_PLACE_LABEL": "标准化活动场所"
+  "STANDARD_PLACE_LABEL": "标准化活动场所",
+  "NONE_OF_THE_ABOVE": "以上任何一项",
+  "STANDARDIZED_PLACE": "标准化地点",
+  "STANDARD_DATE_LABEL2": "标准化事件日期",
+  "STANDARD_PLACE_LABEL2": "标准化活动场所",
+  "NONE_OF_THE_ABOVE2": "以上任何一项",
+  "STANDARDIZED_PLACE2": "标准化地点",
+  "STANDARDIZED_DATE": "标准化日期"
 }
