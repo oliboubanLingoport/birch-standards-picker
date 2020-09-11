@@ -1,0 +1,14 @@
+{
+  "PLACE_PLACEHOLDER":"Enter a place.",
+  "DATE_PLACEHOLDER":"Enter a date.",
+  "NO_STANDARD_DATE_AVAILABLE":"Nonstandardized Date",
+  "NO_STANDARD_PLACE_AVAILABLE":"Nonstandardized Place",
+  "NO_STANDARD_SELECTED":"No standard is selected.",
+  "EVENT_DATE_LABEL":"Event Date",
+  "EVENT_PLACE_LABEL":"Event Place",
+  "STANDARD_DATE_LABEL":"Standardized Event Date",
+  "STANDARD_PLACE_LABEL":"Standardized Event Place",
+  "NONE_OF_THE_ABOVE":"None of the above",
+  "STANDARDIZED_PLACE": "Standardized Place",
+  "STANDARDIZED_DATE": "Standardized Date"
+}
