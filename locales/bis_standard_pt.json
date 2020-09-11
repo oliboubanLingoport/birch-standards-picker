@@ -1,0 +1,14 @@
+{
+  "DATE_PLACEHOLDER": "Informe uma data.",
+  "EVENT_DATE_LABEL": "Data do Evento",
+  "EVENT_PLACE_LABEL": "Local do Evento",
+  "NONE_OF_THE_ABOVE": "Nenhuma das opções acima",
+  "NO_STANDARD_DATE_AVAILABLE": "Data não padronizada",
+  "NO_STANDARD_PLACE_AVAILABLE": "Local não padronizado",
+  "NO_STANDARD_SELECTED": "Nenhum padrão está selecionado.",
+  "PLACE_PLACEHOLDER": "Digite um lugar.",
+  "STANDARDIZED_DATE": "Data Padronizada",
+  "STANDARDIZED_PLACE": "Local Padronizado",
+  "STANDARD_DATE_LABEL": "Data Padronizada do Evento",
+  "STANDARD_PLACE_LABEL": "Local de eventos padronizado"
+}

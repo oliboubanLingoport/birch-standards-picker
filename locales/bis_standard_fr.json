@@ -1,0 +1,14 @@
+{
+  "DATE_PLACEHOLDER": "Entrez une date.",
+  "EVENT_DATE_LABEL": "Date de l'événement",
+  "EVENT_PLACE_LABEL": "Lieu de l'événement",
+  "NONE_OF_THE_ABOVE": "Aucun des éléments ci-dessus",
+  "NO_STANDARD_DATE_AVAILABLE": "Date non normalisée",
+  "NO_STANDARD_PLACE_AVAILABLE": "Lieu non normalisé",
+  "NO_STANDARD_SELECTED": "Aucune norme n'est sélectionnée.",
+  "PLACE_PLACEHOLDER": "Entrez un endroit.",
+  "STANDARDIZED_DATE": "Date normalisée",
+  "STANDARDIZED_PLACE": "Lieu standardisé",
+  "STANDARD_DATE_LABEL": "Date de l'événement normalisée",
+  "STANDARD_PLACE_LABEL": "Lieu d'événement standardisé"
+}

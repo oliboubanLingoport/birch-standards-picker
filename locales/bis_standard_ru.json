@@ -1,0 +1,14 @@
+{
+  "DATE_PLACEHOLDER": "Введите дату.",
+  "EVENT_DATE_LABEL": "Дата события",
+  "EVENT_PLACE_LABEL": "Место проведения мероприятия",
+  "NONE_OF_THE_ABOVE": "Ни одно из вышеперечисленных",
+  "NO_STANDARD_DATE_AVAILABLE": "Нестандартизированная дата",
+  "NO_STANDARD_PLACE_AVAILABLE": "Нестандартизированное место",
+  "NO_STANDARD_SELECTED": "Стандарт не выбран.",
+  "PLACE_PLACEHOLDER": "Введите место.",
+  "STANDARDIZED_DATE": "Стандартизированная дата",
+  "STANDARDIZED_PLACE": "Стандартизированное место",
+  "STANDARD_DATE_LABEL": "Стандартизированная дата события",
+  "STANDARD_PLACE_LABEL": "Стандартизированное место проведения мероприятий"
+}

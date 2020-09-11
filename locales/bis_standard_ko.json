@@ -1,0 +1,14 @@
+{
+  "DATE_PLACEHOLDER": "일자를 입력합니다.",
+  "EVENT_DATE_LABEL": "이벤트 날짜",
+  "EVENT_PLACE_LABEL": "이벤트 장소",
+  "NONE_OF_THE_ABOVE": "위의 내용 없음",
+  "NO_STANDARD_DATE_AVAILABLE": "표준화되지 않은 날짜",
+  "NO_STANDARD_PLACE_AVAILABLE": "표준화되지 않은 장소",
+  "NO_STANDARD_SELECTED": "표준이 선택되지 않았습니다.",
+  "PLACE_PLACEHOLDER": "장소를 입력합니다.",
+  "STANDARDIZED_DATE": "표준화된 날짜",
+  "STANDARDIZED_PLACE": "표준화된 장소",
+  "STANDARD_DATE_LABEL": "표준화된 이벤트 일자",
+  "STANDARD_PLACE_LABEL": "표준화된 이벤트 장소"
+}
