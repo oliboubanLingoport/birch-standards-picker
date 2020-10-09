@@ -1,0 +1,12 @@
+{
+  "DATE_PLACEHOLDER": "36.331 Enter a date",
+  "EVENT_DATE_LABEL": "36.335 Event Date",
+  "EVENT_PLACE_LABEL": "36.336 Event Place",
+  "NONE_OF_THE_ABOVE": "36.339 None of the above",
+  "NO_STANDARD_DATE_AVAILABLE": "36.332 No standardized date is available",
+  "NO_STANDARD_PLACE_AVAILABLE": "36.333 No standardized place is available",
+  "NO_STANDARD_SELECTED": "36.334 No standard is selected",
+  "PLACE_PLACEHOLDER": "36.330 Enter a place",
+  "STANDARD_DATE_LABEL": "36.337 Standardized Event Date",
+  "STANDARD_PLACE_LABEL": "36.338 Standardized Event Place"
+}
